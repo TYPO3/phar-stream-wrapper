@@ -32,6 +32,15 @@ In general the TYPO3 core is released under the GNU General Public License versi
 incompatibilities this `PharStreamWrapper` is licenced under the MIT License. In case
 you duplicate or modify source code, credits are not required but really appreciated. 
 
+## Installation
+
+The `PharStreamWrapper` is provided as composer package `typo3/phar-stream-wrapper`
+and has a minimum requirement of PHP v7.0.
+
+```
+composer require typo3/phar-stream-wrapper
+```
+
 ## Example
 
 The following example is bundled within this package, the shown
@@ -70,6 +79,10 @@ if (in_array('phar', stream_get_wrappers())) {
 
 ## Interceptor
 
+The following interceptor is shipped with the package and ready to use in order
+to block any Phar invocation of files not having a `.phar` suffix. Besides that
+individual interceptors are possible of course.
+
 ```
 class PharExtensionInterceptor implements Assertable
 {
@@ -79,11 +92,11 @@ class PharExtensionInterceptor implements Assertable
      * @param string $path
      * @param string $command
      * @return bool
-     * @throws PharStreamWrapperException
+     * @throws Exception
      */
     public function assert(string $path, string $command): bool
     {
-        if ($this->isValidPath($path)) {
+        if ($this->baseFileContainsPharExtension($path)) {
             return true;
         }
         throw new Exception(
@@ -99,13 +112,13 @@ class PharExtensionInterceptor implements Assertable
      * @param string $path
      * @return bool
      */
-    private function isValidPath(string $path): bool
+    private function baseFileContainsPharExtension(string $path): bool
     {
         $baseFile = Helper::determineBaseFile($path);
         if ($baseFile === null) {
             return false;
         }
-        $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
+        $fileExtension = pathinfo($baseFile, PATHINFO_EXTENSION);
         return strtolower($fileExtension) === 'phar';
     }
 }

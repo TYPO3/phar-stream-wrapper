@@ -1,0 +1,37 @@
+language: php
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+    - php: 7.1
+    - php: 7.2
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - language-pack-de
+      - parallel
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_install:
+  - composer self-update
+  - composer --version
+
+before_script:
+  - composer install
+
+script:
+  - >
+    echo;
+    echo "Running tests";
+    vendor/bin/phpunit --colors
+  - >
+    echo;
+    echo "Running PHP lint";
+    find . -name \*.php ! -path './vendor/*' | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;

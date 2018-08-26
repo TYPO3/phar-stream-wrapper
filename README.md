@@ -2,7 +2,32 @@
 
 ## Abstract & History
 
-...
+Bases on Sam Thomas' findings concerning
+[insecure deserialization in combination with obfuscation strategies](https://blog.secarma.co.uk/labs/near-phar-dangerous-unserialization-wherever-you-are)
+in order to hide Phar files inside valid image resources, the TYPO3 project
+decided back then to introduce a `PharStreamWrapper` to intercept invocations
+of the `phar://` stream in PHP and only allow usage for defined locations in
+the file system.
+
+Since the TYPO3 mission statement is `inspiring people to share`, we thought
+it would be helpful for others to release our `PharStreamWrapper` as standalone
+project to the PHP community.
+
+The mentioned security issue was reported to TYPO3 on 10th June 2018 by Sam Thomas
+and has been addressed concerning the specific attack vector and for this generic
+`PharStreamWrapper` in TYPO3 versions 7.6.30 LTS, 8.7.17 LTS and 9.3.1 on 12th
+July 2018.
+
+* https://typo3.org/security/advisory/typo3-core-sa-2018-002/
+* https://blog.secarma.co.uk/labs/near-phar-dangerous-unserialization-wherever-you-are
+* https://youtu.be/GePBmsNJw6Y
+
+## License
+
+In general the TYPO3 core is released under the GNU General Public License version
+2 or any later version (`GPL-2.0-or-later`). In order to avoid licensing issues and
+incompatibilities this `PharStreamWrapper` is licenced under the MIT License. In case
+you duplicate or modify source code, credits are not required but really appreciated. 
 
 ## Example
 
@@ -92,4 +117,10 @@ class PharExtensionInterceptor implements Assertable
 * `Helper::resetOpCache()`: Resets PHP's OPcache if enabled as work-around for
   issues in `include()` or `require()` calls and OPcache delivering wrong
   results. More details can be found in PHP's bug tracker, for instance like
-  (https://bugs.php.net/bug.php?id=66569)[https://bugs.php.net/bug.php?id=66569]
+  https://bugs.php.net/bug.php?id=66569
+
+## Security Contact
+
+In case of finding additional security issues in the TYPO3 project or in this
+`PharStreamWrapper` package in particular, please get in touch with the
+[TYPO3 Security Team](mailto:security@typo3.org).

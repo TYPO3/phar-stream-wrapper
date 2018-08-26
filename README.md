@@ -1,3 +1,6 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/?branch=master)
+[![Travis CI Build Status](https://travis-ci.org/TYPO3/phar-stream-wrapper.svg?branch=master)](https://travis-ci.org/TYPO3/phar-stream-wrapper)
+
 # PHP Phar Stream Wrapper
 
 ## Abstract & History

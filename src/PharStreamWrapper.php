@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 namespace TYPO3\PharStreamWrapper;
 
 /*
@@ -102,7 +102,7 @@ class PharStreamWrapper
             'mkdir',
             $path,
             $mode,
-            (bool)($options & STREAM_MKDIR_RECURSIVE),
+            (bool) ($options & STREAM_MKDIR_RECURSIVE),
             $this->context
         );
     }
@@ -247,7 +247,7 @@ class PharStreamWrapper
         string &$opened_path = null
     ): bool {
         $this->assert($path, Behavior::COMMAND_STREAM_OPEN);
-        $arguments = [$path, $mode, (bool)($options & STREAM_USE_PATH)];
+        $arguments = [$path, $mode, (bool) ($options & STREAM_USE_PATH)];
         // only add stream context for non include/require calls
         if (!($options & static::STREAM_OPEN_FOR_INCLUDE)) {
             $arguments[] = $this->context;

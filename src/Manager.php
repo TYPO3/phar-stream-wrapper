@@ -15,7 +15,7 @@ namespace TYPO3\PharStreamWrapper;
 class Manager implements Assertable
 {
     /**
-     * @var static
+     * @var self
      */
     private static $instance;
 
@@ -26,13 +26,13 @@ class Manager implements Assertable
 
     /**
      * @param Behavior $behaviour
-     * @return Manager
+     * @return self
      */
     public static function initialize(Behavior $behaviour): self
     {
-        if (static::$instance === null) {
-            static::$instance = new static($behaviour);
-            return static::$instance;
+        if (self::$instance === null) {
+            self::$instance = new self($behaviour);
+            return self::$instance;
         }
         throw new \LogicException(
             'Manager can only be initialized once',
@@ -41,12 +41,12 @@ class Manager implements Assertable
     }
 
     /**
-     * @return static
+     * @return self
      */
     public static function instance(): self
     {
-        if (static::$instance !== null) {
-            return static::$instance;
+        if (self::$instance !== null) {
+            return self::$instance;
         }
         throw new \LogicException(
             'Manager needs to be initialized first',
@@ -56,8 +56,8 @@ class Manager implements Assertable
 
     public static function destroy()
     {
-        if (static::$instance !== null) {
-            static::$instance = null;
+        if (self::$instance !== null) {
+            self::$instance = null;
             return;
         }
         throw new \LogicException(

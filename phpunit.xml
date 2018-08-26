@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit
+		backupGlobals="true"
+		colors="true"
+		processIsolation="true"
+		verbose="true">
+
+	<testsuites>
+		<testsuite name="functional tests">
+			<directory>tests/Functional/</directory>
+		</testsuite>
+		<testsuite name="unit tests">
+			<directory>tests/Unit/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

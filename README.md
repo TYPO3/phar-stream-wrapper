@@ -5,16 +5,16 @@
 
 ## Abstract & History
 
-Bases on Sam Thomas' findings concerning
+Based on Sam Thomas' findings concerning
 [insecure deserialization in combination with obfuscation strategies](https://blog.secarma.co.uk/labs/near-phar-dangerous-unserialization-wherever-you-are)
-in order to hide Phar files inside valid image resources, the TYPO3 project
+allowing to hide Phar files inside valid image resources, the TYPO3 project
 decided back then to introduce a `PharStreamWrapper` to intercept invocations
 of the `phar://` stream in PHP and only allow usage for defined locations in
 the file system.
 
-Since the TYPO3 mission statement is `inspiring people to share`, we thought
+Since the TYPO3 mission statement is **inspiring people to share**, we thought
 it would be helpful for others to release our `PharStreamWrapper` as standalone
-project to the PHP community.
+package to the PHP community.
 
 The mentioned security issue was reported to TYPO3 on 10th June 2018 by Sam Thomas
 and has been addressed concerning the specific attack vector and for this generic

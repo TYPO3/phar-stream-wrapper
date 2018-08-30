@@ -54,16 +54,16 @@ class Manager implements Assertable
         );
     }
 
-    public static function destroy()
+    /**
+     * @return bool
+     */
+    public static function destroy(): bool
     {
-        if (self::$instance !== null) {
-            self::$instance = null;
-            return;
+        if (self::$instance === null) {
+            return false;
         }
-        throw new \LogicException(
-            'Manager was never initialized',
-            1535189873
-        );
+        self::$instance = null;
+        return true;
     }
 
     /**

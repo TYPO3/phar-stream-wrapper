@@ -83,6 +83,23 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
+    public function destroyReturnsTrueIfInitialized()
+    {
+        Manager::initialize($this->behaviorProphecy->reveal());
+        static::assertTrue(Manager::destroy());
+    }
+
+    /**
+     * @test
+     */
+    public function destroyReturnsFalseIfNotInitialized()
+    {
+        static::assertFalse(Manager::destroy());
+    }
+
+    /**
+     * @test
+     */
     public function assertInvocationIsDelegatedToBehavior()
     {
         $testPath = uniqid('path');

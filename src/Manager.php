@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 namespace TYPO3\PharStreamWrapper;
 
 /*
@@ -28,7 +28,7 @@ class Manager implements Assertable
      * @param Behavior $behaviour
      * @return self
      */
-    public static function initialize(Behavior $behaviour): self
+    public static function initialize(Behavior $behaviour)
     {
         if (self::$instance === null) {
             self::$instance = new self($behaviour);
@@ -43,7 +43,7 @@ class Manager implements Assertable
     /**
      * @return self
      */
-    public static function instance(): self
+    public static function instance()
     {
         if (self::$instance !== null) {
             return self::$instance;
@@ -57,7 +57,7 @@ class Manager implements Assertable
     /**
      * @return bool
      */
-    public static function destroy(): bool
+    public static function destroy()
     {
         if (self::$instance === null) {
             return false;
@@ -79,7 +79,7 @@ class Manager implements Assertable
      * @param string $command
      * @return bool
      */
-    public function assert(string $path, string $command): bool
+    public function assert($path, $command)
     {
         return $this->behavior->assert($path, $command);
     }

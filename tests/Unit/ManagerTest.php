@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+
 namespace TYPO3\PharStreamWrapper\Tests\Unit;
 
 /*
@@ -27,7 +27,7 @@ class ManagerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->behaviorProphecy = $this->prophesize(Behavior::class);
+        $this->behaviorProphecy = $this->prophesize('\TYPO3\PharStreamWrapper\Behavior');
     }
 
     protected function tearDown()
@@ -41,8 +41,7 @@ class ManagerTest extends TestCase
      */
     public function multipleInitializationFails()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionCode(1535189871);
+        $this->setExpectedException('\LogicException', NULL, 1535189871);
         Manager::initialize($this->behaviorProphecy->reveal());
         Manager::initialize($this->behaviorProphecy->reveal());
     }
@@ -52,8 +51,7 @@ class ManagerTest extends TestCase
      */
     public function instanceFailsIfNotInitialized()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionCode(1535189872);
+        $this->setExpectedException('\LogicException', NULL, 1535189872);
         Manager::instance();
     }
 
@@ -62,8 +60,7 @@ class ManagerTest extends TestCase
      */
     public function instanceFailsIfDestroyed()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionCode(1535189872);
+        $this->setExpectedException('\LogicException', NULL, 1535189872);
         Manager::initialize($this->behaviorProphecy->reveal());
         Manager::destroy();
         Manager::instance();

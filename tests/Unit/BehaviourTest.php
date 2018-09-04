@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+
 namespace TYPO3\PharStreamWrapper\Tests\Unit;
 
 /*
@@ -39,8 +39,8 @@ class BehaviourTest extends TestCase
     {
         parent::setUp();
         $this->path = uniqid('path');
-        $this->allAssertion = $this->prophesize(Assertable::class);
-        $this->specificAssertion = $this->prophesize(Assertable::class);
+        $this->allAssertion = $this->prophesize('\TYPO3\PharStreamWrapper\Assertable');
+        $this->specificAssertion = $this->prophesize('\TYPO3\PharStreamWrapper\Assertable');
     }
 
     protected function tearDown()
@@ -54,9 +54,9 @@ class BehaviourTest extends TestCase
      */
     public function assertionAssignmentFailsWithUnknownCommand()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionCode(1535189881);
-        (new Behavior())->withAssertion(
+        $this->setExpectedException('\LogicException', NULL, 1535189881);
+        $behavior = new Behavior();
+        $behavior->withAssertion(
             $this->allAssertion->reveal(),
             'UNKNOWN'
         );
@@ -67,9 +67,9 @@ class BehaviourTest extends TestCase
      */
     public function assertInvocationFailsWithInvalidCommand()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionCode(1535189882);
-        $subject = (new Behavior())->withAssertion(
+        $this->setExpectedException('\LogicException', NULL, 1535189882);
+        $behavior = new Behavior();
+        $subject = $behavior->withAssertion(
             $this->allAssertion->reveal()
         );
         $subject->assert($this->path, 'UNKNOWN');
@@ -80,9 +80,9 @@ class BehaviourTest extends TestCase
      */
     public function assertInvocationFailsWithIncompleteAssertions()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionCode(1535189883);
-        $subject = (new Behavior())->withAssertion(
+        $this->setExpectedException('\LogicException', NULL, 1535189883);
+        $behavior = new Behavior();
+        $subject = $behavior->withAssertion(
             $this->allAssertion->reveal(),
             Behavior::COMMAND_UNLINK
         );
@@ -94,7 +94,7 @@ class BehaviourTest extends TestCase
      */
     public function assertInvocationIsDelegatedWithEmptyCommands()
     {
-        $commands = [
+        $commands = array(
             Behavior::COMMAND_DIR_OPENDIR,
             Behavior::COMMAND_MKDIR,
             Behavior::COMMAND_RENAME,
@@ -103,14 +103,15 @@ class BehaviourTest extends TestCase
             Behavior::COMMAND_STREAM_OPEN,
             Behavior::COMMAND_UNLINK,
             Behavior::COMMAND_URL_STAT,
-        ];
+        );
         foreach ($commands as $command) {
             $this->allAssertion->assert($this->path, $command)
                 ->willReturn(false)
                 ->shouldBeCalled();
         }
 
-        $subject = (new Behavior())->withAssertion(
+        $behavior = new Behavior();
+        $subject = $behavior->withAssertion(
             $this->allAssertion->reveal()
         );
 
@@ -135,7 +136,8 @@ class BehaviourTest extends TestCase
             ->willReturn(false)
             ->shouldBeCalled();
 
-        $subject = (new Behavior())
+        $behavior = new Behavior();
+        $subject = $behavior
             ->withAssertion(
                 $this->allAssertion->reveal()
             )

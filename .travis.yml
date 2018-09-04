@@ -1,5 +1,6 @@
 language: php
 
+# Hmmm.
 matrix:
   fast_finish: true
   include:

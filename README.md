@@ -1,5 +1,5 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/badges/quality-score.png?b=v5)](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/?branch=v5)
-[![Travis CI Build Status](https://travis-ci.org/TYPO3/phar-stream-wrapper.svg?branch=v5)](https://travis-ci.org/TYPO3/phar-stream-wrapper)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/badges/quality-score.png?b=v1)](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/?branch=v1)
+[![Travis CI Build Status](https://travis-ci.org/TYPO3/phar-stream-wrapper.svg?branch=v1)](https://travis-ci.org/TYPO3/phar-stream-wrapper)
 
 # PHP Phar Stream Wrapper
 

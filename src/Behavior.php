@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\PharStreamWrapper;
 
 /*
@@ -44,7 +43,6 @@ class Behavior implements Assertable
 
     /**
      * @param Assertable $assertable
-     * @param string ...$commands
      * @return static
      */
     public function withAssertion(Assertable $assertable)

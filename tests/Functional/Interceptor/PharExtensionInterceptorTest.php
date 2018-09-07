@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
 
 /*
@@ -44,7 +43,7 @@ class PharExtensionInterceptorTest extends TestCase
         }
 
         stream_wrapper_unregister('phar');
-        stream_wrapper_register('phar', '\TYPO3\PharStreamWrapper\PharStreamWrapper');
+        stream_wrapper_register('phar', 'TYPO3\\PharStreamWrapper\\PharStreamWrapper');
 
         $behavior = new \TYPO3\PharStreamWrapper\Behavior();
         Manager::initialize(
@@ -153,7 +152,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function directoryActionDeniesInvocation($path)
     {
-        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
         opendir('phar://' . $path);
     }
 
@@ -281,7 +280,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function urlStatDeniesInvocation($functionName, $path)
     {
-        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
         call_user_func($functionName, 'phar://' . $path);
     }
 
@@ -344,7 +343,7 @@ class PharExtensionInterceptorTest extends TestCase
         include('phar://' . $this->allowedPath . '/Classes/Domain/Model/DemoModel.php');
         self::assertTrue(
             class_exists(
-                '\TYPO3Demo\Demo\Domain\Model\DemoModel',
+                'TYPO3Demo\\Demo\\Domain\\Model\\DemoModel',
                 false
             )
         );
@@ -355,7 +354,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenDeniesInvocationForFileOpen()
     {
-        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
         fopen('phar://' . $this->deniedPath . '/Resources/content.txt', 'r');
     }
 
@@ -364,7 +363,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenDeniesInvocationForFileGetContents()
     {
-        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
         file_get_contents('phar://' . $this->deniedPath . '/Resources/content.txt');
     }
 
@@ -373,7 +372,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenDeniesInvocationForInclude()
     {
-        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
         include('phar://' . $this->deniedPath . '/Classes/Domain/Model/DemoModel.php');
     }
 }

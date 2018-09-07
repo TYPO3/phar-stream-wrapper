@@ -337,9 +337,6 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenAllowsInvocationForInclude()
     {
-        if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-            $this->markTestSkipped('Test requires PHP 5.5 or greater');
-        }
         include('phar://' . $this->allowedPath . '/Classes/Domain/Model/DemoModel.php');
         self::assertTrue(
             class_exists(

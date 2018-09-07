@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\PharStreamWrapper\Tests\Unit;
 
 /*
@@ -39,8 +38,8 @@ class BehaviourTest extends TestCase
     {
         parent::setUp();
         $this->path = uniqid('path');
-        $this->allAssertion = $this->prophesize('\TYPO3\PharStreamWrapper\Assertable');
-        $this->specificAssertion = $this->prophesize('\TYPO3\PharStreamWrapper\Assertable');
+        $this->allAssertion = $this->prophesize('TYPO3\\PharStreamWrapper\\Assertable');
+        $this->specificAssertion = $this->prophesize('TYPO3\\PharStreamWrapper\\Assertable');
     }
 
     protected function tearDown()
@@ -54,7 +53,7 @@ class BehaviourTest extends TestCase
      */
     public function assertionAssignmentFailsWithUnknownCommand()
     {
-        $this->setExpectedException('\LogicException', NULL, 1535189881);
+        $this->setExpectedException('LogicException', NULL, 1535189881);
         $behavior = new Behavior();
         $behavior->withAssertion(
             $this->allAssertion->reveal(),
@@ -67,7 +66,7 @@ class BehaviourTest extends TestCase
      */
     public function assertInvocationFailsWithInvalidCommand()
     {
-        $this->setExpectedException('\LogicException', NULL, 1535189882);
+        $this->setExpectedException('LogicException', NULL, 1535189882);
         $behavior = new Behavior();
         $subject = $behavior->withAssertion(
             $this->allAssertion->reveal()
@@ -80,7 +79,7 @@ class BehaviourTest extends TestCase
      */
     public function assertInvocationFailsWithIncompleteAssertions()
     {
-        $this->setExpectedException('\LogicException', NULL, 1535189883);
+        $this->setExpectedException('LogicException', NULL, 1535189883);
         $behavior = new Behavior();
         $subject = $behavior->withAssertion(
             $this->allAssertion->reveal(),

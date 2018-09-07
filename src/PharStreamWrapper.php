@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\PharStreamWrapper;
 
 /*
@@ -184,7 +183,7 @@ class PharStreamWrapper
      * @param int $operation
      * @return bool
      */
-    public function stream_lock(int $operation)
+    public function stream_lock($operation)
     {
         return $this->invokeInternalStreamWrapper(
             'flock',
@@ -203,8 +202,10 @@ class PharStreamWrapper
     {
         $this->assert($path, Behavior::COMMAND_STEAM_METADATA);
         if ($option === STREAM_META_TOUCH) {
-            $arguments = array_merge(array('touch', $path), (array) $value);
-            return call_user_func_array(array($this, 'invokeInternalStreamWrapper'), $arguments);
+            return call_user_func_array(
+                array($this, 'invokeInternalStreamWrapper'),
+                array_merge(array('touch', $path), (array) $value)
+            );
         }
         if ($option === STREAM_META_OWNER_NAME || $option === STREAM_META_OWNER) {
             return $this->invokeInternalStreamWrapper(
@@ -253,7 +254,10 @@ class PharStreamWrapper
         } else {
             Helper::resetOpCache();
         }
-        $this->internalResource = call_user_func_array(array($this, 'invokeInternalStreamWrapper'), array_merge(array('fopen'), $arguments));
+        $this->internalResource = call_user_func_array(
+            array($this, 'invokeInternalStreamWrapper'),
+            array_merge(array('fopen'), $arguments)
+        );
         if (!is_resource($this->internalResource)) {
             return false;
         }

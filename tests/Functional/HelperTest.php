@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\PharStreamWrapper\Tests\Functional;
 
 /*
@@ -58,7 +57,7 @@ class HelperTest extends TestCase
         );
 
         $directory = __DIR__ . '/Fixtures';
-        return $this->substituteFileNames($directory, $dataSet);
+        return static::substituteFileNames($directory, $dataSet);
     }
 
     /**

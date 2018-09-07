@@ -35,7 +35,7 @@ you duplicate or modify source code, credits are not required but really appreci
 ## Credits
 
 Thanks to [Alex Pott](https://github.com/alexpott), Drupal for creating
-back-ports of all sources in order provide compatibility with PHP v5.3.
+back-ports of all sources in order to provide compatibility with PHP v5.3.
 
 ## Installation
 

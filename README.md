@@ -30,12 +30,17 @@ July 2018.
 In general the TYPO3 core is released under the GNU General Public License version
 2 or any later version (`GPL-2.0-or-later`). In order to avoid licensing issues and
 incompatibilities this `PharStreamWrapper` is licenced under the MIT License. In case
-you duplicate or modify source code, credits are not required but really appreciated. 
+you duplicate or modify source code, credits are not required but really appreciated.
+
+## Credits
+
+Thanks to [Alex Pott](https://github.com/alexpott), Drupal for creating
+back-ports of all sources in order to provide compatibility with PHP v5.3.
 
 ## Installation
 
 The `PharStreamWrapper` is provided as composer package `typo3/phar-stream-wrapper`
-and has a minimum requirement of PHP v7.0.
+and has minimum requirements of PHP v5.3 (`v5` branch) and PHP v7.0 (`master` branch).
 
 ```
 composer require typo3/phar-stream-wrapper

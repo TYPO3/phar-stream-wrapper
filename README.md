@@ -40,10 +40,18 @@ back-ports of all sources in order to provide compatibility with PHP v5.3.
 ## Installation
 
 The `PharStreamWrapper` is provided as composer package `typo3/phar-stream-wrapper`
-and has minimum requirements of PHP v5.3 (`v2` branch) and PHP v7.0 (`master` branch).
+and has minimum requirements of PHP v5.3 ([`v2`](https://github.com/TYPO3/phar-stream-wrapper/tree/v2) branch) and PHP v7.0 ([`master`](https://github.com/TYPO3/phar-stream-wrapper) branch).
+
+### Installation for PHP v7.0
 
 ```
-composer require typo3/phar-stream-wrapper
+composer require typo3/phar-stream-wrapper ^3.0
+```
+
+### Installation for PHP v5.3
+
+```
+composer require typo3/phar-stream-wrapper ^2.0
 ```
 
 ## Example

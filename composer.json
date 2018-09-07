@@ -5,10 +5,10 @@
     "license": "MIT",
     "homepage": "https://typo3.org/",
     "require": {
-        "php": "^7.0"
+        "php": "^5.3.3|^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^4.8.36"
     },
     "autoload": {
         "psr-4": {

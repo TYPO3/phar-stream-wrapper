@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+
 namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
 
 /*
@@ -13,22 +13,27 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  */
 
 use PHPUnit\Framework\TestCase;
-use TYPO3\PharStreamWrapper\Exception;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
-use TYPO3\PharStreamWrapper\PharStreamWrapper;
 
 class PharExtensionInterceptorTest extends TestCase
 {
     /**
      * @var string
      */
-    private $allowedPath = __DIR__ . '/../Fixtures/bundle.phar';
+    private $allowedPath;
 
     /**
      * @var string
      */
-    private $deniedPath = __DIR__ . '/../Fixtures/bundle.phar.png';
+    private $deniedPath;
+
+    public function __construct($name = null, array $data = array(), $dataName = '')
+    {
+        $this->allowedPath = __DIR__ . '/../Fixtures/bundle.phar';
+        $this->deniedPath = __DIR__ . '/../Fixtures/bundle.phar.png';
+        parent::__construct($name, $data, $dataName);
+    }
 
     protected function setUp()
     {
@@ -39,11 +44,11 @@ class PharExtensionInterceptorTest extends TestCase
         }
 
         stream_wrapper_unregister('phar');
-        stream_wrapper_register('phar', PharStreamWrapper::class);
+        stream_wrapper_register('phar', '\TYPO3\PharStreamWrapper\PharStreamWrapper');
 
+        $behavior = new \TYPO3\PharStreamWrapper\Behavior();
         Manager::initialize(
-            (new \TYPO3\PharStreamWrapper\Behavior())
-                ->withAssertion(new PharExtensionInterceptor())
+            $behavior->withAssertion(new PharExtensionInterceptor())
         );
     }
 
@@ -57,22 +62,22 @@ class PharExtensionInterceptorTest extends TestCase
     /**
      * @return array
      */
-    public function directoryActionAllowsInvocationDataProvider(): array
+    public function directoryActionAllowsInvocationDataProvider()
     {
-        return [
-            'root directory' => [
+        return array(
+            'root directory' => array(
                 $this->allowedPath,
-                ['Classes', 'Resources']
-            ],
-            'Classes/Domain/Model directory' => [
+                array('Classes', 'Resources')
+            ),
+            'Classes/Domain/Model directory' => array(
                 $this->allowedPath . '/Classes/Domain/Model',
-                ['DemoModel.php']
-            ],
-            'Resources directory' => [
+                array('DemoModel.php')
+            ),
+            'Resources directory' => array(
                 $this->allowedPath . '/Resources',
-                ['content.txt']
-            ],
-        ];
+                array('content.txt')
+            ),
+        );
     }
 
     /**
@@ -81,7 +86,7 @@ class PharExtensionInterceptorTest extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryOpenAllowsInvocation(string $path)
+    public function directoryOpenAllowsInvocation($path)
     {
         $handle = opendir('phar://' . $path);
         self::assertInternalType('resource', $handle);
@@ -94,9 +99,9 @@ class PharExtensionInterceptorTest extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryReadAllowsInvocation(string $path, array $expectation)
+    public function directoryReadAllowsInvocation($path, array $expectation)
     {
-        $items = [];
+        $items = array();
         $handle = opendir('phar://' . $path);
         while (false !== $item = readdir($handle)) {
             $items[] = $item;
@@ -111,7 +116,7 @@ class PharExtensionInterceptorTest extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryCloseAllowsInvocation(string $path)
+    public function directoryCloseAllowsInvocation($path)
     {
         $handle = opendir('phar://' . $path);
         closedir($handle);
@@ -122,22 +127,22 @@ class PharExtensionInterceptorTest extends TestCase
     /**
      * @return array
      */
-    public function directoryActionDeniesInvocationDataProvider(): array
+    public function directoryActionDeniesInvocationDataProvider()
     {
-        return [
-            'root directory' => [
+        return array(
+            'root directory' => array(
                 $this->deniedPath,
-                ['Classes', 'Resources']
-            ],
-            'Classes/Domain/Model directory' => [
+                array('Classes', 'Resources')
+            ),
+            'Classes/Domain/Model directory' => array(
                 $this->deniedPath . '/Classes/Domain/Model',
-                ['DemoModel.php']
-            ],
-            'Resources directory' => [
+                array('DemoModel.php')
+            ),
+            'Resources directory' => array(
                 $this->deniedPath . '/Resources',
-                ['content.txt']
-            ],
-        ];
+                array('content.txt')
+            ),
+        );
     }
 
     /**
@@ -146,60 +151,59 @@ class PharExtensionInterceptorTest extends TestCase
      * @test
      * @dataProvider directoryActionDeniesInvocationDataProvider
      */
-    public function directoryActionDeniesInvocation(string $path)
+    public function directoryActionDeniesInvocation($path)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
         opendir('phar://' . $path);
     }
 
     /**
      * @return array
      */
-    public function urlStatAllowsInvocationDataProvider(): array
+    public function urlStatAllowsInvocationDataProvider()
     {
-        return [
-            'filesize base file' => [
+        return array(
+            'filesize base file' => array(
                 'filesize',
                 $this->allowedPath,
                 0, // Phar base file always has zero size when accessed through phar://
-            ],
-            'filesize Resources/content.txt' => [
+            ),
+            'filesize Resources/content.txt' => array(
                 'filesize',
                 $this->allowedPath . '/Resources/content.txt',
                 21,
-            ],
-            'is_file base file' => [
+            ),
+            'is_file base file' => array(
                 'is_file',
                 $this->allowedPath,
                 false, // Phar base file is not a file when accessed through phar://
-            ],
-            'is_file Resources/content.txt' => [
+            ),
+            'is_file Resources/content.txt' => array(
                 'is_file',
                 $this->allowedPath . '/Resources/content.txt',
                 true,
-            ],
-            'is_dir base file' => [
+            ),
+            'is_dir base file' => array(
                 'is_dir',
                 $this->allowedPath,
                 true, // Phar base file is a directory when accessed through phar://
-            ],
-            'is_dir Resources/content.txt' => [
+            ),
+            'is_dir Resources/content.txt' => array(
                 'is_dir',
                 $this->allowedPath . '/Resources/content.txt',
                 false,
-            ],
-            'file_exists base file' => [
+            ),
+            'file_exists base file' => array(
                 'file_exists',
                 $this->allowedPath,
                 true
-            ],
-            'file_exists Resources/content.txt' => [
+            ),
+            'file_exists Resources/content.txt' => array(
                 'file_exists',
                 $this->allowedPath . '/Resources/content.txt',
                 true
-            ],
-        ];
+            ),
+        );
     }
 
     /**
@@ -210,7 +214,7 @@ class PharExtensionInterceptorTest extends TestCase
      * @test
      * @dataProvider urlStatAllowsInvocationDataProvider
      */
-    public function urlStatAllowsInvocation(string $functionName, string $path, $expectation)
+    public function urlStatAllowsInvocation($functionName, $path, $expectation)
     {
         self::assertSame(
             $expectation,
@@ -221,50 +225,50 @@ class PharExtensionInterceptorTest extends TestCase
     /**
      * @return array
      */
-    public function urlStatDeniesInvocationDataProvider(): array
+    public function urlStatDeniesInvocationDataProvider()
     {
-        return [
-            'filesize base file' => [
+        return array(
+            'filesize base file' => array(
                 'filesize',
                 $this->deniedPath,
                 0, // Phar base file always has zero size when accessed through phar://
-            ],
-            'filesize Resources/content.txt' => [
+            ),
+            'filesize Resources/content.txt' => array(
                 'filesize',
                 $this->deniedPath . '/Resources/content.txt',
                 21,
-            ],
-            'is_file base file' => [
+            ),
+            'is_file base file' => array(
                 'is_file',
                 $this->deniedPath,
                 false, // Phar base file is not a file when accessed through phar://
-            ],
-            'is_file Resources/content.txt' => [
+            ),
+            'is_file Resources/content.txt' => array(
                 'is_file',
                 $this->deniedPath . '/Resources/content.txt',
                 true,
-            ],
-            'is_dir base file' => [
+            ),
+            'is_dir base file' => array(
                 'is_dir',
                 $this->deniedPath,
                 true, // Phar base file is a directory when accessed through phar://
-            ],
-            'is_dir Resources/content.txt' => [
+            ),
+            'is_dir Resources/content.txt' => array(
                 'is_dir',
                 $this->deniedPath . '/Resources/content.txt',
                 false,
-            ],
-            'file_exists base file' => [
+            ),
+            'file_exists base file' => array(
                 'file_exists',
                 $this->deniedPath,
                 true
-            ],
-            'file_exists Resources/content.txt' => [
+            ),
+            'file_exists Resources/content.txt' => array(
                 'file_exists',
                 $this->deniedPath . '/Resources/content.txt',
                 true
-            ],
-        ];
+            ),
+        );
     }
 
     /**
@@ -275,10 +279,9 @@ class PharExtensionInterceptorTest extends TestCase
      * @test
      * @dataProvider urlStatDeniesInvocationDataProvider
      */
-    public function urlStatDeniesInvocation(string $functionName, string $path)
+    public function urlStatDeniesInvocation($functionName, $path)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
         call_user_func($functionName, 'phar://' . $path);
     }
 
@@ -335,10 +338,13 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenAllowsInvocationForInclude()
     {
+        if (version_compare(PHP_VERSION, '5.5.0') < 0) {
+            $this->markTestSkipped('Test requires PHP 5.5 or greater');
+        }
         include('phar://' . $this->allowedPath . '/Classes/Domain/Model/DemoModel.php');
         self::assertTrue(
             class_exists(
-                \TYPO3Demo\Demo\Domain\Model\DemoModel::class,
+                '\TYPO3Demo\Demo\Domain\Model\DemoModel',
                 false
             )
         );
@@ -349,8 +355,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenDeniesInvocationForFileOpen()
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
         fopen('phar://' . $this->deniedPath . '/Resources/content.txt', 'r');
     }
 
@@ -359,8 +364,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenDeniesInvocationForFileGetContents()
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
         file_get_contents('phar://' . $this->deniedPath . '/Resources/content.txt');
     }
 
@@ -369,8 +373,7 @@ class PharExtensionInterceptorTest extends TestCase
      */
     public function streamOpenDeniesInvocationForInclude()
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', NULL, 1535198703);
         include('phar://' . $this->deniedPath . '/Classes/Domain/Model/DemoModel.php');
     }
 }

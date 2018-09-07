@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 namespace TYPO3\PharStreamWrapper;
 
 /*
@@ -24,9 +24,11 @@ class Helper
     {
         if (function_exists('opcache_reset')
             && function_exists('opcache_get_status')
-            && !empty(opcache_get_status()['opcache_enabled'])
         ) {
-            opcache_reset();
+            $status = opcache_get_status();
+            if (!empty($status['opcache_enabled'])) {
+                opcache_reset();
+            }
         }
     }
 
@@ -38,7 +40,7 @@ class Helper
      * @param string $path
      * @return string|null
      */
-    public static function determineBaseFile(string $path)
+    public static function determineBaseFile($path)
     {
         $parts = explode('/', static::normalizePath($path));
 
@@ -57,7 +59,7 @@ class Helper
      * @param string $path
      * @return string
      */
-    public static function removePharPrefix(string $path): string
+    public static function removePharPrefix($path)
     {
         $path = trim($path);
         if (stripos($path, 'phar://') !== 0) {
@@ -73,7 +75,7 @@ class Helper
      * @param string $path
      * @return string
      */
-    public static function normalizePath(string $path): string
+    public static function normalizePath($path)
     {
         return rtrim(
             static::getCanonicalPath(
@@ -89,7 +91,7 @@ class Helper
      * @param string $path File path to process
      * @return string
      */
-    private static function normalizeWindowsPath(string $path): string
+    private static function normalizeWindowsPath($path)
     {
         return str_replace('\\', '/', $path);
     }
@@ -100,7 +102,7 @@ class Helper
      * @param string $path Input string
      * @return string Canonical path, always without trailing slash
      */
-    private static function getCanonicalPath($path): string
+    private static function getCanonicalPath($path)
     {
         $path = static::normalizeWindowsPath($path);
 
@@ -125,13 +127,13 @@ class Helper
                 $pathPartsLength--;
             }
             // "." in path: remove element
-            if (($pathParts[$partCount] ?? '') === '.') {
+            if ((isset($pathParts[$partCount]) ? $pathParts[$partCount] : '') === '.') {
                 array_splice($pathParts, $partCount, 1);
                 $partCount--;
                 $pathPartsLength--;
             }
             // ".." in path:
-            if (($pathParts[$partCount] ?? '') === '..') {
+            if ((isset($pathParts[$partCount]) ? $pathParts[$partCount] : '') === '..') {
                 if ($partCount === 0) {
                     array_splice($pathParts, $partCount, 1);
                     $partCount--;
@@ -161,11 +163,11 @@ class Helper
      * @param string $path File path to evaluate
      * @return bool
      */
-    private static function isAbsolutePath($path): bool
+    private static function isAbsolutePath($path)
     {
         // Path starting with a / is always absolute, on every system
         // On Windows also a path starting with a drive letter is absolute: X:/
-        return ($path[0] ?? null) === '/'
+        return (isset($path[0]) ? $path[0] : null) === '/'
             || static::isWindows() && (
                 strpos($path, ':/') === 1
                 || strpos($path, ':\\') === 1
@@ -175,7 +177,7 @@ class Helper
     /**
      * @return bool
      */
-    private static function isWindows(): bool
+    private static function isWindows()
     {
         return stripos(PHP_OS, 'WIN') === 0;
     }

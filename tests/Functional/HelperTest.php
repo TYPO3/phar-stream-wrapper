@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+
 namespace TYPO3\PharStreamWrapper\Tests\Functional;
 
 /*
@@ -20,42 +20,42 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function baseFileIsResolvedDataProvider(): array
+    public function baseFileIsResolvedDataProvider()
     {
-        $dataSet = [
-            [
+        $dataSet = array(
+            array(
                 'phar://{DIR}/bundle.phar',
                 '{DIR}/bundle.phar'
-            ],
-            [
+            ),
+            array(
                 'phar://{DIR}/bundle.phar/path',
                 '{DIR}/bundle.phar'
-            ],
-            [
+            ),
+            array(
                 'phar://{DIR}/bundle.phar/path/content.txt',
                 '{DIR}/bundle.phar'
-            ],
-            [
+            ),
+            array(
                 'phar://{DIR}/other/../bundle.phar/path/../other/content.txt',
                 '{DIR}/bundle.phar'
-            ],
-            [
+            ),
+            array(
                 'phar://{DIR}/../Fixtures/bundle.phar',
                 '{DIR}/bundle.phar'
-            ],
-            [
+            ),
+            array(
                 'phar://{DIR}/not-existing.phar/path/../other/content.txt',
                 null
-            ],
-            [
+            ),
+            array(
                 'phar://../Functional/Fixtures/bundle.phar',
                 null
-            ],
-            [
+            ),
+            array(
                 'phar://./Fixtures/bundle.phar',
                 null
-            ],
-        ];
+            ),
+        );
 
         $directory = __DIR__ . '/Fixtures';
         return $this->substituteFileNames($directory, $dataSet);
@@ -68,7 +68,7 @@ class HelperTest extends TestCase
      * @test
      * @dataProvider baseFileIsResolvedDataProvider
      */
-    public function baseFileIsResolved(string $path, string $expectation = null)
+    public function baseFileIsResolved($path, $expectation = null)
     {
         static::assertSame(
             $expectation,
@@ -81,7 +81,7 @@ class HelperTest extends TestCase
      * @param string[] $items
      * @return string[]
      */
-    private function substituteFileNames(string $directory, array $items): array
+    public static function substituteFileNames($directory, array $items)
     {
         $directory = rtrim($directory);
 
@@ -91,7 +91,7 @@ class HelperTest extends TestCase
                     return $item;
                 }
                 if (is_array($item)) {
-                    return $this->substituteFileNames($directory, $item);
+                    return HelperTest::substituteFileNames($directory, $item);
                 }
                 return str_replace('{DIR}', $directory, $item);
             },

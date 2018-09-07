@@ -1,5 +1,5 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/?branch=master)
-[![Travis CI Build Status](https://travis-ci.org/TYPO3/phar-stream-wrapper.svg?branch=master)](https://travis-ci.org/TYPO3/phar-stream-wrapper)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/badges/quality-score.png?b=v5)](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/?branch=v5)
+[![Travis CI Build Status](https://travis-ci.org/TYPO3/phar-stream-wrapper.svg?branch=v5)](https://travis-ci.org/TYPO3/phar-stream-wrapper)
 
 # PHP Phar Stream Wrapper
 
@@ -30,12 +30,17 @@ July 2018.
 In general the TYPO3 core is released under the GNU General Public License version
 2 or any later version (`GPL-2.0-or-later`). In order to avoid licensing issues and
 incompatibilities this `PharStreamWrapper` is licenced under the MIT License. In case
-you duplicate or modify source code, credits are not required but really appreciated. 
+you duplicate or modify source code, credits are not required but really appreciated.
+
+## Credits
+
+Thanks to [Alex Pott](https://github.com/alexpott), Drupal for creating
+back-ports of all sources in order provide compatibility with PHP v5.3.
 
 ## Installation
 
 The `PharStreamWrapper` is provided as composer package `typo3/phar-stream-wrapper`
-and has a minimum requirement of PHP v7.0.
+and has minimum requirements of PHP v5.3 (`v5` branch) and PHP v7.0 (`master` branch).
 
 ```
 composer require typo3/phar-stream-wrapper
@@ -49,14 +54,14 @@ not having the `.phar` suffix. Interceptor logic has to be individual and
 adjusted to according requirements.
 
 ```
-\TYPO3\PharStreamWrapper\Manager::initialize(
-    (new \TYPO3\PharStreamWrapper\Behavior())
-        ->withAssertion(new \TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor())
+$behavior = new \TYPO3\PharStreamWrapper\Behavior();
+Manager::initialize(
+    $behavior->withAssertion(new PharExtensionInterceptor())
 );
 
 if (in_array('phar', stream_get_wrappers())) {
     stream_wrapper_unregister('phar');
-    stream_wrapper_register('phar', \TYPO3\PharStreamWrapper\PharStreamWrapper::class);
+    stream_wrapper_register('phar', 'TYPO3\\PharStreamWrapper\\PharStreamWrapper');
 }
 ```
 
@@ -94,7 +99,7 @@ class PharExtensionInterceptor implements Assertable
      * @return bool
      * @throws Exception
      */
-    public function assert(string $path, string $command): bool
+    public function assert($path, $command)
     {
         if ($this->baseFileContainsPharExtension($path)) {
             return true;
@@ -112,7 +117,7 @@ class PharExtensionInterceptor implements Assertable
      * @param string $path
      * @return bool
      */
-    private function baseFileContainsPharExtension(string $path): bool
+    private function baseFileContainsPharExtension($path)
     {
         $baseFile = Helper::determineBaseFile($path);
         if ($baseFile === null) {

@@ -4,6 +4,7 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://typo3.org/",
+    "keywords": ["php", "phar", "stream-wrapper", "security"],
     "require": {
         "php": "^7.0"
     },

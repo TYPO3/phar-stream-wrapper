@@ -13,7 +13,11 @@
     },
     "autoload": {
         "psr-4": {
-            "TYPO3\\PharStreamWrapper\\": "src/",
+            "TYPO3\\PharStreamWrapper\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "TYPO3\\PharStreamWrapper\\Tests\\": "tests/"
         }
     }

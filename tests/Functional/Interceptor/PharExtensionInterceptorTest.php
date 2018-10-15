@@ -74,7 +74,7 @@ class PharExtensionInterceptorTest extends TestCase
             ),
             'Resources directory' => array(
                 $this->allowedPath . '/Resources',
-                array('content.txt')
+                array('content.txt', 'exception.php')
             ),
         );
     }
@@ -89,6 +89,41 @@ class PharExtensionInterceptorTest extends TestCase
     {
         $handle = opendir('phar://' . $path);
         self::assertInternalType('resource', $handle);
+    }
+
+    /**
+     * @test
+     */
+    public function directoryOpenDeniesInvocationAfterCatchingError()
+    {
+        try {
+            opendir('phar://' . $this->allowedPath . '/__invalid__');
+        } catch (\Exception $exception) {
+            // this possible is caught in user-land code, for these tests
+            // it is asserted that it actually happens
+            static::assertInstanceOf('PHPUnit_Framework_Error_Warning', $exception);
+        }
+
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
+        file_exists('phar://' . $this->deniedPath);
+    }
+
+    /**
+     * @test
+     */
+    public function directoryOpenDeniesInvocationAfterCatchingException()
+    {
+        try {
+            include('phar://' . $this->allowedPath . '/Resources/exception.php');
+        } catch (\Exception $exception) {
+            // this possible is caught in user-land code, for these tests
+            // it is asserted that it actually happens
+            static::assertInstanceOf('RuntimeException', $exception);
+            static::assertSame(1539618987, $exception->getCode());
+        }
+
+        self::setExpectedException('TYPO3\\PharStreamWrapper\\Exception', NULL, 1535198703);
+        file_exists('phar://' . $this->deniedPath);
     }
 
     /**

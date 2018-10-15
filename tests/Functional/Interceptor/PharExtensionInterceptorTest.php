@@ -12,6 +12,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
+use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use TYPO3\PharStreamWrapper\Exception;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
@@ -85,6 +86,43 @@ class PharExtensionInterceptorTest extends TestCase
     {
         $handle = opendir('phar://' . $path);
         self::assertInternalType('resource', $handle);
+    }
+
+    /**
+     * @test
+     */
+    public function directoryOpenDeniesInvocationAfterCatchingError()
+    {
+        try {
+            opendir('phar://' . $this->allowedPath . '/__invalid__');
+        } catch (\Throwable $throwable) {
+            // this possible is caught in user-land code, for these tests
+            // it is asserted that it actually happens
+            static::assertInstanceOf(Warning::class, $throwable);
+        }
+
+        self::expectException(Exception::class);
+        self::expectExceptionCode(1535198703);
+        file_exists('phar://' . $this->deniedPath);
+    }
+
+    /**
+     * @test
+     */
+    public function directoryOpenDeniesInvocationAfterCatchingException()
+    {
+        try {
+            include('phar://' . $this->allowedPath . '/Resources/exception.php');
+        } catch (\Throwable $throwable) {
+            // this possible is caught in user-land code, for these tests
+            // it is asserted that it actually happens
+            static::assertInstanceOf(\RuntimeException::class, $throwable);
+            static::assertSame(1539618987, $throwable->getCode());
+        }
+
+        self::expectException(Exception::class);
+        self::expectExceptionCode(1535198703);
+        file_exists('phar://' . $this->deniedPath);
     }
 
     /**

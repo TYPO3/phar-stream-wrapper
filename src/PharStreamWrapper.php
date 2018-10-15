@@ -446,10 +446,14 @@ class PharStreamWrapper
         $functionName = ltrim($functionName, '@');
         $this->restoreInternalSteamWrapper();
 
-        if ($silentExecution) {
-            $result = @call_user_func_array($functionName, $arguments);
-        } else {
-            $result = call_user_func_array($functionName, $arguments);
+        try {
+            if ($silentExecution) {
+                $result = @call_user_func_array($functionName, $arguments);
+            } else {
+                $result = call_user_func_array($functionName, $arguments);
+            }
+        } finally {
+            $this->registerStreamWrapper();
         }
 
         $this->registerStreamWrapper();

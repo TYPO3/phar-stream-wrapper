@@ -24,17 +24,17 @@ class AbstractTestCase extends TestCase
     /**
      * @var string[]
      */
-    protected const ALLOWED_PATHS = [];
+    const ALLOWED_PATHS = [];
 
     /**
      * @var string[]
      */
-    private const DENIED_PATHS = [];
+    const DENIED_PATHS = [];
 
     /**
      * @var int
      */
-    protected const EXPECTED_EXCEPTION_CODE = 0;
+    const EXPECTED_EXCEPTION_CODE = 0;
 
     /**
      * @return array

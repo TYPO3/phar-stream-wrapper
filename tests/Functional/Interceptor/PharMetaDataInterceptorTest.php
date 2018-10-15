@@ -21,7 +21,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    protected const ALLOWED_PATHS = [
+    const ALLOWED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar',
         __DIR__ . '/../Fixtures/bundle.phar.png',
     ];
@@ -29,7 +29,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    protected const DENIED_PATHS = [
+    const DENIED_PATHS = [
         __DIR__ . '/../Fixtures/serialized.phar',
         __DIR__ . '/../Fixtures/serialized.phar.gz',
         __DIR__ . '/../Fixtures/serialized.phar.bz2',
@@ -38,7 +38,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     /**
      * @var int
      */
-    protected const EXPECTED_EXCEPTION_CODE = 1539632368;
+    const EXPECTED_EXCEPTION_CODE = 1539632368;
 
     protected function setUp()
     {

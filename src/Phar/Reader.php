@@ -94,7 +94,7 @@ class Reader
      * @param string $content
      * @return int|null
      */
-    private function resolveManifestLength(string $content): ?int
+    private function resolveManifestLength(string $content)
     {
         if (strlen($content) < 4) {
             return null;

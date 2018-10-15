@@ -21,21 +21,21 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    protected const ALLOWED_PATHS = [
+    const ALLOWED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar',
     ];
 
     /**
      * @var string[]
      */
-    protected const DENIED_PATHS = [
+    const DENIED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
     ];
 
     /**
      * @var int
      */
-    protected const EXPECTED_EXCEPTION_CODE = 1535198703;
+    const EXPECTED_EXCEPTION_CODE = 1535198703;
 
     protected function setUp()
     {

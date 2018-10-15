@@ -23,14 +23,14 @@ class ConjunctionInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    protected const ALLOWED_PATHS = [
+    const ALLOWED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar',
     ];
 
     /**
      * @var string[]
      */
-    protected const DENIED_PATHS = [
+    const DENIED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
         __DIR__ . '/../Fixtures/serialized.phar',
         __DIR__ . '/../Fixtures/serialized.phar.gz',
@@ -40,7 +40,7 @@ class ConjunctionInterceptorTest extends AbstractTestCase
     /**
      * @var int
      */
-    protected const EXPECTED_EXCEPTION_CODE = 1539625084;
+    const EXPECTED_EXCEPTION_CODE = 1539625084;
 
     protected function setUp()
     {

@@ -71,7 +71,7 @@ class PharExtensionInterceptorTest extends TestCase
             ],
             'Resources directory' => [
                 $this->allowedPath . '/Resources',
-                ['content.txt']
+                ['content.txt', 'exception.php']
             ],
         ];
     }

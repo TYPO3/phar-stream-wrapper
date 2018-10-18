@@ -460,7 +460,6 @@ class PharStreamWrapper
             throw $throwable;
         }
 
-        $this->registerStreamWrapper();
         return $result;
     }
 

@@ -456,6 +456,7 @@ class PharStreamWrapper
             $this->registerStreamWrapper();
             throw $exception;
         } catch (\Throwable $throwable) {
+            $this->registerStreamWrapper();
             throw $throwable;
         }
 

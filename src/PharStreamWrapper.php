@@ -456,7 +456,6 @@ class PharStreamWrapper
             $this->registerStreamWrapper();
         }
 
-        $this->registerStreamWrapper();
         return $result;
     }
 

@@ -50,6 +50,14 @@ class PharExtensionInterceptor implements Assertable
         if ($baseFile === null) {
             return false;
         }
+        // If the stream wrapper is registered by invoking a phar file that does
+        // not not have .phar extension then this should be allowed. For
+        // example, some CLI tools recommend removing the extension.
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $caller = array_pop($backtrace);
+        if (isset($caller['file']) && $baseFile === $caller['file']) {
+            return true;
+        }
         $fileExtension = pathinfo($baseFile, PATHINFO_EXTENSION);
         return strtolower($fileExtension) === 'phar';
     }

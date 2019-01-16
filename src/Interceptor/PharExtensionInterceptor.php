@@ -54,8 +54,13 @@ class PharExtensionInterceptor implements Assertable
         // not not have .phar extension then this should be allowed. For
         // example, some CLI tools recommend removing the extension.
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $caller = array_pop($backtrace);
-        if (isset($caller['file']) && $baseFile === $caller['file']) {
+        // Find the last entry in the backtrace containing a 'file' key as
+        // sometimes the last caller is executed outside the scope of a file.
+        // For example, this occurs with shutdown functions.
+        do {
+            $caller = array_pop($backtrace);
+        } while (empty($caller['file']) && !empty($backtrace));
+        if (isset($caller['file']) && $baseFile === Helper::determineBaseFile($caller['file'])) {
             return true;
         }
         $fileExtension = pathinfo($baseFile, PATHINFO_EXTENSION);

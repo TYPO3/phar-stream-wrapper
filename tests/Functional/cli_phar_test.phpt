@@ -10,3 +10,4 @@ passthru(PHP_BINARY . ' cli_phar');
 Can access phar files without .phar extension if they are the CLI command.
 Can access phar files with .phar extension.
 Cannot access other phar files without .phar extension.
+Shutdown functions work in phar files without a .phar extension.

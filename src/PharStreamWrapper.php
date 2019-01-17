@@ -31,6 +31,13 @@ class PharStreamWrapper
     protected $internalResource;
 
     /**
+     * A list of phar aliases keyed by phar filename.
+     *
+     * @var string[]
+     */
+    private $aliases = [];
+
+    /**
      * @return bool
      */
     public function dir_closedir(): bool
@@ -411,7 +418,28 @@ class PharStreamWrapper
      */
     protected function assert(string $path, string $command)
     {
+        $basePath = Helper::determineBaseFile($path);
+        // Performance optimisation. Once we've checked a path we don't need to
+        // again.
+        if (isset($this->aliases[$basePath])) {
+            return;
+        }
+        // If we can't determine a base then this is being invoked from
+        // inside a Phar archive that is using aliases. Check if any of the
+        // previous read phar files use this alias.
+        if ($basePath === null) {
+            foreach ($this->aliases as $alias) {
+                if (strpos($path, 'phar://' . $alias) === 0) {
+                    return;
+                }
+            }
+        }
         if ($this->resolveAssertable()->assert($path, $command) === true) {
+            if ($basePath && !isset($this->aliases[$path])) {
+                $this->restoreInternalSteamWrapper();
+                $this->aliases[$path] = (new \Phar(realpath($basePath)))->getAlias();
+                $this->registerStreamWrapper();
+            }
             return;
         }
 

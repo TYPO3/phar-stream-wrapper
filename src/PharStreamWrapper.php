@@ -141,13 +141,11 @@ class PharStreamWrapper
 
     /**
      * @param int $cast_as
+     * @return resource|false
      */
     public function stream_cast(int $cast_as)
     {
-        throw new Exception(
-            'Method stream_select() cannot be used',
-            1530103999
-        );
+        return $this->internalResource ? $this->internalResource : FALSE;
     }
 
     public function stream_close()

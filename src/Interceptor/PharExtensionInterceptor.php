@@ -64,8 +64,14 @@ class PharExtensionInterceptor implements Assertable
         do {
             $caller = array_pop($backtrace);
         } while (empty($caller['file']) && !empty($backtrace));
-        if (isset($caller['file']) && $baseFile === Helper::determineBaseFile($caller['file'])) {
-            return true;
+        if (isset($caller['file'])) {
+            if ($baseFile === Helper::determineBaseFile($caller['file'])) {
+                return TRUE;
+            }
+            // Resolve phar aliases.
+            if (realpath($baseFile) === $caller['file']) {
+                return TRUE;
+            }
         }
         $fileExtension = pathinfo($baseFile, PATHINFO_EXTENSION);
         return strtolower($fileExtension) === 'phar';

@@ -48,7 +48,11 @@ class PharExtensionInterceptor implements Assertable
     {
         $baseFile = Helper::determineBaseFile($path);
         if ($baseFile === null) {
-            return false;
+            // If we can't determine a base then this is being invoked from
+            // inside a Phar archive that is using aliases. In this case we
+            // should allow access because the real phar will have already been
+            // checked.
+            return true;
         }
         // If the stream wrapper is registered by invoking a phar file that does
         // not not have .phar extension then this should be allowed. For

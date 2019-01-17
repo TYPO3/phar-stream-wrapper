@@ -411,4 +411,13 @@ class PharExtensionInterceptorTest extends TestCase
         self::expectExceptionCode(1535198703);
         include('phar://' . $this->deniedPath . '/Classes/Domain/Model/DemoModel.php');
     }
+
+    /**
+     * @test
+     */
+    public function includeAllowsAliasedInclude()
+    {
+        include(__DIR__ . '/../Fixtures/alias_phar.phar');
+        $this->assertSame("Included a file inside the phar using 'phar://alias_phar.phar/test/file_to_include.php'", phar_test_include());
+    }
 }

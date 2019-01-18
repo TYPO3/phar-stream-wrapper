@@ -15,9 +15,6 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use TYPO3\PharStreamWrapper\Exception;
-use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
-use TYPO3\PharStreamWrapper\Manager;
-use TYPO3\PharStreamWrapper\PharStreamWrapper;
 
 class AbstractTestCase extends TestCase
 {

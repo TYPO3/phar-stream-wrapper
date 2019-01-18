@@ -52,4 +52,12 @@ class Container
     {
         return $this->manifest;
     }
+
+    /**
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return $this->stub->getMappedAlias() ?: $this->manifest->getAlias();
+    }
 }

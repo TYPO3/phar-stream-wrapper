@@ -32,8 +32,7 @@ class Stub
         ) {
             // remove spaces, single & double quotes
             // @todo `'my' . 'alias' . '.phar'` is not evaluated here
-            $alias = trim($matches[1], ' \'"');
-            $target->mappedAlias = $alias !== '' ? $alias : null;
+            $target->mappedAlias = trim($matches[1], ' \'"');
         }
 
         return $target;
@@ -47,7 +46,7 @@ class Stub
     /**
      * @var string
      */
-    private $mappedAlias;
+    private $mappedAlias = '';
 
     /**
      * @return string
@@ -58,9 +57,9 @@ class Stub
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getMappedAlias()
+    public function getMappedAlias(): string
     {
         return $this->mappedAlias;
     }

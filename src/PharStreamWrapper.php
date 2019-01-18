@@ -33,9 +33,12 @@ class PharStreamWrapper
     /**
      * A list of phar aliases keyed by phar filename.
      *
+     * As the stream wrapper is re-registered this needs to be static to be
+     * preserved.
+     *
      * @var string[]
      */
-    private $aliases = [];
+    private static $aliases = [];
 
     /**
      * @return bool
@@ -419,25 +422,28 @@ class PharStreamWrapper
     protected function assert(string $path, string $command)
     {
         $basePath = Helper::determineBaseFile($path);
+        if ($basePath) {
+            $basePath = realpath($basePath);
+        }
         // Performance optimisation. Once we've checked a path we don't need to
         // again.
-        if (isset($this->aliases[$basePath])) {
+        if (isset(self::$aliases[$basePath])) {
             return;
         }
         // If we can't determine a base then this is being invoked from
         // inside a Phar archive that is using aliases. Check if any of the
         // previous read phar files use this alias.
         if ($basePath === null) {
-            foreach ($this->aliases as $alias) {
+            foreach (self::$aliases as $alias) {
                 if (strpos($path, 'phar://' . $alias) === 0) {
                     return;
                 }
             }
         }
         if ($this->resolveAssertable()->assert($path, $command) === true) {
-            if ($basePath && !isset($this->aliases[$path])) {
+            if ($basePath && !isset($this->aliases[$basePath])) {
                 $this->restoreInternalSteamWrapper();
-                $this->aliases[$path] = (new \Phar(realpath($basePath)))->getAlias();
+                self::$aliases[$basePath] = (new \Phar(realpath($basePath)))->getAlias();
                 $this->registerStreamWrapper();
             }
             return;

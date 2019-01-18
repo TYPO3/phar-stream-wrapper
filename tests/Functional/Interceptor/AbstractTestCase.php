@@ -74,7 +74,7 @@ class AbstractTestCase extends TestCase
                 ],
                 'Resources directory ' . $fileName => [
                     $allowedPath . '/Resources',
-                    ['content.txt']
+                    ['content.txt', 'exception.php']
                 ],
             ]);
         }

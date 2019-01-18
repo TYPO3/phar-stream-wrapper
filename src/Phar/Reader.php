@@ -44,9 +44,9 @@ class Reader
     }
 
     /**
-     * @return Manifest
+     * @return Container
      */
-    public function resolveManifest(): Manifest
+    public function resolveContainer(): Container
     {
         $stream = '';
         if ($this->fileType === 'application/x-gzip') {
@@ -55,30 +55,61 @@ class Reader
             $stream = 'compress.bzip2://';
         }
 
-        $content = null;
+        $stubContent = null;
+        $manifestContent = null;
         $manifestLength = null;
         $resource = fopen($stream . $this->fileName, 'r');
         while (!feof($resource)) {
             $line = fgets($resource);
             // stop reading file when manifest can be extracted
-            if ($manifestLength !== null && $content !== null && strlen($content) >= $manifestLength) {
+            if ($manifestLength !== null && $manifestContent !== null && strlen($manifestContent) >= $manifestLength) {
                 break;
             }
-            if ($content !== null) {
-                $content .= $line;
-                $manifestLength = $this->resolveManifestLength($content);
-            } elseif (strpos($line, '__HALT_COMPILER()') !== false) {
-                $content = preg_replace('#^.*__HALT_COMPILER\(\)[^>]*\?>(\r|\n)*#', '', $line);
-                $manifestLength = $this->resolveManifestLength($content);
+
+            $stubPosition = strpos($line, '<?php');
+            $manifestPosition = strpos($line, '__HALT_COMPILER()');
+
+            if ($stubContent === null && $stubPosition !== false) {
+                $stubContent = substr($line, $stubPosition);
+            } elseif ($manifestContent === null && $manifestPosition !== false) {
+                $manifestContent = preg_replace('#^.*__HALT_COMPILER\(\)[^>]*\?>(\r|\n)*#', '', $line);
+                $manifestLength = $this->resolveManifestLength($manifestContent);
+            } elseif ($manifestContent !== null) {
+                $manifestContent .= $line;
+                $manifestLength = $this->resolveManifestLength($manifestContent);
+            } elseif ($stubContent !== null) {
+                $stubContent .= $line;
             }
         }
         fclose($resource);
 
-        if ($content === null || $manifestLength === null || strlen($content) < $manifestLength) {
-            throw new \UnexpectedValueException('Cannot resolve manifest');
+        if ($stubContent === null) {
+            throw new \UnexpectedValueException(
+                'Cannot resolve stub',
+                1547807881
+            );
+        }
+        if ($manifestContent === null || $manifestLength === null) {
+            throw new \UnexpectedValueException(
+                'Cannot resolve manifest',
+                1547807882
+            );
+        }
+        if (strlen($manifestContent) < $manifestLength) {
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'Exected manifest length %d, got %d',
+                    strlen($manifestContent),
+                    $manifestLength
+                ),
+                1547807883
+            );
         }
 
-        return Manifest::fromContent($content);
+        return new Container(
+            Stub::fromContent($stubContent),
+            Manifest::fromContent($manifestContent)
+        );
     }
 
     /**

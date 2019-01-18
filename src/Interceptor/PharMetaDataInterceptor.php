@@ -56,7 +56,7 @@ class PharMetaDataInterceptor implements Assertable
 
         try {
             $reader = new Reader($baseFile);
-            $reader->resolveManifest()->deserializeMetaData();
+            $reader->resolveContainer()->getManifest()->deserializeMetaData();
         } catch (DeserializationException $exception) {
             return false;
         }

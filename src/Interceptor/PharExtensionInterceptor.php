@@ -12,8 +12,8 @@ namespace TYPO3\PharStreamWrapper\Interceptor;
  */
 
 use TYPO3\PharStreamWrapper\Assertable;
-use TYPO3\PharStreamWrapper\Helper;
 use TYPO3\PharStreamWrapper\Exception;
+use TYPO3\PharStreamWrapper\Manager;
 
 class PharExtensionInterceptor implements Assertable
 {
@@ -45,7 +45,7 @@ class PharExtensionInterceptor implements Assertable
      */
     private function baseFileContainsPharExtension($path)
     {
-        $baseFile = Helper::determineBaseFile($path);
+        $baseFile = Manager::instance()->resolveBaseName($path);
         if ($baseFile === null) {
             return false;
         }

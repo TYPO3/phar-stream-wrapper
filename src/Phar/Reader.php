@@ -45,17 +45,48 @@ class Reader
      */
     public function resolveContainer(): Container
     {
-        $stream = '';
-        if ($this->fileType === 'application/x-gzip') {
-            $stream = 'compress.zlib://';
-        } elseif ($this->fileType === 'application/x-bzip2') {
-            $stream = 'compress.bzip2://';
+        $data = $this->extractData($this->resolveStream() . $this->fileName);
+
+        if ($data['stubContent'] === null) {
+            throw new \UnexpectedValueException(
+                'Cannot resolve stub',
+                1547807881
+            );
+        }
+        if ($data['manifestContent'] === null || $data['manifestLength'] === null) {
+            throw new \UnexpectedValueException(
+                'Cannot resolve manifest',
+                1547807882
+            );
+        }
+        if (strlen($data['manifestContent']) < $data['manifestLength']) {
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'Exected manifest length %d, got %d',
+                    strlen($data['manifestContent']),
+                    $data['manifestLength']
+                ),
+                1547807883
+            );
         }
 
+        return new Container(
+            Stub::fromContent($data['stubContent']),
+            Manifest::fromContent($data['manifestContent'])
+        );
+    }
+
+    /**
+     * @param string $fileName e.g. '/path/file.phar' or 'compress.zlib:///path/file.phar'
+     * @return array
+     */
+    private function extractData(string $fileName): array
+    {
         $stubContent = null;
         $manifestContent = null;
         $manifestLength = null;
-        $resource = fopen($stream . $this->fileName, 'r');
+
+        $resource = fopen($fileName, 'r');
         while (!feof($resource)) {
             $line = fgets($resource);
             // stop reading file when manifest can be extracted
@@ -90,33 +121,26 @@ class Reader
         }
         fclose($resource);
 
-        if ($stubContent === null) {
-            throw new \UnexpectedValueException(
-                'Cannot resolve stub',
-                1547807881
-            );
-        }
-        if ($manifestContent === null || $manifestLength === null) {
-            throw new \UnexpectedValueException(
-                'Cannot resolve manifest',
-                1547807882
-            );
-        }
-        if (strlen($manifestContent) < $manifestLength) {
-            throw new \UnexpectedValueException(
-                sprintf(
-                    'Exected manifest length %d, got %d',
-                    strlen($manifestContent),
-                    $manifestLength
-                ),
-                1547807883
-            );
-        }
+        return [
+            'stubContent' => $stubContent,
+            'manifestContent' => $manifestContent,
+            'manifestLength' => $manifestLength,
+        ];
+    }
 
-        return new Container(
-            Stub::fromContent($stubContent),
-            Manifest::fromContent($manifestContent)
-        );
+    /**
+     * Resolves stream in order to handle compressed Phar archives.
+     *
+     * @return string
+     */
+    private function resolveStream(): string
+    {
+        if ($this->fileType === 'application/x-gzip') {
+            return 'compress.zlib://';
+        } elseif ($this->fileType === 'application/x-bzip2') {
+            return 'compress.bzip2://';
+        }
+        return '';
     }
 
     /**

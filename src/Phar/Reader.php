@@ -30,7 +30,7 @@ class Reader
     public function __construct(string $fileName)
     {
         if (strpos($fileName, '://') !== false) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 'File name must not contain stream prefix',
                 1539623708
             );
@@ -48,19 +48,19 @@ class Reader
         $data = $this->extractData($this->resolveStream() . $this->fileName);
 
         if ($data['stubContent'] === null) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 'Cannot resolve stub',
                 1547807881
             );
         }
         if ($data['manifestContent'] === null || $data['manifestLength'] === null) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 'Cannot resolve manifest',
                 1547807882
             );
         }
         if (strlen($data['manifestContent']) < $data['manifestLength']) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 sprintf(
                     'Exected manifest length %d, got %d',
                     strlen($data['manifestContent']),
@@ -173,7 +173,7 @@ class Reader
     {
         $payload = substr($content, $start, 4);
         if (!is_string($payload)) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 sprintf('Cannot resolve value at offset %d', $start),
                 1539614260
             );
@@ -181,7 +181,7 @@ class Reader
 
         $value = unpack('V', $payload);
         if (!isset($value[1])) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 sprintf('Cannot resolve value at offset %d', $start),
                 1539614261
             );
@@ -198,7 +198,7 @@ class Reader
     {
         $payload = substr($content, $start, 2);
         if (!is_string($payload)) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 sprintf('Cannot resolve value at offset %d', $start),
                 1539614263
             );
@@ -206,7 +206,7 @@ class Reader
 
         $value = unpack('n', $payload);
         if (!isset($value[1])) {
-            throw new \UnexpectedValueException(
+            throw new ReaderException(
                 sprintf('Cannot resolve value at offset %d', $start),
                 1539614264
             );

@@ -12,6 +12,13 @@ namespace TYPO3\PharStreamWrapper;
  * The TYPO3 project - inspiring people to share!
  */
 
+/**
+ * Helper provides low-level tools on file name resolving. However it does not
+ * (and should not) maintain any runtime state information. In order to resolve
+ * Phar archive paths according resolvers have to be used.
+ *
+ * @see \TYPO3\PharStreamWrapper\Resolvable::resolveBaseName()
+ */
 class Helper
 {
     /*
@@ -55,12 +62,21 @@ class Helper
 
     /**
      * @param string $path
+     * @return bool
+     */
+    public static function hasPharPrefix(string $path): bool
+    {
+        return stripos($path, 'phar://') === 0;
+    }
+
+    /**
+     * @param string $path
      * @return string
      */
     public static function removePharPrefix(string $path): string
     {
         $path = trim($path);
-        if (stripos($path, 'phar://') !== 0) {
+        if (!static::hasPharPrefix($path)) {
             return $path;
         }
         return substr($path, 7);

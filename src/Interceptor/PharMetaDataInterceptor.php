@@ -18,6 +18,10 @@ use TYPO3\PharStreamWrapper\Exception;
 use TYPO3\PharStreamWrapper\Phar\DeserializationException;
 use TYPO3\PharStreamWrapper\Phar\Reader;
 
+/**
+ * @internal Experimental implementation of checking against serialized objects in Phar meta-data
+ * @internal This functionality has not been 100% pentested...
+ */
 class PharMetaDataInterceptor implements Assertable
 {
     /**

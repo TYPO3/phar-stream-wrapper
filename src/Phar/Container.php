@@ -12,9 +12,6 @@ namespace TYPO3\PharStreamWrapper\Phar;
  * The TYPO3 project - inspiring people to share!
  */
 
-/**
- * @internal Experimental implementation of Phar archive internals
- */
 class Container
 {
     /**

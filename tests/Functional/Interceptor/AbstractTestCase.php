@@ -26,6 +26,11 @@ class AbstractTestCase extends TestCase
     /**
      * @var string[]
      */
+    const ALLOWED_ALIASED_PATHS = [];
+
+    /**
+     * @var string[]
+     */
     const DENIED_PATHS = [];
 
     /**
@@ -41,6 +46,17 @@ class AbstractTestCase extends TestCase
         return array_combine(
             static::ALLOWED_PATHS,
             array_map([$this, 'wrapInArray'], static::ALLOWED_PATHS)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function allowedAliasedPathsDataProvider(): array
+    {
+        return array_combine(
+            static::ALLOWED_ALIASED_PATHS,
+            array_map([$this, 'wrapInArray'], static::ALLOWED_ALIASED_PATHS)
         );
     }
 
@@ -424,6 +440,18 @@ class AbstractTestCase extends TestCase
                 false
             )
         );
+    }
+
+    /**
+     * @param string $allowedPath
+     *
+     * @test
+     * @dataProvider allowedAliasedPathsDataProvider
+     */
+    public function streamOpenAllowsInvocationForIncludeOnPhar(string $allowedPath)
+    {
+        $result = include($allowedPath);
+        static::assertNotFalse($result);
     }
 
     /**

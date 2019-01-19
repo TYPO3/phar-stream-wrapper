@@ -87,6 +87,13 @@ class Reader
         $manifestLength = null;
 
         $resource = fopen($fileName, 'r');
+        if (!is_resource($resource)) {
+            throw new ReaderException(
+                sprintf('Resource %s could not be opened', $fileName),
+                1547902055
+            );
+        }
+
         while (!feof($resource)) {
             $line = fgets($resource);
             // stop reading file when manifest can be extracted

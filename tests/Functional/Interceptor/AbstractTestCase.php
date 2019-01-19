@@ -110,7 +110,7 @@ class AbstractTestCase extends TestCase
         }
 
         self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         file_exists('phar://' . static::DENIED_PATHS[0]);
     }
 
@@ -132,7 +132,7 @@ class AbstractTestCase extends TestCase
         }
 
         self::expectException(Exception::class);
-        self::expectExceptionCode(1535198703);
+        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         file_exists('phar://' . static::DENIED_PATHS[0]);
     }
 

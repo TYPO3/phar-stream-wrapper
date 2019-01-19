@@ -92,22 +92,18 @@ class BaseNameResolver implements Resolvable
     }
 
     /**
+     * Updates alias map for current Phar archive.
+     *
+     * Since Phar aliases are intended to be used only inside Phar archives,
+     * there is no further check for duplicates in our alias map.
+     *
      * @param string $alias
      * @param string $basePath
+     * @see https://secure.php.net/manual/en/phar.setalias.php
+     * @see https://secure.php.net/manual/en/phar.mapphar.php
      */
     private function setAlias($alias, $basePath)
     {
-        $currentBasePath = $this->getAlias($alias);
-        if ($currentBasePath !== null && $currentBasePath !== $basePath) {
-            throw new \TYPO3\PharStreamWrapper\Exception(
-                sprintf(
-                    'Alias %s already registered for different path %s',
-                    $alias,
-                    $currentBasePath
-                ),
-                1547893171
-            );
-        }
         $this->aliasMap[$alias] = $basePath;
     }
 }

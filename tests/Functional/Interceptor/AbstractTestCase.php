@@ -22,12 +22,17 @@ class AbstractTestCase extends TestCase
     const EXPECTED_EXCEPTION_CODE = 0;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $allowedPaths = array();
 
     /**
-     * @var string
+     * @var string[]
+     */
+    protected $allowedAliasedPaths = array();
+
+    /**
+     * @var string[]
      */
     protected $deniedPaths = array();
 
@@ -39,6 +44,17 @@ class AbstractTestCase extends TestCase
         return array_combine(
             $this->allowedPaths,
             array_map(array($this, 'wrapInArray'), $this->allowedPaths)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function allowedAliasedPathsDataProvider()
+    {
+        return array_combine(
+            $this->allowedAliasedPaths,
+            array_map(array($this, 'wrapInArray'), $this->allowedAliasedPaths)
         );
     }
 
@@ -418,6 +434,18 @@ class AbstractTestCase extends TestCase
                 false
             )
         );
+    }
+
+    /**
+     * @param string $allowedPath
+     *
+     * @test
+     * @dataProvider allowedAliasedPathsDataProvider
+     */
+    public function streamOpenAllowsInvocationForIncludeOnPhar($allowedPath)
+    {
+        $result = include($allowedPath);
+        static::assertNotFalse($result);
     }
 
     /**

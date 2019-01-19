@@ -26,6 +26,9 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         $this->allowedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar'
         );
+        $this->allowedAliasedPaths = array(
+            __DIR__ . '/../Fixtures/geoip2.phar',
+        );
         $this->deniedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar.png'
         );

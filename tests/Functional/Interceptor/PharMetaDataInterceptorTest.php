@@ -16,7 +16,6 @@ use TYPO3\PharStreamWrapper\Manager;
 
 class PharMetaDataInterceptorTest extends AbstractTestCase
 {
-
     /**
      * @var int
      */
@@ -27,6 +26,9 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
         $this->allowedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar',
             __DIR__ . '/../Fixtures/bundle.phar.png',
+        );
+        $this->allowedAliasedPaths = array(
+            __DIR__ . '/../Fixtures/geoip2.phar',
         );
         $this->deniedPaths = array(
             __DIR__ . '/../Fixtures/serialized.phar',

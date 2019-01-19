@@ -67,4 +67,53 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         Manager::destroy();
         parent::tearDown();
     }
+
+    /**
+     * @return array
+     */
+    public function cliToolCommandDataProvider(): array
+    {
+        $fixtureDirectory = dirname(__DIR__) . '/Fixtures';
+        return $this->inflateDataSet([
+            // add ' --plain' in order to disable PharStreamWrapper in CLI tool
+            $fixtureDirectory . '/cli-tool.phar',
+            $fixtureDirectory . '/cli-tool',
+        ]);
+    }
+
+    /**
+     * @param string $command
+     *
+     * @test
+     * @dataProvider cliToolCommandDataProvider
+     */
+    public function cliToolIsExecuted(string $command)
+    {
+        $descriptorSpecifications = [
+            ['pipe', 'r'], // STDIN -> process
+            ['pipe', 'w'], // STDOUT <- process
+            ['pipe', 'a'], // STDERR
+        ];
+        $process = proc_open('php ' . $command, $descriptorSpecifications, $pipes);
+        static::assertInternalType('resource', $process);
+
+        $read = [$pipes[1], $pipes[2]]; // reading from process' STDOUT & STDERR
+        $write = null;
+        $except = null;
+        // there must be some response at least after 3 seconds
+        $events = stream_select($read, $write, $except, 3);
+        static::assertGreaterThan(0, $events);
+
+        $response = stream_get_contents($pipes[1]);
+        if (stripos($response, 'error')) {
+            static::fail($response);
+        }
+
+        static::assertSame([
+            '__wrapped' => true,
+            '__self' => 'TYPO3 demo text file.',
+            '__alias' => 'TYPO3 demo text file.',
+            'bundle.phar' => 'TYPO3 demo text file.',
+        ], json_decode($response, true));
+    }
 }

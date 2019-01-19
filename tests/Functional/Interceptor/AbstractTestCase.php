@@ -501,4 +501,16 @@ class AbstractTestCase extends TestCase
     {
         return [$value];
     }
+
+    /**
+     * @param array $items
+     * @return array
+     */
+    protected function inflateDataSet(array $items): array
+    {
+        return array_combine(
+            $items,
+            array_map([$this, 'wrapInArray'], $items)
+        );
+    }
 }

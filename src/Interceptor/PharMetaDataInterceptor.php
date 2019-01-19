@@ -13,8 +13,8 @@ namespace TYPO3\PharStreamWrapper\Interceptor;
  */
 
 use TYPO3\PharStreamWrapper\Assertable;
-use TYPO3\PharStreamWrapper\Helper;
 use TYPO3\PharStreamWrapper\Exception;
+use TYPO3\PharStreamWrapper\Manager;
 use TYPO3\PharStreamWrapper\Phar\DeserializationException;
 use TYPO3\PharStreamWrapper\Phar\Reader;
 
@@ -53,7 +53,7 @@ class PharMetaDataInterceptor implements Assertable
      */
     private function baseFileDoesNotHaveMetaDataIssues(string $path): bool
     {
-        $baseFile = Helper::determineBaseFile($path);
+        $baseFile = Manager::instance()->resolveBaseName($path);
         if ($baseFile === null) {
             return false;
         }

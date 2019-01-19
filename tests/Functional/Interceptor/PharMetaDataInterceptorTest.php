@@ -12,30 +12,33 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
+use TYPO3\PharStreamWrapper\Interceptor\PharMetaDataInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
 use TYPO3\PharStreamWrapper\PharStreamWrapper;
 
-class PharExtensionInterceptorTest extends AbstractTestCase
+class PharMetaDataInterceptorTest extends AbstractTestCase
 {
     /**
      * @var string[]
      */
     const ALLOWED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar',
+        __DIR__ . '/../Fixtures/bundle.phar.png',
     ];
 
     /**
      * @var string[]
      */
     const DENIED_PATHS = [
-        __DIR__ . '/../Fixtures/bundle.phar.png',
+        __DIR__ . '/../Fixtures/serialized.phar',
+        __DIR__ . '/../Fixtures/serialized.phar.gz',
+        __DIR__ . '/../Fixtures/serialized.phar.bz2',
     ];
 
     /**
      * @var int
      */
-    const EXPECTED_EXCEPTION_CODE = 1535198703;
+    const EXPECTED_EXCEPTION_CODE = 1539632368;
 
     protected function setUp()
     {
@@ -50,7 +53,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
 
         Manager::initialize(
             (new \TYPO3\PharStreamWrapper\Behavior())
-                ->withAssertion(new PharExtensionInterceptor())
+                ->withAssertion(new PharMetaDataInterceptor())
         );
     }
 

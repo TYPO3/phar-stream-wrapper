@@ -30,6 +30,13 @@ class ConjunctionInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
+    const ALLOWED_ALIASED_PATHS = [
+        __DIR__ . '/../Fixtures/geoip2.phar',
+    ];
+
+    /**
+     * @var string[]
+     */
     const DENIED_PATHS = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
         __DIR__ . '/../Fixtures/serialized.phar',

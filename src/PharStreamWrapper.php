@@ -452,7 +452,6 @@ class PharStreamWrapper
             } else {
                 $result = call_user_func_array($functionName, $arguments);
             }
-            $this->registerStreamWrapper();
         } catch (\Exception $exception) {
             $this->registerStreamWrapper();
             throw $exception;
@@ -461,6 +460,7 @@ class PharStreamWrapper
             throw $throwable;
         }
 
+        $this->registerStreamWrapper();
         return $result;
     }
 

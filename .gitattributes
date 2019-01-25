@@ -2,3 +2,6 @@
 /.travis.yml export-ignore
 /phpunit.xml export-ignore
 /tests/ export-ignore
+# Define phar file attributes.
+# - Use text diff to make reviewing changes easy.
+*.phar    -text diff

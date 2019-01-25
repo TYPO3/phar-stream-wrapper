@@ -1,5 +1,4 @@
 <?php
-declare(strict_types = 1);
 namespace TYPO3\PharStreamWrapper\Tests\Functional\Phar;
 
 /*
@@ -21,36 +20,36 @@ class ReaderTest extends TestCase
     const STUB_MAPPED_ALIAS = 'stub.mappedAlias';
     const MANIFEST_ALIAS = 'manifest.alias';
 
-    public function pharAliasDataProvider(): array
+    public function pharAliasDataProvider()
     {
         $fixturesPath = dirname(__DIR__) . '/Fixtures/';
 
-        return [
-            'bundle.phar' => [
+        return array(
+            'bundle.phar' => array(
                 $fixturesPath . 'bundle.phar',
-                [
+                array(
                     self::CONTAINER_ALIAS => 'bndl.phar',
                     self::STUB_MAPPED_ALIAS => '',
                     self::MANIFEST_ALIAS => 'bndl.phar',
-                ],
-            ],
-            'serialized.phar' => [
+                ),
+            ),
+            'serialized.phar' => array(
                 $fixturesPath . 'serialized.phar',
-                [
+                array(
                     self::CONTAINER_ALIAS => 'srlzd.phar',
                     self::STUB_MAPPED_ALIAS => '',
                     self::MANIFEST_ALIAS => 'srlzd.phar',
-                ],
-            ],
-            'geoip2.phar' => [
+                ),
+            ),
+            'geoip2.phar' => array(
                 $fixturesPath . 'geoip2.phar',
-                [
+                array(
                     self::CONTAINER_ALIAS => 'geoip2.phar',
                     self::STUB_MAPPED_ALIAS => 'geoip2.phar',
                     self::MANIFEST_ALIAS => '',
-                ],
-            ],
-        ];
+                ),
+            ),
+        );
     }
 
     /**
@@ -59,7 +58,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharStubMappedAliasCanBeResolved(string $path, array $expectations)
+    public function pharStubMappedAliasCanBeResolved($path, array $expectations)
     {
         $reader = new Reader($path);
         $this->assertSame(
@@ -74,7 +73,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharManifestAliasCanBeResolved(string $path, array $expectations)
+    public function pharManifestAliasCanBeResolved($path, array $expectations)
     {
         $reader = new Reader($path);
         $this->assertSame(
@@ -89,7 +88,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharContainerAliasCanBeResolved(string $path, array $expectations)
+    public function pharContainerAliasCanBeResolved($path, array $expectations)
     {
         $reader = new Reader($path);
         $this->assertSame(

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types = 1);
 namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
 
 /*
@@ -16,31 +15,28 @@ use TYPO3\PharStreamWrapper\Interceptor\ConjunctionInterceptor;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
 use TYPO3\PharStreamWrapper\Interceptor\PharMetaDataInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
-use TYPO3\PharStreamWrapper\PharStreamWrapper;
 
 class ConjunctionInterceptorTest extends AbstractTestCase
 {
-    /**
-     * @var string[]
-     */
-    const ALLOWED_PATHS = [
-        __DIR__ . '/../Fixtures/bundle.phar',
-    ];
-
-    /**
-     * @var string[]
-     */
-    const DENIED_PATHS = [
-        __DIR__ . '/../Fixtures/bundle.phar.png',
-        __DIR__ . '/../Fixtures/serialized.phar',
-        __DIR__ . '/../Fixtures/serialized.phar.gz',
-        __DIR__ . '/../Fixtures/serialized.phar.bz2',
-    ];
 
     /**
      * @var int
      */
     const EXPECTED_EXCEPTION_CODE = 1539625084;
+
+    public function __construct($name = null, array $data = array(), $dataName = '')
+    {
+        $this->allowedPaths = array(
+            __DIR__ . '/../Fixtures/bundle.phar',
+        );
+        $this->deniedPaths = array(
+            __DIR__ . '/../Fixtures/bundle.phar.png',
+            __DIR__ . '/../Fixtures/serialized.phar',
+            __DIR__ . '/../Fixtures/serialized.phar.gz',
+            __DIR__ . '/../Fixtures/serialized.phar.bz2',
+        );
+        parent::__construct($name, $data, $dataName);
+    }
 
     protected function setUp()
     {
@@ -51,14 +47,14 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         }
 
         stream_wrapper_unregister('phar');
-        stream_wrapper_register('phar', PharStreamWrapper::class);
+        stream_wrapper_register('phar', 'TYPO3\\PharStreamWrapper\\PharStreamWrapper');
 
+        $behavior = new \TYPO3\PharStreamWrapper\Behavior();
         Manager::initialize(
-            (new \TYPO3\PharStreamWrapper\Behavior())
-                ->withAssertion(new ConjunctionInterceptor([
-                    new PharExtensionInterceptor(),
-                    new PharMetaDataInterceptor(),
-                ]))
+            $behavior->withAssertion(new ConjunctionInterceptor(array(
+                new PharExtensionInterceptor(),
+                new PharMetaDataInterceptor()
+            )))
         );
     }
 

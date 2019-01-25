@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace TYPO3\PharStreamWrapper\Phar;
 
 /*
@@ -12,6 +11,8 @@ namespace TYPO3\PharStreamWrapper\Phar;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Brumann\Polyfill\Unserialize;
+
 class Manifest
 {
     /**
@@ -19,7 +20,7 @@ class Manifest
      * @return self
      * @see http://php.net/manual/en/phar.fileformat.phar.php
      */
-    public static function fromContent(string $content): self
+    public static function fromContent($content)
     {
         $target = new static();
         $target->manifestLength = Reader::resolveFourByteLittleEndian($content, 0);
@@ -31,11 +32,11 @@ class Manifest
         $target->metaData = substr($content, 22 + $target->aliasLength, $target->metaDataLength);
 
         $apiVersionNibbles = Reader::resolveTwoByteBigEndian($content, 8);
-        $target->apiVersion = implode('.', [
+        $target->apiVersion = implode('.', array(
             ($apiVersionNibbles & 0xf000) >> 12,
             ($apiVersionNibbles & 0x0f00) >> 8,
             ($apiVersionNibbles & 0x00f0) >> 4,
-        ]);
+        ));
 
         return $target;
     }
@@ -90,7 +91,7 @@ class Manifest
     /**
      * @return int
      */
-    public function getManifestLength(): int
+    public function getManifestLength()
     {
         return $this->manifestLength;
     }
@@ -98,7 +99,7 @@ class Manifest
     /**
      * @return int
      */
-    public function getAmountOfFiles(): int
+    public function getAmountOfFiles()
     {
         return $this->amountOfFiles;
     }
@@ -106,7 +107,7 @@ class Manifest
     /**
      * @return string
      */
-    public function getApiVersion(): string
+    public function getApiVersion()
     {
         return $this->apiVersion;
     }
@@ -114,7 +115,7 @@ class Manifest
     /**
      * @return int
      */
-    public function getFlags(): int
+    public function getFlags()
     {
         return $this->flags;
     }
@@ -122,7 +123,7 @@ class Manifest
     /**
      * @return int
      */
-    public function getAliasLength(): int
+    public function getAliasLength()
     {
         return $this->aliasLength;
     }
@@ -130,7 +131,7 @@ class Manifest
     /**
      * @return string
      */
-    public function getAlias(): string
+    public function getAlias()
     {
         return $this->alias;
     }
@@ -138,7 +139,7 @@ class Manifest
     /**
      * @return int
      */
-    public function getMetaDataLength(): int
+    public function getMetaDataLength()
     {
         return $this->metaDataLength;
     }
@@ -146,7 +147,7 @@ class Manifest
     /**
      * @return string
      */
-    public function getMetaData(): string
+    public function getMetaData()
     {
         return $this->metaData;
     }
@@ -160,7 +161,7 @@ class Manifest
             return null;
         }
 
-        $result = unserialize($this->metaData, ['allowed_classes' => false]);
+        $result = Unserialize::unserialize($this->metaData, array('allowed_classes' => false));
 
         $serialized = json_encode($result);
         if (strpos($serialized, '__PHP_Incomplete_Class_Name') !== false) {

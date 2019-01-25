@@ -17,24 +17,19 @@ use TYPO3\PharStreamWrapper\Manager;
 class PharExtensionInterceptorTest extends AbstractTestCase
 {
     /**
-     * @var string
-     */
-    private $allowedPath;
-
-    /**
-     * @var string
-     */
-    private $deniedPath;
-
-    /**
      * @var int
      */
     const EXPECTED_EXCEPTION_CODE = 1535198703;
 
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        $this->allowedPath = __DIR__ . '/../Fixtures/bundle.phar';
-        $this->deniedPath = __DIR__ . '/../Fixtures/bundle.phar.png';
+        // @todo check.
+        $this->allowedPaths = array(
+            __DIR__ . '/../Fixtures/bundle.phar'
+        );
+        $this->deniedPaths = array(
+            __DIR__ . '/../Fixtures/bundle.phar.png'
+        );
         parent::__construct($name, $data, $dataName);
     }
 

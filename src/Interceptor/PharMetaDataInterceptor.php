@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace TYPO3\PharStreamWrapper\Interceptor;
 
 /*
@@ -33,7 +32,7 @@ class PharMetaDataInterceptor implements Assertable
      * @return bool
      * @throws Exception
      */
-    public function assert(string $path, string $command): bool
+    public function assert($path, $command)
     {
         if ($this->baseFileDoesNotHaveMetaDataIssues($path)) {
             return true;
@@ -51,7 +50,7 @@ class PharMetaDataInterceptor implements Assertable
      * @param string $path
      * @return bool
      */
-    private function baseFileDoesNotHaveMetaDataIssues(string $path): bool
+    private function baseFileDoesNotHaveMetaDataIssues($path)
     {
         $baseFile = Helper::determineBaseFile($path);
         if ($baseFile === null) {

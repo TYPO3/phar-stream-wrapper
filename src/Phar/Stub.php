@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace TYPO3\PharStreamWrapper\Phar;
 
 /*
@@ -21,7 +20,7 @@ class Stub
      * @param string $content
      * @return self
      */
-    public static function fromContent(string $content): self
+    public static function fromContent($content)
     {
         $target = new static();
         $target->content = $content;
@@ -59,7 +58,7 @@ class Stub
     /**
      * @return string
      */
-    public function getMappedAlias(): string
+    public function getMappedAlias()
     {
         return $this->mappedAlias;
     }

@@ -23,7 +23,6 @@ class PharExtensionInterceptorTest extends AbstractTestCase
 
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        // @todo check.
         $this->allowedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar'
         );

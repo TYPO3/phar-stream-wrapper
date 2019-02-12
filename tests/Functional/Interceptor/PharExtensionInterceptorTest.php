@@ -21,21 +21,21 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    const ALLOWED_PATHS = [
+    protected $allowedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar',
     ];
 
     /**
      * @var string[]
      */
-    const ALLOWED_ALIASED_PATHS = [
+    protected $allowedAliasedPaths = [
         __DIR__ . '/../Fixtures/geoip2.phar',
     ];
 
     /**
      * @var string[]
      */
-    const DENIED_PATHS = [
+    protected $deniedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
     ];
 

@@ -21,7 +21,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    const ALLOWED_PATHS = [
+    protected $allowedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar',
         __DIR__ . '/../Fixtures/bundle.phar.png',
     ];
@@ -29,14 +29,14 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     /**
      * @var string[]
      */
-    const ALLOWED_ALIASED_PATHS = [
+    protected $allowedAliasedPaths = [
         __DIR__ . '/../Fixtures/geoip2.phar',
     ];
 
     /**
      * @var string[]
      */
-    const DENIED_PATHS = [
+    protected $deniedPaths = [
         __DIR__ . '/../Fixtures/serialized.phar',
         __DIR__ . '/../Fixtures/serialized.phar.gz',
         __DIR__ . '/../Fixtures/serialized.phar.bz2',

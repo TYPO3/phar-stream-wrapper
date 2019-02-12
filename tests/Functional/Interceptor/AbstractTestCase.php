@@ -21,17 +21,17 @@ class AbstractTestCase extends TestCase
     /**
      * @var string[]
      */
-    const ALLOWED_PATHS = [];
+    protected $allowedPaths = array();
 
     /**
      * @var string[]
      */
-    const ALLOWED_ALIASED_PATHS = [];
+    protected $allowedAliasedPaths = array();
 
     /**
      * @var string[]
      */
-    const DENIED_PATHS = [];
+    protected $deniedPaths = array();
 
     /**
      * @var int
@@ -44,8 +44,8 @@ class AbstractTestCase extends TestCase
     public function allowedPathsDataProvider(): array
     {
         return array_combine(
-            static::ALLOWED_PATHS,
-            array_map([$this, 'wrapInArray'], static::ALLOWED_PATHS)
+            $this->allowedPaths,
+            array_map([$this, 'wrapInArray'], $this->allowedPaths)
         );
     }
 
@@ -55,8 +55,8 @@ class AbstractTestCase extends TestCase
     public function allowedAliasedPathsDataProvider(): array
     {
         return array_combine(
-            static::ALLOWED_ALIASED_PATHS,
-            array_map([$this, 'wrapInArray'], static::ALLOWED_ALIASED_PATHS)
+            $this->allowedAliasedPaths,
+            array_map([$this, 'wrapInArray'], $this->allowedAliasedPaths)
         );
     }
 
@@ -66,8 +66,8 @@ class AbstractTestCase extends TestCase
     public function deniedPathsDataProvider(): array
     {
         return array_combine(
-            static::DENIED_PATHS,
-            array_map([$this, 'wrapInArray'], static::DENIED_PATHS)
+            $this->deniedPaths,
+            array_map([$this, 'wrapInArray'], $this->deniedPaths)
         );
     }
 
@@ -77,7 +77,7 @@ class AbstractTestCase extends TestCase
     public function directoryActionAllowsInvocationDataProvider(): array
     {
         $dataSet = [];
-        foreach (static::ALLOWED_PATHS as $allowedPath) {
+        foreach ($this->allowedPaths as $allowedPath) {
             $fileName = basename($allowedPath);
             $dataSet = array_merge($dataSet, [
                 'root directory ' . $fileName => [
@@ -114,11 +114,11 @@ class AbstractTestCase extends TestCase
      */
     public function directoryOpenDeniesInvocationAfterCatchingError()
     {
-        if (empty(static::ALLOWED_PATHS) || empty(static::DENIED_PATHS)) {
+        if (empty($this->allowedPaths) || empty($this->deniedPaths)) {
             $this->markTestSkipped('No ALLOWED_PATHS and DENIED_PATHS defined');
         }
         try {
-            opendir('phar://' . static::ALLOWED_PATHS[0] . '/__invalid__');
+            opendir('phar://' . $this->allowedPaths[0] . '/__invalid__');
         } catch (\Throwable $throwable) {
             // this possible is caught in user-land code, for these tests
             // it is asserted that it actually happens
@@ -127,7 +127,7 @@ class AbstractTestCase extends TestCase
 
         self::expectException(Exception::class);
         self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
-        file_exists('phar://' . static::DENIED_PATHS[0]);
+        file_exists('phar://' . $this->deniedPaths[0]);
     }
 
     /**
@@ -135,11 +135,11 @@ class AbstractTestCase extends TestCase
      */
     public function directoryOpenDeniesInvocationAfterCatchingException()
     {
-        if (empty(static::ALLOWED_PATHS) || empty(static::DENIED_PATHS)) {
+        if (empty($this->allowedPaths) || empty($this->deniedPaths)) {
             $this->markTestSkipped('No ALLOWED_PATHS and DENIED_PATHS defined');
         }
         try {
-            include('phar://' . static::ALLOWED_PATHS[0] . '/Resources/exception.php');
+            include('phar://' . $this->allowedPaths[0] . '/Resources/exception.php');
         } catch (\Throwable $throwable) {
             // this possible is caught in user-land code, for these tests
             // it is asserted that it actually happens
@@ -149,7 +149,7 @@ class AbstractTestCase extends TestCase
 
         self::expectException(Exception::class);
         self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
-        file_exists('phar://' . static::DENIED_PATHS[0]);
+        file_exists('phar://' . $this->deniedPaths[0]);
     }
 
     /**
@@ -190,7 +190,7 @@ class AbstractTestCase extends TestCase
     public function directoryActionDeniesInvocationDataProvider(): array
     {
         $dataSet = [];
-        foreach (static::DENIED_PATHS as $deniedPath) {
+        foreach ($this->deniedPaths as $deniedPath) {
             $fileName = basename($deniedPath);
             $dataSet = array_merge($dataSet, [
                 'root directory ' . $fileName => [
@@ -229,7 +229,7 @@ class AbstractTestCase extends TestCase
     public function urlStatAllowsInvocationDataProvider(): array
     {
         $dataSet = [];
-        foreach (static::ALLOWED_PATHS as $allowedPath) {
+        foreach ($this->allowedPaths as $allowedPath) {
             $fileName = basename($allowedPath);
             $dataSet = array_merge($dataSet, [
                 'filesize base file ' . $fileName => [
@@ -299,7 +299,7 @@ class AbstractTestCase extends TestCase
     public function urlStatDeniesInvocationDataProvider(): array
     {
         $dataSet = [];
-        foreach (static::DENIED_PATHS as $deniedPath) {
+        foreach ($this->deniedPaths as $deniedPath) {
             $fileName = basename($deniedPath);
             $dataSet = array_merge($dataSet, [
                 'filesize base file ' . $fileName => [

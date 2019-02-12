@@ -11,23 +11,29 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\PharStreamWrapper\Interceptor\ConjunctionInterceptor;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
+use TYPO3\PharStreamWrapper\Interceptor\PharMetaDataInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
 
-class PharExtensionInterceptorTest extends AbstractTestCase
+class ConjunctionInterceptorTest extends AbstractTestCase
 {
+
     /**
      * @var int
      */
-    const EXPECTED_EXCEPTION_CODE = 1535198703;
+    const EXPECTED_EXCEPTION_CODE = 1539625084;
 
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         $this->allowedPaths = array(
-            __DIR__ . '/../Fixtures/bundle.phar'
+            __DIR__ . '/../Fixtures/bundle.phar',
         );
         $this->deniedPaths = array(
-            __DIR__ . '/../Fixtures/bundle.phar.png'
+            __DIR__ . '/../Fixtures/bundle.phar.png',
+            __DIR__ . '/../Fixtures/serialized.phar',
+            __DIR__ . '/../Fixtures/serialized.phar.gz',
+            __DIR__ . '/../Fixtures/serialized.phar.bz2',
         );
         parent::__construct($name, $data, $dataName);
     }
@@ -45,7 +51,10 @@ class PharExtensionInterceptorTest extends AbstractTestCase
 
         $behavior = new \TYPO3\PharStreamWrapper\Behavior();
         Manager::initialize(
-            $behavior->withAssertion(new PharExtensionInterceptor())
+            $behavior->withAssertion(new ConjunctionInterceptor(array(
+                new PharExtensionInterceptor(),
+                new PharMetaDataInterceptor()
+            )))
         );
     }
 

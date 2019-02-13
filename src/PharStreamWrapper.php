@@ -410,6 +410,7 @@ class PharStreamWrapper
     protected function assert($path, $command)
     {
         if ($this->resolveAssertable()->assert($path, $command) === true) {
+            Manager::instance()->learnAlias($path);
             return;
         }
 

@@ -48,9 +48,6 @@ class BaseNameResolver implements Resolvable
         if ($baseName !== null && $flags & static::RESOLVE_REALPATH) {
             $baseName = realpath($baseName);
         }
-        if ($baseName !== null && $hasPharPrefix && $flags & static::RESOLVE_ALIAS) {
-            $this->learnAlias($baseName);
-        }
 
         return $baseName;
     }
@@ -68,14 +65,18 @@ class BaseNameResolver implements Resolvable
 
 
     /**
-     * @param string $basePath
+     * @param string $path
      */
-    private function learnAlias($basePath)
+    public function learnAlias($path)
     {
-        $reader = new Reader($basePath);
-        $alias = $reader->resolveContainer()->getAlias();
-        if ($alias !== '' && $alias !== $basePath) {
-            $this->setAlias($alias, $basePath);
+        $baseName = Helper::determineBaseFile($path);
+        if ($baseName !== null) {
+            $baseName = realpath($baseName);
+            $reader = new Reader($baseName);
+            $alias = $reader->resolveContainer()->getAlias();
+            if ($alias !== '' && $alias !== $baseName) {
+                $this->setAlias($alias, $baseName);
+            }
         }
     }
 

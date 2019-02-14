@@ -22,9 +22,20 @@ class BaseNameResolver implements Resolvable
     const RESOLVE_ALIAS = 2;
 
     /**
-     * @var string[]
+     * @var AliasMap
      */
     private $aliasMap = [];
+
+    /**
+     * @param null|AliasMap $aliasMap
+     */
+    public function __construct(AliasMap $aliasMap = null)
+    {
+        if ($aliasMap === null) {
+            $aliasMap = new AliasMap();
+        }
+        $this->aliasMap = $aliasMap;
+    }
 
     /**
      * @param string $path
@@ -39,7 +50,7 @@ class BaseNameResolver implements Resolvable
         if ($hasPharPrefix && $flags & static::RESOLVE_ALIAS) {
             $baseNameFromAliasMap = $this->resolveBaseNameFromAliasMap($path);
             if ($baseNameFromAliasMap !== null) {
-                return $baseNameFromAliasMap;
+                return $baseNameFromAliasMap->getBaseName();
             }
         }
 
@@ -52,20 +63,32 @@ class BaseNameResolver implements Resolvable
     }
 
     /**
-     * @param string $path
-     * @return null|string
+     * @param string $baseName
+     * @return bool
+     * @todo Enhance design, wrapping does not make much sense in this class
      */
-    private function resolveBaseNameFromAliasMap(string $path)
+    public function purgeBaseName(string $baseName): bool
     {
-        $normalizedBaseName = Helper::normalizePath($path);
-        $possibleAlias = strstr($normalizedBaseName, '/', true);
-        return $this->getAlias($possibleAlias ?: '');
+        return $this->aliasMap->purgeByBaseName($baseName);
     }
 
     /**
+     * Learns (possible) Phar alias for given $baseName.
+     *
+     * Phar aliases are intended to be used only inside Phar archives, however
+     * PharStreamWrapper needs this information exposed outside of Phar as well
+     *
+     * It is possible that same alias is used for different $baseName values.
+     * That's why AliasMap behaves like a stack when resolving base-name for a
+     * given alias. On the other hand it is not possible that one $baseName is
+     * referring to multiple aliases.
+     *
      * @param string $path
      * @param int|null $flags
      * @return bool
+     *
+     * @see https://secure.php.net/manual/en/phar.setalias.php
+     * @see https://secure.php.net/manual/en/phar.mapphar.php
      */
     public function learnAlias(string $path, int $flags = null): bool
     {
@@ -74,42 +97,25 @@ class BaseNameResolver implements Resolvable
         if ($baseName === null) {
             return false;
         }
+        if ($this->aliasMap->findFirstByBaseName($baseName) !== null) {
+            return false;
+        }
 
         if ($flags & static::RESOLVE_REALPATH) {
             $baseName = realpath($baseName);
         }
 
         $alias = (new Reader($baseName))->resolveContainer()->getAlias();
-        if ($alias === '' || $alias === $baseName) {
-            return false;
-        }
-
-        $this->setAlias($alias, $baseName);
-        return true;
+        return $this->aliasMap->append($baseName, $alias);
     }
 
     /**
-     * @param string $alias
-     * @return null|string
+     * @return null|AliasReference
      */
-    private function getAlias(string $alias)
+    private function resolveBaseNameFromAliasMap(string $path)
     {
-        return $this->aliasMap[$alias] ?? null;
-    }
-
-    /**
-     * Updates alias map for current Phar archive.
-     *
-     * Since Phar aliases are intended to be used only inside Phar archives,
-     * there is no further check for duplicates in our alias map.
-     *
-     * @param string $alias
-     * @param string $basePath
-     * @see https://secure.php.net/manual/en/phar.setalias.php
-     * @see https://secure.php.net/manual/en/phar.mapphar.php
-     */
-    private function setAlias(string $alias, string $basePath)
-    {
-        $this->aliasMap[$alias] = $basePath;
+        $normalizedPath = Helper::normalizePath($path);
+        $possibleAlias = strstr($normalizedPath, '/', true);
+        return $this->aliasMap->findLastByAlias($possibleAlias ?: '');
     }
 }

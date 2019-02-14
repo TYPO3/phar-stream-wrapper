@@ -113,4 +113,13 @@ class Manager implements Assertable, Resolvable
     {
         return $this->resolver->learnAlias($path);
     }
+
+    /**
+     * @param string $baseName
+     * @return bool
+     */
+    public function purgeBaseName(string $baseName): bool
+    {
+        return $this->resolver->purgeBaseName($baseName);
+    }
 }

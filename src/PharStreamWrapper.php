@@ -31,6 +31,11 @@ class PharStreamWrapper
     protected $internalResource;
 
     /**
+     * @var string
+     */
+    protected $internalBaseName;
+
+    /**
      * @return bool
      */
     public function dir_closedir(): bool
@@ -156,6 +161,12 @@ class PharStreamWrapper
             'fclose',
             $this->internalResource
         );
+        if (!empty($this->internalBaseName)) {
+            // @todo Purge from AliasMap in case the Phar archive is closed
+            // (probably more information is needed on how it has been opened)
+            // (probably should aim for some event approach, PSR-14, ...)
+            #Manager::instance()->purgeBaseName($this->internalBaseName);
+        }
     }
 
     /**
@@ -267,6 +278,7 @@ class PharStreamWrapper
             $metaData = stream_get_meta_data($this->internalResource);
             $opened_path = $metaData['uri'];
         }
+        $this->internalBaseName = Manager::instance()->resolveBaseName($path);
         return true;
     }
 

@@ -27,4 +27,11 @@ interface Resolvable
      * @return bool
      */
     public function learnAlias(string $path, int $flags = null);
+
+    /**
+     * @param string $baseName
+     * @return bool
+     * @todo This is NOT CORRECT in this interface
+     */
+    public function purgeBaseName(string $baseName): bool;
 }

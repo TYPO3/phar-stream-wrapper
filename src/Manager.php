@@ -106,10 +106,11 @@ class Manager implements Assertable, Resolvable
 
     /**
      * @param string $path
+     * @param null|int $flags
+     * @return bool
      */
-    public function learnAlias(string $path)
+    public function learnAlias(string $path, int $flags = null)
     {
         return $this->resolver->learnAlias($path);
     }
-
 }

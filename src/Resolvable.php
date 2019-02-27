@@ -20,4 +20,11 @@ interface Resolvable
      * @return null|string
      */
     public function resolveBaseName(string $path, int $flags = null);
+
+    /**
+     * @param string $path
+     * @param int|null $flags
+     * @return bool
+     */
+    public function learnAlias(string $path, int $flags = null);
 }

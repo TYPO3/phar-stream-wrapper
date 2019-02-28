@@ -31,9 +31,9 @@ class PharStreamWrapper
     protected $internalResource;
 
     /**
-     * @var string
+     * @var PharInvocation
      */
-    protected $internalBaseName;
+    protected $invocation;
 
     /**
      * @return bool
@@ -161,12 +161,6 @@ class PharStreamWrapper
             'fclose',
             $this->internalResource
         );
-        if (!empty($this->internalBaseName)) {
-            // @todo Purge from AliasMap in case the Phar archive is closed
-            // (probably more information is needed on how it has been opened)
-            // (probably should aim for some event approach, PSR-14, ...)
-            #Manager::instance()->purgeBaseName($this->internalBaseName);
-        }
     }
 
     /**
@@ -278,7 +272,6 @@ class PharStreamWrapper
             $metaData = stream_get_meta_data($this->internalResource);
             $opened_path = $metaData['uri'];
         }
-        $this->internalBaseName = Manager::instance()->resolveBaseName($path);
         return true;
     }
 
@@ -423,8 +416,8 @@ class PharStreamWrapper
      */
     protected function assert(string $path, string $command)
     {
-            Manager::instance()->learnAlias($path);
         if (Manager::instance()->assert($path, $command) === true) {
+            $this->learnInvocation($path);
             return;
         }
 
@@ -436,6 +429,19 @@ class PharStreamWrapper
             ),
             1535189880
         );
+    }
+
+    /**
+     * @param string $path
+     */
+    protected function learnInvocation(string $path)
+    {
+        if (isset($this->invocation)) {
+            return;
+        }
+
+        $this->invocation = Manager::instance()->resolve($path);
+        Manager::instance()->learnInvocation($this->invocation);
     }
 
     /**

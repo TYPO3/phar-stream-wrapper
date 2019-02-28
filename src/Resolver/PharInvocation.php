@@ -12,7 +12,9 @@ namespace TYPO3\PharStreamWrapper\Resolver;
  * The TYPO3 project - inspiring people to share!
  */
 
-class AliasReference
+use TYPO3\PharStreamWrapper\Exception;
+
+class PharInvocation
 {
     /**
      * @var string
@@ -28,8 +30,14 @@ class AliasReference
      * @param string $baseName
      * @param string $alias
      */
-    public function __construct(string $baseName, string $alias)
+    public function __construct(string $baseName, string $alias = '')
     {
+        if ($baseName === '') {
+            throw new Exception(
+                'Base-name cannot be empty',
+                1551283689
+            );
+        }
         $this->baseName = $baseName;
         $this->alias = $alias;
     }
@@ -51,7 +59,7 @@ class AliasReference
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAlias(): string
     {

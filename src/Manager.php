@@ -12,9 +12,11 @@ namespace TYPO3\PharStreamWrapper;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\PharStreamWrapper\Resolver\BaseNameResolver;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocationResolver;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocation;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocationStack;
 
-class Manager implements Assertable, Resolvable
+class Manager
 {
     /**
      * @var self
@@ -32,14 +34,23 @@ class Manager implements Assertable, Resolvable
     private $resolver;
 
     /**
+     * @var PharInvocationStack
+     */
+    private $stack;
+
+    /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
+     * @param PharInvocationStack $stack
      * @return self
      */
-    public static function initialize(Behavior $behaviour, Resolvable $resolver = null): self
-    {
+    public static function initialize(
+        Behavior $behaviour,
+        Resolvable $resolver = null,
+        PharInvocationStack $stack = null
+    ): self {
         if (self::$instance === null) {
-            self::$instance = new self($behaviour, $resolver);
+            self::$instance = new self($behaviour, $resolver, $stack);
             return self::$instance;
         }
         throw new \LogicException(
@@ -77,11 +88,16 @@ class Manager implements Assertable, Resolvable
     /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
+     * @param PharInvocationStack $stack
      */
-    private function __construct(Behavior $behaviour, Resolvable $resolver = null)
-    {
+    private function __construct(
+        Behavior $behaviour,
+        Resolvable $resolver = null,
+        PharInvocationStack $stack = null
+    ) {
+        $this->stack = $stack ?? new PharInvocationStack();
+        $this->resolver = $resolver ?? new PharInvocationResolver($this->stack);
         $this->behavior = $behaviour;
-        $this->resolver = $resolver ?? new BaseNameResolver();
     }
 
     /**
@@ -97,29 +113,18 @@ class Manager implements Assertable, Resolvable
     /**
      * @param string $path
      * @param null|int $flags
-     * @return string|null
+     * @return PharInvocation|null
      */
-    public function resolveBaseName(string $path, int $flags = null)
+    public function resolve(string $path, int $flags = null)
     {
-        return $this->resolver->resolveBaseName($path, $flags);
+        return $this->resolver->resolve($path, $flags);
     }
 
     /**
-     * @param string $path
-     * @param null|int $flags
-     * @return bool
+     * @param PharInvocation $invocation
      */
-    public function learnAlias(string $path, int $flags = null)
+    public function learnInvocation(PharInvocation $invocation)
     {
-        return $this->resolver->learnAlias($path);
-    }
-
-    /**
-     * @param string $baseName
-     * @return bool
-     */
-    public function purgeBaseName(string $baseName): bool
-    {
-        return $this->resolver->purgeBaseName($baseName);
+        $this->stack->learn($invocation);
     }
 }

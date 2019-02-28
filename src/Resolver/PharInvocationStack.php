@@ -12,59 +12,50 @@ namespace TYPO3\PharStreamWrapper\Resolver;
  * The TYPO3 project - inspiring people to share!
  */
 
-class AliasMap
+class PharInvocationStack
 {
     /**
-     * @var AliasReference[]
+     * @var PharInvocation[]
      */
-    private $references = [];
+    private $invocations = [];
 
     /**
-     * @param string $baseName
-     * @param string $alias
+     * @param PharInvocation $invocation
      * @return bool
      */
-    public function append(string $baseName, string $alias): bool
+    public function learn(PharInvocation $invocation): bool
     {
-        if ($baseName === '' || $alias === '') {
+        if ($this->findFirstByBaseName($invocation->getBaseName()) !== null) {
             return false;
         }
-        if ($this->findFirstByBaseName($baseName) !== null) {
-            return false;
+
+        $sameAliasInvocation = $this->findLastByAlias($invocation->getAlias());
+        if ($sameAliasInvocation !== null) {
+            trigger_error(
+                sprintf(
+                    'Alias %s cannot be used by %s, used already by %s',
+                    $invocation->getAlias(),
+                    $invocation->getBaseName(),
+                    $sameAliasInvocation->getBaseName()
+                ),
+                E_USER_WARNING
+            );
         }
-        $this->references[] = new AliasReference($baseName, $alias);
+
+        $this->invocations[] = $invocation;
         return true;
     }
 
     /**
      * @param string $baseName
-     * @return bool
-     */
-    public function purgeByBaseName(string $baseName): bool
-    {
-        if ($baseName === '') {
-            return false;
-        }
-        $count = count($this->references);
-        $this->references = array_filter(
-            $this->references,
-            function (AliasReference $reference) use ($baseName) {
-                return $reference->getBaseName() !== $baseName;
-            }
-        );
-        return count($this->references) < $count;
-    }
-
-    /**
-     * @param string $baseName
-     * @return null|AliasReference
+     * @return null|PharInvocation
      */
     public function findFirstByBaseName(string $baseName)
     {
         if ($baseName === '') {
             return null;
         }
-        foreach (array_reverse($this->references) as $reference) {
+        foreach ($this->invocations as $reference) {
             if ($reference->getBaseName() === $baseName) {
                 return $reference;
             }
@@ -74,14 +65,14 @@ class AliasMap
 
     /**
      * @param string $alias
-     * @return null|AliasReference
+     * @return null|PharInvocation
      */
     public function findLastByAlias(string $alias)
     {
         if ($alias === '') {
             return null;
         }
-        foreach (array_reverse($this->references) as $reference) {
+        foreach (array_reverse($this->invocations) as $reference) {
             if ($reference->getAlias() === $alias) {
                 return $reference;
             }
@@ -91,7 +82,7 @@ class AliasMap
 
     /**
      * @param string $alias
-     * @return AliasReference[]
+     * @return PharInvocation[]
      */
     public function findAllByAlias(string $alias): array
     {
@@ -99,8 +90,8 @@ class AliasMap
             return [];
         }
         return array_filter(
-            $this->references,
-            function (AliasReference $reference) use ($alias) {
+            $this->invocations,
+            function (PharInvocation $reference) use ($alias) {
                 return $reference->getAlias() === $alias;
             }
         );

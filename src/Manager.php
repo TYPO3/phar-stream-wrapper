@@ -122,9 +122,10 @@ class Manager
 
     /**
      * @param PharInvocation $invocation
+     * @param null|int $flags
      */
-    public function learnInvocation(PharInvocation $invocation)
+    public function learnInvocation(PharInvocation $invocation, int $flags = null)
     {
-        $this->stack->learn($invocation);
+        $this->stack->learn($invocation, $flags);
     }
 }

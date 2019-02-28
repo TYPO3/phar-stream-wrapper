@@ -65,4 +65,14 @@ class PharInvocation
     {
         return $this->alias;
     }
+
+    /**
+     * @param PharInvocation $other
+     * @return bool
+     */
+    public function equals(PharInvocation $other): bool
+    {
+        return $other->baseName === $this->baseName
+            && $other->alias === $this->alias;
+    }
 }

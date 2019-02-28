@@ -109,6 +109,12 @@ class PharInvocationResolver implements Resolvable
     private function isInternalInvocation(PharInvocation $invocation): bool
     {
         $trace = debug_backtrace(0);
+        $firstIndex = count($trace) - 1;
+        // initial invocation, most probably a CLI tool
+        if (($trace[$firstIndex]['file'] ?? null) === $invocation->getBaseName()) {
+            return true;
+        }
+        // otherwise search for include/require invocations
         foreach ($trace as $item) {
             if (!isset($item['function']) || !isset($item['args'][0])) {
                 continue;

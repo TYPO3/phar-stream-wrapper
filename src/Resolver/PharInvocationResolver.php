@@ -111,7 +111,7 @@ class PharInvocationResolver implements Resolvable
      */
     private function assertInternalInvocation(PharInvocation $invocation, int $flags): bool
     {
-        if ($flags ^ static::ASSERT_INTERNAL_INVOCATION) {
+        if (!($flags & static::ASSERT_INTERNAL_INVOCATION)) {
             return true;
         }
 

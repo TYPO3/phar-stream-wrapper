@@ -33,7 +33,8 @@ class PharInvocationStack
         if ($flags === null) {
             $flags = static::UNIQUE_INVOCATION | static::DUPLICATE_ALIAS_WARNING;
         }
-        if ($invocation->getAlias() === ''
+        if ($invocation->getBaseName() === ''
+            || $invocation->getAlias() === ''
             || !$this->assertUniqueBaseName($invocation, $flags)
             || !$this->assertUniqueInvocation($invocation, $flags)
         ) {
@@ -45,25 +46,6 @@ class PharInvocationStack
 
         $this->invocations[] = $invocation;
         return true;
-    }
-
-    /**
-     * @param string $baseName
-     * @param string $alias
-     * @param bool $reverse
-     * @return null|PharInvocation
-     */
-    public function findByBaseNameAndAlias(string $baseName, string $alias, bool $reverse = false)
-    {
-        if ($baseName === '' || $alias === '') {
-            return null;
-        }
-        foreach ($this->getInvocations($reverse) as $invocation) {
-            if ($invocation->getBaseName() === $baseName && $invocation->getAlias() === $alias) {
-                return $invocation;
-            }
-        }
-        return null;
     }
 
     /**
@@ -103,6 +85,21 @@ class PharInvocationStack
     }
 
     /**
+     * @param callable $callback
+     * @param bool $reverse
+     * @return null|PharInvocation
+     */
+    public function findByCallback(callable $callback, $reverse = false)
+    {
+        foreach ($this->getInvocations($reverse) as $invocation) {
+            if (call_user_func($callback, $invocation) === true) {
+                return $invocation;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Asserts that base-name is unique. This disallows having multiple invocations for
      * same base-name but having different alias names.
      *
@@ -112,10 +109,10 @@ class PharInvocationStack
      */
     private function assertUniqueBaseName(PharInvocation $invocation, int $flags): bool
     {
-        if ($flags ^ static::UNIQUE_BASE_NAME) {
+        if (!($flags & static::UNIQUE_BASE_NAME)) {
             return true;
         }
-        return $this->findByBaseName($invocation->getBaseName()) !== null;
+        return $this->findByBaseName($invocation->getBaseName()) === null;
     }
 
     /**
@@ -128,10 +125,14 @@ class PharInvocationStack
      */
     private function assertUniqueInvocation(PharInvocation $invocation, int $flags): bool
     {
-        if ($flags ^ static::UNIQUE_INVOCATION) {
+        if (!($flags & static::UNIQUE_INVOCATION)) {
             return true;
         }
-        return $this->findByBaseNameAndAlias($invocation->getBaseName(), $invocation->getAlias()) !== null;
+        return $this->findByCallback(
+            function (PharInvocation $candidate) use ($invocation) {
+                return $candidate->equals($invocation);
+            }
+        ) === null;
     }
 
     /**
@@ -143,7 +144,7 @@ class PharInvocationStack
         if ($sameAliasInvocation !== null) {
             trigger_error(
                 sprintf(
-                    'Alias %s cannot be used by %s, used already by %s',
+                    'Alias %s cannot be used by %s, already used by %s',
                     $invocation->getAlias(),
                     $invocation->getBaseName(),
                     $sameAliasInvocation->getBaseName()

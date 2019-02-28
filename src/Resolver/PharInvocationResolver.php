@@ -20,6 +20,7 @@ class PharInvocationResolver implements Resolvable
 {
     const RESOLVE_REALPATH = 1;
     const RESOLVE_ALIAS = 2;
+    const ASSERT_INTERNAL_INVOCATION = 32;
 
     /**
      * @var PharInvocationStack
@@ -63,11 +64,11 @@ class PharInvocationResolver implements Resolvable
     public function resolve(string $path, int $flags = null)
     {
         $hasPharPrefix = Helper::hasPharPrefix($path);
-        $flags = $flags ?? static::RESOLVE_REALPATH | static::RESOLVE_ALIAS;
+        $flags = $flags ?? static::RESOLVE_REALPATH | static::RESOLVE_ALIAS | static::ASSERT_INTERNAL_INVOCATION;
 
         if ($hasPharPrefix && $flags & static::RESOLVE_ALIAS) {
             $invocation = $this->findByAlias($path);
-            if ($invocation !== null && $this->isInternalInvocation($invocation)) {
+            if ($invocation !== null && $this->assertInternalInvocation($invocation, $flags)) {
                 return $invocation;
             } elseif ($invocation !== null) {
                 return null;
@@ -99,15 +100,21 @@ class PharInvocationResolver implements Resolvable
     {
         $normalizedPath = Helper::normalizePath($path);
         $possibleAlias = strstr($normalizedPath, '/', true);
-        return $this->stack->findLastByAlias($possibleAlias ?: '');
+        return $this->stack->findByAlias($possibleAlias ?: '', true);
     }
 
     /**
      * @param PharInvocation $invocation
+     * @param int $flags
      * @return bool
+     * @experimental
      */
-    private function isInternalInvocation(PharInvocation $invocation): bool
+    private function assertInternalInvocation(PharInvocation $invocation, int $flags): bool
     {
+        if ($flags ^ static::ASSERT_INTERNAL_INVOCATION) {
+            return true;
+        }
+
         $trace = debug_backtrace(0);
         $firstIndex = count($trace) - 1;
         // initial invocation, most probably a CLI tool
@@ -125,6 +132,7 @@ class PharInvocationResolver implements Resolvable
                 return true;
             }
         }
+
         return false;
     }
 }

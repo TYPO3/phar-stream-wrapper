@@ -448,7 +448,7 @@ class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedAliasedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForIncludeOnPhar(string $allowedPath)
+    public function streamOpenAllowsInvocationForIncludeOnAliasedPhar(string $allowedPath)
     {
         $result = include($allowedPath);
         static::assertNotFalse($result);

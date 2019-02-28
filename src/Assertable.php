@@ -14,5 +14,10 @@ namespace TYPO3\PharStreamWrapper;
 
 interface Assertable
 {
+    /**
+     * @param string $path
+     * @param string $command
+     * @return bool
+     */
     public function assert(string $path, string $command): bool;
 }

@@ -423,8 +423,8 @@ class PharStreamWrapper
      */
     protected function assert(string $path, string $command)
     {
-        if ($this->resolveAssertable()->assert($path, $command) === true) {
             Manager::instance()->learnAlias($path);
+        if (Manager::instance()->assert($path, $command) === true) {
             return;
         }
 
@@ -439,7 +439,8 @@ class PharStreamWrapper
     }
 
     /**
-     * @return Assertable
+     * @return Manager|Assertable
+     * @deprecated Use Manager::instance() directly
      */
     protected function resolveAssertable(): Assertable
     {

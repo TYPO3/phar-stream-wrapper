@@ -17,14 +17,7 @@ interface Resolvable
     /**
      * @param string $path
      * @param null|int $flags
-     * @return null|string
+     * @return null|PharInvocation
      */
-    public function resolveBaseName(string $path, int $flags = null);
-
-    /**
-     * @param string $path
-     * @param int|null $flags
-     * @return bool
-     */
-    public function learnAlias(string $path, int $flags = null);
+    public function resolve(string $path, int $flags = null);
 }

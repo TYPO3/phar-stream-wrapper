@@ -12,9 +12,11 @@ namespace TYPO3\PharStreamWrapper;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\PharStreamWrapper\Resolver\BaseNameResolver;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocationResolver;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocation;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocationCollection;
 
-class Manager implements Assertable, Resolvable
+class Manager
 {
     /**
      * @var self
@@ -32,14 +34,23 @@ class Manager implements Assertable, Resolvable
     private $resolver;
 
     /**
+     * @var Collectable
+     */
+    private $collection;
+
+    /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
+     * @param Collectable $collection
      * @return self
      */
-    public static function initialize(Behavior $behaviour, Resolvable $resolver = null): self
-    {
+    public static function initialize(
+        Behavior $behaviour,
+        Resolvable $resolver = null,
+        Collectable $collection = null
+    ): self {
         if (self::$instance === null) {
-            self::$instance = new self($behaviour, $resolver);
+            self::$instance = new self($behaviour, $resolver, $collection);
             return self::$instance;
         }
         throw new \LogicException(
@@ -77,11 +88,16 @@ class Manager implements Assertable, Resolvable
     /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
+     * @param Collectable $collection
      */
-    private function __construct(Behavior $behaviour, Resolvable $resolver = null)
-    {
+    private function __construct(
+        Behavior $behaviour,
+        Resolvable $resolver = null,
+        Collectable $collection = null
+    ) {
+        $this->collection = $collection ?? new PharInvocationCollection();
+        $this->resolver = $resolver ?? new PharInvocationResolver();
         $this->behavior = $behaviour;
-        $this->resolver = $resolver ?? new BaseNameResolver();
     }
 
     /**
@@ -97,20 +113,18 @@ class Manager implements Assertable, Resolvable
     /**
      * @param string $path
      * @param null|int $flags
-     * @return string|null
+     * @return PharInvocation|null
      */
-    public function resolveBaseName(string $path, int $flags = null)
+    public function resolve(string $path, int $flags = null)
     {
-        return $this->resolver->resolveBaseName($path, $flags);
+        return $this->resolver->resolve($path, $flags);
     }
 
     /**
-     * @param string $path
-     * @param null|int $flags
-     * @return bool
+     * @return Collectable
      */
-    public function learnAlias(string $path, int $flags = null)
+    public function getCollection(): Collectable
     {
-        return $this->resolver->learnAlias($path);
+        return $this->collection;
     }
 }

@@ -12,12 +12,21 @@ namespace TYPO3\PharStreamWrapper;
  * The TYPO3 project - inspiring people to share!
  */
 
-interface Assertable
+use TYPO3\PharStreamWrapper\Resolver\PharInvocation;
+
+interface Collectable
 {
     /**
-     * @param string $path
-     * @param string $command
+     * @param PharInvocation $invocation
+     * @param int|null $flags
      * @return bool
      */
-    public function assert(string $path, string $command): bool;
+    public function collect(PharInvocation $invocation, int $flags = null): bool;
+
+    /**
+     * @param callable $callback
+     * @param bool $reverse
+     * @return null|PharInvocation
+     */
+    public function findByCallback(callable $callback, $reverse = false);
 }

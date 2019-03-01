@@ -53,13 +53,13 @@ class PharMetaDataInterceptor implements Assertable
      */
     private function baseFileDoesNotHaveMetaDataIssues(string $path): bool
     {
-        $baseFile = Manager::instance()->resolveBaseName($path);
-        if ($baseFile === null) {
+        $invocation = Manager::instance()->resolve($path);
+        if ($invocation === null) {
             return false;
         }
 
         try {
-            $reader = new Reader($baseFile);
+            $reader = new Reader($invocation->getBaseName());
             $reader->resolveContainer()->getManifest()->deserializeMetaData();
         } catch (DeserializationException $exception) {
             return false;

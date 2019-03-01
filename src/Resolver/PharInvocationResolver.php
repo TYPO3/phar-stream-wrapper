@@ -100,7 +100,15 @@ class PharInvocationResolver implements Resolvable
     {
         $normalizedPath = Helper::normalizePath($path);
         $possibleAlias = strstr($normalizedPath, '/', true);
-        return $this->collection->findByAlias($possibleAlias ?: '', true);
+        if (empty($possibleAlias)) {
+            return null;
+        }
+        return $this->collection->findByCallback(
+            function (PharInvocation $candidate) use ($possibleAlias) {
+                return $candidate->getAlias() === $possibleAlias;
+            },
+            true
+        );
     }
 
     /**

@@ -49,42 +49,6 @@ class PharInvocationCollection
     }
 
     /**
-     * @param string $baseName
-     * @param bool $reverse
-     * @return null|PharInvocation
-     */
-    public function findByBaseName(string $baseName, bool $reverse = false)
-    {
-        if ($baseName === '') {
-            return null;
-        }
-        foreach ($this->getInvocations($reverse) as $invocation) {
-            if ($invocation->getBaseName() === $baseName) {
-                return $invocation;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param string $alias
-     * @param bool $reverse
-     * @return null|PharInvocation
-     */
-    public function findByAlias(string $alias, bool $reverse = false)
-    {
-        if ($alias === '') {
-            return null;
-        }
-        foreach ($this->getInvocations($reverse) as $invocation) {
-            if ($invocation->getAlias() === $alias) {
-                return $invocation;
-            }
-        }
-        return null;
-    }
-
-    /**
      * @param callable $callback
      * @param bool $reverse
      * @return null|PharInvocation
@@ -112,7 +76,11 @@ class PharInvocationCollection
         if (!($flags & static::UNIQUE_BASE_NAME)) {
             return true;
         }
-        return $this->findByBaseName($invocation->getBaseName()) === null;
+        return $this->findByCallback(
+            function (PharInvocation $candidate) use ($invocation) {
+                return $candidate->getBaseName() === $invocation->getBaseName();
+            }
+        ) === null;
     }
 
     /**
@@ -140,18 +108,24 @@ class PharInvocationCollection
      */
     private function triggerDuplicateAliasWarning(PharInvocation $invocation)
     {
-        $sameAliasInvocation = $this->findByAlias($invocation->getAlias(), true);
-        if ($sameAliasInvocation !== null) {
-            trigger_error(
-                sprintf(
-                    'Alias %s cannot be used by %s, already used by %s',
-                    $invocation->getAlias(),
-                    $invocation->getBaseName(),
-                    $sameAliasInvocation->getBaseName()
-                ),
-                E_USER_WARNING
-            );
+        $sameAliasInvocation = $this->findByCallback(
+            function (PharInvocation $candidate) use ($invocation) {
+                return $candidate->getAlias() === $invocation->getAlias();
+            },
+            true
+        );
+        if ($sameAliasInvocation === null) {
+            return;
         }
+        trigger_error(
+            sprintf(
+                'Alias %s cannot be used by %s, already used by %s',
+                $invocation->getAlias(),
+                $invocation->getBaseName(),
+                $sameAliasInvocation->getBaseName()
+            ),
+            E_USER_WARNING
+        );
     }
 
     /**

@@ -12,7 +12,9 @@ namespace TYPO3\PharStreamWrapper\Resolver;
  * The TYPO3 project - inspiring people to share!
  */
 
-class PharInvocationCollection
+use TYPO3\PharStreamWrapper\Collectable;
+
+class PharInvocationCollection implements Collectable
 {
     const UNIQUE_INVOCATION = 1;
     const UNIQUE_BASE_NAME = 2;

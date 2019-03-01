@@ -13,6 +13,7 @@ namespace TYPO3\PharStreamWrapper\Resolver;
  */
 
 use TYPO3\PharStreamWrapper\Helper;
+use TYPO3\PharStreamWrapper\Manager;
 use TYPO3\PharStreamWrapper\Phar\Reader;
 use TYPO3\PharStreamWrapper\Resolvable;
 
@@ -23,11 +24,6 @@ class PharInvocationResolver implements Resolvable
     const ASSERT_INTERNAL_INVOCATION = 32;
 
     /**
-     * @var PharInvocationCollection
-     */
-    private $collection;
-
-    /**
      * @var string[]
      */
     private $invocationFunctionNames = [
@@ -36,14 +32,6 @@ class PharInvocationResolver implements Resolvable
         'require',
         'require_once'
     ];
-
-    /**
-     * @param PharInvocationCollection $collection
-     */
-    public function __construct(PharInvocationCollection $collection)
-    {
-        $this->collection = $collection;
-    }
 
     /**
      * Resolves PharInvocation value object (baseName and optional alias).
@@ -103,7 +91,7 @@ class PharInvocationResolver implements Resolvable
         if (empty($possibleAlias)) {
             return null;
         }
-        return $this->collection->findByCallback(
+        return Manager::instance()->getCollection()->findByCallback(
             function (PharInvocation $candidate) use ($possibleAlias) {
                 return $candidate->getAlias() === $possibleAlias;
             },

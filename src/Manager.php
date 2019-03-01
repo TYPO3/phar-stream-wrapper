@@ -34,20 +34,20 @@ class Manager
     private $resolver;
 
     /**
-     * @var PharInvocationCollection
+     * @var Collectable
      */
     private $collection;
 
     /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
-     * @param PharInvocationCollection $collection
+     * @param Collectable $collection
      * @return self
      */
     public static function initialize(
         Behavior $behaviour,
         Resolvable $resolver = null,
-        PharInvocationCollection $collection = null
+        Collectable $collection = null
     ): self {
         if (self::$instance === null) {
             self::$instance = new self($behaviour, $resolver, $collection);
@@ -88,15 +88,15 @@ class Manager
     /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
-     * @param PharInvocationCollection $collection
+     * @param Collectable $collection
      */
     private function __construct(
         Behavior $behaviour,
         Resolvable $resolver = null,
-        PharInvocationCollection $collection = null
+        Collectable $collection = null
     ) {
         $this->collection = $collection ?? new PharInvocationCollection();
-        $this->resolver = $resolver ?? new PharInvocationResolver($this->collection);
+        $this->resolver = $resolver ?? new PharInvocationResolver();
         $this->behavior = $behaviour;
     }
 
@@ -121,11 +121,10 @@ class Manager
     }
 
     /**
-     * @param PharInvocation $invocation
-     * @param null|int $flags
+     * @return Collectable
      */
-    public function collectionInvocation(PharInvocation $invocation, int $flags = null)
+    public function getCollection(): Collectable
     {
-        $this->collection->collect($invocation, $flags);
+        return $this->collection;
     }
 }

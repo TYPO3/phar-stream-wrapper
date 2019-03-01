@@ -417,7 +417,7 @@ class PharStreamWrapper
     protected function assert(string $path, string $command)
     {
         if (Manager::instance()->assert($path, $command) === true) {
-            $this->learnInvocation($path);
+            $this->collectInvocation($path);
             return;
         }
 
@@ -434,14 +434,15 @@ class PharStreamWrapper
     /**
      * @param string $path
      */
-    protected function learnInvocation(string $path)
+    protected function collectInvocation(string $path)
     {
         if (isset($this->invocation)) {
             return;
         }
 
-        $this->invocation = Manager::instance()->resolve($path);
-        Manager::instance()->collectionInvocation($this->invocation);
+        $manager = Manager::instance();
+        $this->invocation = $manager->resolve($path);
+        $manager->getCollection()->collect($this->invocation);
     }
 
     /**

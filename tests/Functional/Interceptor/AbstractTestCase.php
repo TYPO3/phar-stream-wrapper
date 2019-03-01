@@ -442,10 +442,26 @@ class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedAliasedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForIncludeOnPhar($allowedPath)
+    public function streamOpenAllowsInvocationForIncludeOnAliasedPhar($allowedPath)
     {
         $result = include($allowedPath);
         static::assertNotFalse($result);
+    }
+
+    /**
+     * @param string $allowedPath
+     *
+     * @test
+     * @dataProvider allowedPathsDataProvider
+     */
+    public function streamOpenDeniesInvocationForAliasedIncludeOutsideAliasedPhar($allowedPath)
+    {
+        // used to trigger registration of Phar alias
+        include('phar://' . $allowedPath . '/Classes/Domain/Model/DemoModel.php');
+
+        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', '', static::EXPECTED_EXCEPTION_CODE);
+        // using Phar alias outside(!) of according Phar archive
+        include('phar://bndl.phar/Classes/Domain/Model/DemoModel.php');
     }
 
     /**

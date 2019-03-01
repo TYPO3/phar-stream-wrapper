@@ -23,9 +23,9 @@ class PharInvocationResolver implements Resolvable
     const ASSERT_INTERNAL_INVOCATION = 32;
 
     /**
-     * @var PharInvocationStack
+     * @var PharInvocationCollection
      */
-    private $stack;
+    private $collection;
 
     /**
      * @var string[]
@@ -38,11 +38,11 @@ class PharInvocationResolver implements Resolvable
     ];
 
     /**
-     * @param PharInvocationStack $stack
+     * @param PharInvocationCollection $collection
      */
-    public function __construct(PharInvocationStack $stack)
+    public function __construct(PharInvocationCollection $collection)
     {
-        $this->stack = $stack;
+        $this->collection = $collection;
     }
 
     /**
@@ -51,9 +51,9 @@ class PharInvocationResolver implements Resolvable
      * Phar aliases are intended to be used only inside Phar archives, however
      * PharStreamWrapper needs this information exposed outside of Phar as well
      * It is possible that same alias is used for different $baseName values.
-     * That's why AliasMap behaves like a stack when resolving base-name for a
-     * given alias. On the other hand it is not possible that one $baseName is
-     * referring to multiple aliases.
+     * That's why PharInvocationCollection behaves like a stack when resolving
+     * base-name for a given alias. On the other hand it is not possible that
+     * one $baseName is referring to multiple aliases.
      * @see https://secure.php.net/manual/en/phar.setalias.php
      * @see https://secure.php.net/manual/en/phar.mapphar.php
      *
@@ -100,7 +100,7 @@ class PharInvocationResolver implements Resolvable
     {
         $normalizedPath = Helper::normalizePath($path);
         $possibleAlias = strstr($normalizedPath, '/', true);
-        return $this->stack->findByAlias($possibleAlias ?: '', true);
+        return $this->collection->findByAlias($possibleAlias ?: '', true);
     }
 
     /**

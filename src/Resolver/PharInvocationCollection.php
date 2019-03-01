@@ -12,7 +12,7 @@ namespace TYPO3\PharStreamWrapper\Resolver;
  * The TYPO3 project - inspiring people to share!
  */
 
-class PharInvocationStack
+class PharInvocationCollection
 {
     const UNIQUE_INVOCATION = 1;
     const UNIQUE_BASE_NAME = 2;

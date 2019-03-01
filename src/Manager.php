@@ -14,7 +14,7 @@ namespace TYPO3\PharStreamWrapper;
 
 use TYPO3\PharStreamWrapper\Resolver\PharInvocationResolver;
 use TYPO3\PharStreamWrapper\Resolver\PharInvocation;
-use TYPO3\PharStreamWrapper\Resolver\PharInvocationStack;
+use TYPO3\PharStreamWrapper\Resolver\PharInvocationCollection;
 
 class Manager
 {
@@ -34,23 +34,23 @@ class Manager
     private $resolver;
 
     /**
-     * @var PharInvocationStack
+     * @var PharInvocationCollection
      */
-    private $stack;
+    private $collection;
 
     /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
-     * @param PharInvocationStack $stack
+     * @param PharInvocationCollection $collection
      * @return self
      */
     public static function initialize(
         Behavior $behaviour,
         Resolvable $resolver = null,
-        PharInvocationStack $stack = null
+        PharInvocationCollection $collection = null
     ): self {
         if (self::$instance === null) {
-            self::$instance = new self($behaviour, $resolver, $stack);
+            self::$instance = new self($behaviour, $resolver, $collection);
             return self::$instance;
         }
         throw new \LogicException(
@@ -88,15 +88,15 @@ class Manager
     /**
      * @param Behavior $behaviour
      * @param Resolvable $resolver
-     * @param PharInvocationStack $stack
+     * @param PharInvocationCollection $collection
      */
     private function __construct(
         Behavior $behaviour,
         Resolvable $resolver = null,
-        PharInvocationStack $stack = null
+        PharInvocationCollection $collection = null
     ) {
-        $this->stack = $stack ?? new PharInvocationStack();
-        $this->resolver = $resolver ?? new PharInvocationResolver($this->stack);
+        $this->collection = $collection ?? new PharInvocationCollection();
+        $this->resolver = $resolver ?? new PharInvocationResolver($this->collection);
         $this->behavior = $behaviour;
     }
 
@@ -126,6 +126,6 @@ class Manager
      */
     public function learnInvocation(PharInvocation $invocation, int $flags = null)
     {
-        $this->stack->learn($invocation, $flags);
+        $this->collection->learn($invocation, $flags);
     }
 }

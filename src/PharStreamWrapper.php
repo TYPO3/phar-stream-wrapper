@@ -441,7 +441,7 @@ class PharStreamWrapper
         }
 
         $this->invocation = Manager::instance()->resolve($path);
-        Manager::instance()->learnInvocation($this->invocation);
+        Manager::instance()->collectionInvocation($this->invocation);
     }
 
     /**

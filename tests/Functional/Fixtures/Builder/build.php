@@ -20,6 +20,24 @@ $phar->addFile('Resources/content.txt');
 $phar->setStub('<?php __HALT_COMPILER();');
 $phar->stopBuffering();
 
+$phar = new Phar('../alias-no-path.phar');
+$phar->startBuffering();
+$phar->setMetadata(['vendor' => 'TYPO3Demo']);
+$phar->addFile('Classes/Domain/Model/DemoModel.php');
+$phar->addFile('Resources/exception.php');
+$phar->addFile('Resources/content.txt');
+$phar->setStub(file_get_contents('alias-no-path.stub.php'));
+$phar->stopBuffering();
+
+$phar = new Phar('../alias-with-path.phar');
+$phar->startBuffering();
+$phar->setMetadata(['vendor' => 'TYPO3Demo']);
+$phar->addFile('Classes/Domain/Model/DemoModel.php');
+$phar->addFile('Resources/exception.php');
+$phar->addFile('Resources/content.txt');
+$phar->setStub(file_get_contents('alias-with-path.stub.php'));
+$phar->stopBuffering();
+
 $phar = new Phar('../serialized.phar');
 $phar->setAlias('srlzd.phar');
 $phar->startBuffering();

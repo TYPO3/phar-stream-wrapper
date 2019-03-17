@@ -42,11 +42,19 @@ class ReaderTest extends TestCase
                     self::MANIFEST_ALIAS => 'srlzd.phar',
                 ],
             ],
-            'geoip2.phar' => [
-                $fixturesPath . 'geoip2.phar',
+            'alias.no.path.phar' => [
+                $fixturesPath . 'alias-no-path.phar',
                 [
-                    self::CONTAINER_ALIAS => 'geoip2.phar',
-                    self::STUB_MAPPED_ALIAS => 'geoip2.phar',
+                    self::CONTAINER_ALIAS => 'alias.no.path.phar',
+                    self::STUB_MAPPED_ALIAS => 'alias.no.path.phar',
+                    self::MANIFEST_ALIAS => '',
+                ],
+            ],
+            'alias.with.path.phar' => [
+                $fixturesPath . 'alias-with-path.phar',
+                [
+                    self::CONTAINER_ALIAS => 'alias.with.path.phar',
+                    self::STUB_MAPPED_ALIAS => 'alias.with.path.phar',
                     self::MANIFEST_ALIAS => '',
                 ],
             ],

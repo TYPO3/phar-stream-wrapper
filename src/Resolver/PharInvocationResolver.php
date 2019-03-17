@@ -63,7 +63,7 @@ class PharInvocationResolver implements Resolvable
             }
         }
 
-        $baseName = Helper::determineBaseFile($path);
+        $baseName = $this->resolveBaseName($path, $flags);
         if ($baseName === null) {
             return null;
         }
@@ -78,6 +78,49 @@ class PharInvocationResolver implements Resolvable
         }
 
         return new PharInvocation($baseName, $alias);
+    }
+
+    /**
+     * @param string $path
+     * @param int $flags
+     * @return null|string
+     */
+    private function resolveBaseName(string $path, int $flags)
+    {
+        $baseName = Helper::determineBaseFile($path);
+        if ($baseName !== null) {
+            return $baseName;
+        }
+
+        $possibleAlias = $this->resolvePossibleAlias($path);
+        if (!($flags & static::RESOLVE_ALIAS) || $possibleAlias === null) {
+            return null;
+        }
+
+        $trace = debug_backtrace();
+        foreach ($trace as $item) {
+            if (!isset($item['function']) || !isset($item['args'][0])
+                || !in_array($item['function'], $this->invocationFunctionNames, true)) {
+                continue;
+            }
+            $currentPath = $item['args'][0];
+            if (Helper::hasPharPrefix($currentPath)) {
+                continue;
+            }
+            $currentBaseName = Helper::determineBaseFile($currentPath);
+            if ($currentBaseName === null) {
+                continue;
+            }
+            // ensure the possible alias name (how we have been called initially) matches
+            // the resolved alias name that was retrieved by the current possible base name
+            $currentAlias = (new Reader($currentBaseName))->resolveContainer()->getAlias();
+            if ($currentAlias !== $possibleAlias) {
+                continue;
+            }
+            return $currentBaseName;
+        }
+
+        return null;
     }
 
     /**

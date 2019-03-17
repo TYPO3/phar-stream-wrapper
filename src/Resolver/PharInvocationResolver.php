@@ -82,13 +82,22 @@ class PharInvocationResolver implements Resolvable
 
     /**
      * @param string $path
+     * @return null|string
+     */
+    private function resolvePossibleAlias(string $path)
+    {
+        $normalizedPath = Helper::normalizePath($path);
+        return strstr($normalizedPath, '/', true) ?: null;
+    }
+
+    /**
+     * @param string $path
      * @return null|PharInvocation
      */
     private function findByAlias(string $path)
     {
-        $normalizedPath = Helper::normalizePath($path);
-        $possibleAlias = strstr($normalizedPath, '/', true);
-        if (empty($possibleAlias)) {
+        $possibleAlias = $this->resolvePossibleAlias($path);
+        if ($possibleAlias === null) {
             return null;
         }
         return Manager::instance()->getCollection()->findByCallback(

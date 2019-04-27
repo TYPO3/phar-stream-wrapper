@@ -29,11 +29,16 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
         );
         $this->allowedAliasedPaths = array(
             __DIR__ . '/../Fixtures/geoip2.phar',
+            // __DIR__ . '/../Fixtures/alias-no-path.phar',
+            __DIR__ . '/../Fixtures/alias-with-path.phar',
         );
         $this->deniedPaths = array(
-            __DIR__ . '/../Fixtures/serialized.phar',
-            __DIR__ . '/../Fixtures/serialized.phar.gz',
-            __DIR__ . '/../Fixtures/serialized.phar.bz2',
+            __DIR__ . '/../Fixtures/compromised.phar',
+            __DIR__ . '/../Fixtures/compromised.phar.gz',
+            __DIR__ . '/../Fixtures/compromised.phar.bz2',
+            __DIR__ . '/../Fixtures/compromised.phar.png',
+            __DIR__ . '/../Fixtures/compromised.phar.gz.png',
+            __DIR__ . '/../Fixtures/compromised.phar.bz2.png',
         );
         parent::__construct($name, $data, $dataName);
     }

@@ -16,7 +16,7 @@ use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use TYPO3\PharStreamWrapper\Exception;
 
-class AbstractTestCase extends TestCase
+abstract class AbstractTestCase extends TestCase
 {
     /**
      * @var string[]
@@ -508,6 +508,62 @@ class AbstractTestCase extends TestCase
         self::expectException(Exception::class);
         self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         include('phar://' . $deniedPath . '/Classes/Domain/Model/DemoModel.php');
+    }
+
+    /**
+     * @return array
+     */
+    abstract public function isFileSystemInvocationAcceptableDataProvider(): array;
+
+    /**
+     * @param string $path
+     * @param array $expectation
+     *
+     * @test
+     * @dataProvider isFileSystemInvocationAcceptableDataProvider
+     * @throws \MaxMind\Db\Reader\InvalidDatabaseException
+     */
+    public function isFileSystemInvocationAcceptable(string $path, array $expectation)
+    {
+        if (!extension_loaded('xdebug')) {
+            $this->markTestSkipped('xdebug not available');
+        }
+
+        \xdebug_start_function_monitor(array_keys($expectation));
+
+        include($path);
+        new \GeoIp2\Database\Reader(__DIR__ . '/../Fixtures/Resources/GeoLite2/GeoLite2-Country.mmdb');
+
+        \xdebug_stop_function_monitor();
+        $invocations = $this->groupInvocations(
+            \xdebug_get_monitored_functions(),
+            realpath(__DIR__ . '/../../../src')
+        );
+
+        self::assertSame($expectation, $invocations);
+    }
+
+    /**
+     * @param array $monitoredInvocations
+     * @param string $path
+     * @return array
+     */
+    protected function groupInvocations(array $monitoredInvocations, string $path): array
+    {
+        $invocations = [];
+        $path = rtrim($path, '/') . '/';
+        foreach ($monitoredInvocations as $item) {
+            if (empty($item['filename']) || strpos($item['filename'], $path) !== 0) {
+                continue;
+            }
+            $functionName = $item['function'];
+            if (isset($invocations[$functionName])) {
+                $invocations[$functionName]++;
+            } else {
+                $invocations[$functionName] = 1;
+            }
+        }
+        return $invocations;
     }
 
     /**

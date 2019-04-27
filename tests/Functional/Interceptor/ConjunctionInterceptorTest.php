@@ -12,10 +12,12 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\PharStreamWrapper\Helper;
 use TYPO3\PharStreamWrapper\Interceptor\ConjunctionInterceptor;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
 use TYPO3\PharStreamWrapper\Interceptor\PharMetaDataInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
+use TYPO3\PharStreamWrapper\Phar\Reader;
 use TYPO3\PharStreamWrapper\PharStreamWrapper;
 
 class ConjunctionInterceptorTest extends AbstractTestCase
@@ -79,5 +81,26 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         stream_wrapper_restore('phar');
         Manager::destroy();
         parent::tearDown();
+    }
+
+    /**
+     * @return array
+     */
+    public function isFileSystemInvocationAcceptableDataProvider(): array
+    {
+        $fixturePath = __DIR__ . '/../Fixtures';
+
+        return [
+            /*
+            'include phar' => [
+                $fixturePath . '/geoip2.phar',
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
+            ],
+            */
+            'include autoloader' => [
+                'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
+                [Helper::class . '::determineBaseFile' => 45, Reader::class . '->resolveContainer' => 60]
+            ],
+        ];
     }
 }

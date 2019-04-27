@@ -18,6 +18,7 @@ class ReaderTest extends TestCase
 {
     const CONTAINER_ALIAS = 'container.alias';
     const STUB_MAPPED_ALIAS = 'stub.mappedAlias';
+    const STUB_CONTENT_FLAG = 'stub.containerFlag';
     const MANIFEST_ALIAS = 'manifest.alias';
 
     public function pharAliasDataProvider()
@@ -28,14 +29,26 @@ class ReaderTest extends TestCase
             'bundle.phar' => array(
                 $fixturesPath . 'bundle.phar',
                 array(
+                    self::STUB_CONTENT_FLAG => '<?php',
                     self::CONTAINER_ALIAS => 'bndl.phar',
                     self::STUB_MAPPED_ALIAS => '',
                     self::MANIFEST_ALIAS => 'bndl.phar',
                 ),
             ),
+            'alias-special.phar' => array(
+                $fixturesPath . 'alias-special.phar',
+                array(
+                    self::STUB_CONTENT_FLAG => '<c3d4371ab0014b4e777cd450347bd20182a1dae3>',
+                    // actually PHP would throw an error when having different alias names
+                    self::CONTAINER_ALIAS => 'spcl.phar',
+                    self::STUB_MAPPED_ALIAS => 'alias.special.phar',
+                    self::MANIFEST_ALIAS => 'spcl.phar',
+                ),
+            ),
             'compromised.phar' => array(
                 $fixturesPath . 'compromised.phar',
                 array(
+                    self::STUB_CONTENT_FLAG => '<?php',
                     self::CONTAINER_ALIAS => 'cmprmsd.phar',
                     self::STUB_MAPPED_ALIAS => '',
                     self::MANIFEST_ALIAS => 'cmprmsd.phar',
@@ -44,11 +57,27 @@ class ReaderTest extends TestCase
             'geoip2.phar' => array(
                 $fixturesPath . 'geoip2.phar',
                 array(
+                    self::STUB_CONTENT_FLAG => '@link https://github.com/herrera-io/php-box/',
                     self::CONTAINER_ALIAS => 'geoip2.phar',
                     self::STUB_MAPPED_ALIAS => 'geoip2.phar',
                     self::MANIFEST_ALIAS => '',
                 ),
             ),
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param array $expectations
+     * @test
+     * @dataProvider pharAliasDataProvider
+     */
+    public function pharStubContentFlagCanBeResolved($path, array $expectations)
+    {
+        $reader = new Reader($path);
+        $this->assertContains(
+            $expectations[self::STUB_CONTENT_FLAG],
+            $reader->resolveContainer()->getStub()->getContent()
         );
     }
 

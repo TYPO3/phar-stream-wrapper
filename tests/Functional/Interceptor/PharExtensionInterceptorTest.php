@@ -24,13 +24,16 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         $this->allowedPaths = array(
-            __DIR__ . '/../Fixtures/bundle.phar'
+            __DIR__ . '/../Fixtures/bundle.phar',
         );
         $this->allowedAliasedPaths = array(
             __DIR__ . '/../Fixtures/geoip2.phar',
+            // __DIR__ . '/../Fixtures/alias-no-path.phar',
+            __DIR__ . '/../Fixtures/alias-with-path.phar',
         );
         $this->deniedPaths = array(
-            __DIR__ . '/../Fixtures/bundle.phar.png'
+            __DIR__ . '/../Fixtures/bundle.phar.png',
+            __DIR__ . '/../Fixtures/compromised.phar.png',
         );
         parent::__construct($name, $data, $dataName);
     }

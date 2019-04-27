@@ -100,8 +100,10 @@ class PharInvocationResolver implements Resolvable
         } else {
             $alias = '';
         }
-
-        return new PharInvocation($baseName, $alias);
+        // add unconfirmed(!) new invocation to collection
+        $invocation = new PharInvocation($baseName, $alias);
+        Manager::instance()->getCollection()->collect($invocation);
+        return $invocation;
     }
 
     /**
@@ -214,8 +216,11 @@ class PharInvocationResolver implements Resolvable
     }
 
     /**
+     * Finds confirmed(!) invocations by alias.
+     *
      * @param string $path
      * @return null|PharInvocation
+     * @see \TYPO3\PharStreamWrapper\PharStreamWrapper::collectInvocation()
      */
     private function findByAlias(string $path)
     {
@@ -225,7 +230,7 @@ class PharInvocationResolver implements Resolvable
         }
         return Manager::instance()->getCollection()->findByCallback(
             function (PharInvocation $candidate) use ($possibleAlias) {
-                return $candidate->getAlias() === $possibleAlias;
+                return $candidate->isConfirmed() && $candidate->getAlias() === $possibleAlias;
             },
             true
         );

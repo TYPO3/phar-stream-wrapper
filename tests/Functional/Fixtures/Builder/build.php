@@ -9,6 +9,9 @@ namespace {
     $metaData = array('test' => new TYPO3\PharStreamWrapper\Tests\Functional\Fixtures\Source\TestModel());
 
     @unlink('../bundle.phar');
+    @unlink('../alias-no-path.phar');
+    @unlink('../alias-with-path.phar');
+    @unlink('../alias-special.phar');
     @unlink('../compromised.phar');
     @unlink('../compromised.phar.gz');
     @unlink('../compromised.phar.bz2');
@@ -42,6 +45,16 @@ namespace {
     $phar->addFile('Resources/exception.php');
     $phar->addFile('Resources/content.txt');
     $phar->setStub(file_get_contents('alias-with-path.stub.php'));
+    $phar->stopBuffering();
+
+    $phar = new Phar('../alias-special.phar');
+    $phar->setAlias('spcl.phar');
+    $phar->startBuffering();
+    $phar->setMetadata(array('vendor' => 'TYPO3Demo', 'test' => '__HALT_COMPILER();'));
+    $phar->addFile('Classes/Domain/Model/DemoModel.php');
+    $phar->addFile('Resources/exception.php');
+    $phar->addFile('Resources/content.txt');
+    $phar->setStub(file_get_contents('alias-special.stub.php'));
     $phar->stopBuffering();
 
     $phar = new Phar('../compromised.phar');

@@ -34,7 +34,7 @@ class ConjunctionInterceptorTest extends AbstractTestCase
      */
     protected $allowedAliasedPaths = [
         __DIR__ . '/../Fixtures/geoip2.phar',
-        // __DIR__ . '/../Fixtures/alias-no-path.phar',
+        __DIR__ . '/../Fixtures/alias-no-path.phar',
         __DIR__ . '/../Fixtures/alias-with-path.phar',
     ];
 
@@ -91,15 +91,13 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         $fixturePath = __DIR__ . '/../Fixtures';
 
         return [
-            /*
             'include phar' => [
                 $fixturePath . '/geoip2.phar',
-                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 19]
             ],
-            */
             'include autoloader' => [
                 'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
-                [Helper::class . '::determineBaseFile' => 45, Reader::class . '->resolveContainer' => 60]
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 18]
             ],
         ];
     }

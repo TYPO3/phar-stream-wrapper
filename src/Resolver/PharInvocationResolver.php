@@ -34,6 +34,13 @@ class PharInvocationResolver implements Resolvable
     ];
 
     /**
+     * Contains resolved base names in order to reduce file IO.
+     *
+     * @var string[]
+     */
+    private $baseNames = [];
+
+    /**
      * Resolves PharInvocation value object (baseName and optional alias).
      *
      * Phar aliases are intended to be used only inside Phar archives, however
@@ -56,21 +63,38 @@ class PharInvocationResolver implements Resolvable
 
         if ($hasPharPrefix && $flags & static::RESOLVE_ALIAS) {
             $invocation = $this->findByAlias($path);
-            if ($invocation !== null && $this->assertInternalInvocation($invocation, $flags)) {
+            if ($invocation !== null) {
                 return $invocation;
-            } elseif ($invocation !== null) {
-                return null;
             }
         }
 
-        $baseName = Helper::determineBaseFile($path);
+        $baseName = $this->resolveBaseName($path, $flags);
         if ($baseName === null) {
             return null;
         }
 
         if ($flags & static::RESOLVE_REALPATH) {
-            $baseName = realpath($baseName);
+            $baseName = $this->baseNames[$baseName];
         }
+
+        return $this->retrieveInvocation($baseName, $flags);
+    }
+
+    /**
+     * Retrieves PharInvocation, either existing in collection or created on demand
+     * with resolving a potential alias name used in the according Phar archive.
+     *
+     * @param string $baseName
+     * @param int $flags
+     * @return PharInvocation
+     */
+    private function retrieveInvocation(string $baseName, int $flags): PharInvocation
+    {
+        $invocation = $this->findByBaseName($baseName);
+        if ($invocation !== null) {
+            return $invocation;
+        }
+
         if ($flags & static::RESOLVE_ALIAS) {
             $alias = (new Reader($baseName))->resolveContainer()->getAlias();
         } else {
@@ -82,13 +106,121 @@ class PharInvocationResolver implements Resolvable
 
     /**
      * @param string $path
+     * @param int $flags
+     * @return null|string
+     */
+    private function resolveBaseName(string $path, int $flags)
+    {
+        $baseName = $this->findInBaseNames($path);
+        if ($baseName !== null) {
+            return $baseName;
+        }
+
+        $baseName = Helper::determineBaseFile($path);
+        if ($baseName !== null) {
+            $this->addBaseName($baseName);
+            return $baseName;
+        }
+
+        $possibleAlias = $this->resolvePossibleAlias($path);
+        if (!($flags & static::RESOLVE_ALIAS) || $possibleAlias === null) {
+            return null;
+        }
+
+        $trace = debug_backtrace();
+        foreach ($trace as $item) {
+            if (!isset($item['function']) || !isset($item['args'][0])
+                || !in_array($item['function'], $this->invocationFunctionNames, true)) {
+                continue;
+            }
+            $currentPath = $item['args'][0];
+            if (Helper::hasPharPrefix($currentPath)) {
+                continue;
+            }
+            $currentBaseName = Helper::determineBaseFile($currentPath);
+            if ($currentBaseName === null) {
+                continue;
+            }
+            // ensure the possible alias name (how we have been called initially) matches
+            // the resolved alias name that was retrieved by the current possible base name
+            $currentAlias = (new Reader($currentBaseName))->resolveContainer()->getAlias();
+            if ($currentAlias !== $possibleAlias) {
+                continue;
+            }
+            $this->addBaseName($currentBaseName);
+            return $currentBaseName;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $path
+     * @return null|string
+     */
+    private function resolvePossibleAlias(string $path)
+    {
+        $normalizedPath = Helper::normalizePath($path);
+        return strstr($normalizedPath, '/', true) ?: null;
+    }
+
+    /**
+     * @param string $baseName
+     * @return null|PharInvocation
+     */
+    private function findByBaseName(string $baseName)
+    {
+        return Manager::instance()->getCollection()->findByCallback(
+            function (PharInvocation $candidate) use ($baseName) {
+                return $candidate->getBaseName() === $baseName;
+            },
+            true
+        );
+    }
+
+    /**
+     * @param string $path
+     * @return null|string
+     */
+    private function findInBaseNames(string $path)
+    {
+        // return directly if the resolved base name was submitted
+        if (in_array($path, $this->baseNames, true)) {
+            return $path;
+        }
+
+        $parts = explode('/', Helper::normalizePath($path));
+
+        while (count($parts)) {
+            $currentPath = implode('/', $parts);
+            if (isset($this->baseNames[$currentPath])) {
+                return $currentPath;
+            }
+            array_pop($parts);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $baseName
+     */
+    private function addBaseName(string $baseName)
+    {
+        if (isset($this->baseNames[$baseName])) {
+            return;
+        }
+        $this->baseNames[$baseName] = realpath($baseName);
+    }
+
+    /**
+     * @param string $path
      * @return null|PharInvocation
      */
     private function findByAlias(string $path)
     {
-        $normalizedPath = Helper::normalizePath($path);
-        $possibleAlias = strstr($normalizedPath, '/', true);
-        if (empty($possibleAlias)) {
+        $possibleAlias = $this->resolvePossibleAlias($path);
+        if ($possibleAlias === null) {
             return null;
         }
         return Manager::instance()->getCollection()->findByCallback(
@@ -97,38 +229,5 @@ class PharInvocationResolver implements Resolvable
             },
             true
         );
-    }
-
-    /**
-     * @param PharInvocation $invocation
-     * @param int $flags
-     * @return bool
-     * @experimental
-     */
-    private function assertInternalInvocation(PharInvocation $invocation, int $flags): bool
-    {
-        if (!($flags & static::ASSERT_INTERNAL_INVOCATION)) {
-            return true;
-        }
-
-        $trace = debug_backtrace(0);
-        $firstIndex = count($trace) - 1;
-        // initial invocation, most probably a CLI tool
-        if (($trace[$firstIndex]['file'] ?? null) === $invocation->getBaseName()) {
-            return true;
-        }
-        // otherwise search for include/require invocations
-        foreach ($trace as $item) {
-            if (!isset($item['function']) || !isset($item['args'][0])) {
-                continue;
-            }
-            if ($item['args'][0] === $invocation->getBaseName()
-                && in_array($item['function'], $this->invocationFunctionNames, true)
-            ) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -32,7 +32,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
      */
     protected $allowedAliasedPaths = [
         __DIR__ . '/../Fixtures/geoip2.phar',
-        // __DIR__ . '/../Fixtures/alias-no-path.phar',
+        __DIR__ . '/../Fixtures/alias-no-path.phar',
         __DIR__ . '/../Fixtures/alias-with-path.phar',
     ];
 
@@ -130,15 +130,13 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         $fixturePath = __DIR__ . '/../Fixtures';
 
         return [
-            /*
             'include phar' => [
                 $fixturePath . '/geoip2.phar',
                 [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
             ],
-            */
             'include autoloader' => [
                 'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
-                [Helper::class . '::determineBaseFile' => 30, Reader::class . '->resolveContainer' => 30]
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
             ],
         ];
     }

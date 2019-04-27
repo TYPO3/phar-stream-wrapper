@@ -92,7 +92,7 @@ class Helper
     public static function normalizePath(string $path): string
     {
         return rtrim(
-            static::getCanonicalPath(
+            static::normalizeWindowsPath(
                 static::removePharPrefix($path)
             ),
             '/'

@@ -93,11 +93,13 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         return [
             'include phar' => [
                 $fixturePath . '/geoip2.phar',
-                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 19]
+                // Reader invocations: one for alias, one for meta-data
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
             ],
             'include autoloader' => [
                 'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
-                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 18]
+                // Reader invocations: one for alias, one for meta-data
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
             ],
         ];
     }

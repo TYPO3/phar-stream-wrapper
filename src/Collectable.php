@@ -18,6 +18,12 @@ interface Collectable
 {
     /**
      * @param PharInvocation $invocation
+     * @return bool
+     */
+    public function has(PharInvocation $invocation): bool;
+
+    /**
+     * @param PharInvocation $invocation
      * @param int|null $flags
      * @return bool
      */

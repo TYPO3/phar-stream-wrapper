@@ -132,11 +132,13 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         return [
             'include phar' => [
                 $fixturePath . '/geoip2.phar',
-                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
+                // Reader invocations: jise one for alias
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 1]
             ],
             'include autoloader' => [
                 'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
-                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 2]
+                // Reader invocations: jise one for alias
+                [Helper::class . '::determineBaseFile' => 1, Reader::class . '->resolveContainer' => 1]
             ],
         ];
     }

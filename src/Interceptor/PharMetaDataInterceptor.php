@@ -57,10 +57,15 @@ class PharMetaDataInterceptor implements Assertable
         if ($invocation === null) {
             return false;
         }
-
+        // directly return in case invocation was checked before
+        if ($invocation->getVariable(self::class) === true) {
+            return true;
+        }
+        // otherwise analyze meta-data
         try {
             $reader = new Reader($invocation->getBaseName());
             $reader->resolveContainer()->getManifest()->deserializeMetaData();
+            $invocation->setVariable(self::class, true);
         } catch (DeserializationException $exception) {
             return false;
         }

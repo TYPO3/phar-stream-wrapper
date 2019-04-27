@@ -27,6 +27,15 @@ class PharInvocationCollection implements Collectable
 
     /**
      * @param PharInvocation $invocation
+     * @return bool
+     */
+    public function has(PharInvocation $invocation): bool
+    {
+        return in_array($invocation, $this->invocations, true);
+    }
+
+    /**
+     * @param PharInvocation $invocation
      * @param null|int $flags
      * @return bool
      */
@@ -106,13 +115,17 @@ class PharInvocationCollection implements Collectable
     }
 
     /**
+     * Triggers warning for invocations with same alias and same confirmation state.
+     *
      * @param PharInvocation $invocation
+     * @see \TYPO3\PharStreamWrapper\PharStreamWrapper::collectInvocation()
      */
     private function triggerDuplicateAliasWarning(PharInvocation $invocation)
     {
         $sameAliasInvocation = $this->findByCallback(
             function (PharInvocation $candidate) use ($invocation) {
-                return $candidate->getAlias() === $invocation->getAlias();
+                return $candidate->isConfirmed() === $invocation->isConfirmed()
+                    && $candidate->getAlias() === $invocation->getAlias();
             },
             true
         );

@@ -21,17 +21,17 @@ abstract class AbstractTestCase extends TestCase
     /**
      * @var string[]
      */
-    protected $allowedPaths = array();
+    protected $allowedPaths = [];
 
     /**
      * @var string[]
      */
-    protected $allowedAliasedPaths = array();
+    protected $allowedAliasedPaths = [];
 
     /**
      * @var string[]
      */
-    protected $deniedPaths = array();
+    protected $deniedPaths = [];
 
     /**
      * @var int

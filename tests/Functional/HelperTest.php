@@ -36,12 +36,16 @@ class HelperTest extends TestCase
                 '{DIR}/bundle.phar'
             ],
             [
-                'phar://{DIR}/other/../bundle.phar/path/../other/content.txt',
-                '{DIR}/bundle.phar'
+                'phar://{DIR}/Existing/../bundle.phar/path/../other/content.txt',
+                '{DIR}/Existing/../bundle.phar'
             ],
             [
                 'phar://{DIR}/../Fixtures/bundle.phar',
-                '{DIR}/bundle.phar'
+                '{DIR}/../Fixtures/bundle.phar'
+            ],
+            [
+                'phar://{DIR}/NotExisting/../bundle.phar/path/../other/content.txt',
+                null
             ],
             [
                 'phar://{DIR}/not-existing.phar/path/../other/content.txt',

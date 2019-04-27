@@ -34,12 +34,12 @@ class ReaderTest extends TestCase
                     self::MANIFEST_ALIAS => 'bndl.phar',
                 ],
             ],
-            'serialized.phar' => [
-                $fixturesPath . 'serialized.phar',
+            'compromised.phar' => [
+                $fixturesPath . 'compromised.phar',
                 [
-                    self::CONTAINER_ALIAS => 'srlzd.phar',
+                    self::CONTAINER_ALIAS => 'cmprmsd.phar',
                     self::STUB_MAPPED_ALIAS => '',
-                    self::MANIFEST_ALIAS => 'srlzd.phar',
+                    self::MANIFEST_ALIAS => 'cmprmsd.phar',
                 ],
             ],
             'geoip2.phar' => [

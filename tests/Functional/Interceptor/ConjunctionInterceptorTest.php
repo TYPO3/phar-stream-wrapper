@@ -32,6 +32,8 @@ class ConjunctionInterceptorTest extends AbstractTestCase
      */
     protected $allowedAliasedPaths = [
         __DIR__ . '/../Fixtures/geoip2.phar',
+        // __DIR__ . '/../Fixtures/alias-no-path.phar',
+        __DIR__ . '/../Fixtures/alias-with-path.phar',
     ];
 
     /**
@@ -39,9 +41,12 @@ class ConjunctionInterceptorTest extends AbstractTestCase
      */
     protected $deniedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
-        __DIR__ . '/../Fixtures/serialized.phar',
-        __DIR__ . '/../Fixtures/serialized.phar.gz',
-        __DIR__ . '/../Fixtures/serialized.phar.bz2',
+        __DIR__ . '/../Fixtures/compromised.phar',
+        __DIR__ . '/../Fixtures/compromised.phar.gz',
+        __DIR__ . '/../Fixtures/compromised.phar.bz2',
+        __DIR__ . '/../Fixtures/compromised.phar.png',
+        __DIR__ . '/../Fixtures/compromised.phar.gz.png',
+        __DIR__ . '/../Fixtures/compromised.phar.bz2.png',
     ];
 
     /**

@@ -30,6 +30,8 @@ class PharExtensionInterceptorTest extends AbstractTestCase
      */
     protected $allowedAliasedPaths = [
         __DIR__ . '/../Fixtures/geoip2.phar',
+        // __DIR__ . '/../Fixtures/alias-no-path.phar',
+        __DIR__ . '/../Fixtures/alias-with-path.phar',
     ];
 
     /**
@@ -37,6 +39,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
      */
     protected $deniedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
+        __DIR__ . '/../Fixtures/compromised.phar.png',
     ];
 
     /**

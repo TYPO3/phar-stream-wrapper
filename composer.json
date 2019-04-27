@@ -11,6 +11,7 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "ext-xdebug": "*",
         "phpunit/phpunit": "^6.5"
     },
     "autoload": {

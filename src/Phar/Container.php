@@ -55,6 +55,6 @@ class Container
      */
     public function getAlias(): string
     {
-        return $this->stub->getMappedAlias() ?: $this->manifest->getAlias();
+        return $this->manifest->getAlias() ?: $this->stub->getMappedAlias();
     }
 }

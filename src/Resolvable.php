@@ -12,6 +12,8 @@ namespace TYPO3\PharStreamWrapper;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\PharStreamWrapper\Resolver\PharInvocation;
+
 interface Resolvable
 {
     /**

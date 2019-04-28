@@ -499,8 +499,10 @@ abstract class AbstractTestCase extends TestCase
      */
     public function isFileSystemInvocationAcceptable($path, array $expectation)
     {
-        if (!extension_loaded('xdebug')) {
-            $this->markTestSkipped('xdebug not available');
+        if (!extension_loaded('xdebug')
+            || version_compare(phpversion('xdebug'), '2.4.0', '<')
+        ) {
+            $this->markTestSkipped('xdebug not available (>=2.4.0)');
         }
         \xdebug_start_function_monitor(array_keys($expectation));
         include($path);

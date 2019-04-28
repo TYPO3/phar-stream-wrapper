@@ -30,7 +30,7 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         );
         $this->allowedAliasedPaths = array(
             __DIR__ . '/../Fixtures/geoip2.phar',
-            // __DIR__ . '/../Fixtures/alias-no-path.phar',
+            __DIR__ . '/../Fixtures/alias-no-path.phar',
             __DIR__ . '/../Fixtures/alias-with-path.phar',
         );
         $this->deniedPaths = array(
@@ -70,5 +70,31 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         stream_wrapper_restore('phar');
         Manager::destroy();
         parent::tearDown();
+    }
+
+    /**
+     * @return array
+     */
+    public function isFileSystemInvocationAcceptableDataProvider()
+    {
+        $fixturePath = __DIR__ . '/../Fixtures';
+        return array(
+            'include phar' => array(
+                $fixturePath . '/geoip2.phar',
+                // Reader invocations: one for alias, one for meta-data
+                array(
+                    'TYPO3\\PharStreamWrapper\\Helper::determineBaseFile' => 1,
+                    'TYPO3\\PharStreamWrapper\\Phar\\Reader->resolveContainer' => 2,
+                )
+            ),
+            'include autoloader' => array(
+                'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
+                // Reader invocations: one for alias, one for meta-data
+                array(
+                    'TYPO3\\PharStreamWrapper\\Helper::determineBaseFile' => 1,
+                    'TYPO3\\PharStreamWrapper\\Phar\\Reader->resolveContainer' => 2,
+                )
+            ),
+        );
     }
 }

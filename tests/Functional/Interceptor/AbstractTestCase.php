@@ -13,7 +13,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
 
 use PHPUnit\Framework\TestCase;
 
-class AbstractTestCase extends TestCase
+abstract class AbstractTestCase extends TestCase
 {
 
     /**
@@ -449,22 +449,6 @@ class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
-     * @test
-     * @dataProvider allowedPathsDataProvider
-     */
-    public function streamOpenDeniesInvocationForAliasedIncludeOutsideAliasedPhar($allowedPath)
-    {
-        // used to trigger registration of Phar alias
-        include('phar://' . $allowedPath . '/Classes/Domain/Model/DemoModel.php');
-
-        self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', '', static::EXPECTED_EXCEPTION_CODE);
-        // using Phar alias outside(!) of according Phar archive
-        include('phar://bndl.phar/Classes/Domain/Model/DemoModel.php');
-    }
-
-    /**
      * @param string $deniedPath
      *
      * @test
@@ -498,6 +482,58 @@ class AbstractTestCase extends TestCase
     {
         self::setExpectedException('\TYPO3\PharStreamWrapper\Exception', '', static::EXPECTED_EXCEPTION_CODE);
         include('phar://' . $deniedPath . '/Classes/Domain/Model/DemoModel.php');
+    }
+
+    /**
+     * @return array
+     */
+    abstract public function isFileSystemInvocationAcceptableDataProvider();
+
+    /**
+     * @param string $path
+     * @param array $expectation
+     *
+     * @test
+     * @dataProvider isFileSystemInvocationAcceptableDataProvider
+     * @throws \MaxMind\Db\Reader\InvalidDatabaseException
+     */
+    public function isFileSystemInvocationAcceptable($path, array $expectation)
+    {
+        if (!extension_loaded('xdebug')) {
+            $this->markTestSkipped('xdebug not available');
+        }
+        \xdebug_start_function_monitor(array_keys($expectation));
+        include($path);
+        new \GeoIp2\Database\Reader(__DIR__ . '/../Fixtures/Resources/GeoLite2/GeoLite2-Country.mmdb');
+        \xdebug_stop_function_monitor();
+        $invocations = $this->groupInvocations(
+            \xdebug_get_monitored_functions(),
+            realpath(__DIR__ . '/../../../src')
+        );
+        self::assertSame($expectation, $invocations);
+    }
+
+    /**
+     * @param array $monitoredInvocations
+     * @param string $path
+     * @return array
+     */
+    protected function groupInvocations(array $monitoredInvocations, $path)
+    {
+        $invocations = array();
+        $path = rtrim($path, '/') . '/';
+        foreach ($monitoredInvocations as $item) {
+            if (empty($item['filename']) || strpos($item['filename'], $path) !== 0) {
+                continue;
+            }
+            $functionName = $item['function'];
+            if (isset($invocations[$functionName])) {
+                $invocations[$functionName]++;
+            } else {
+                $invocations[$functionName] = 1;
+            }
+        }
+        return $invocations;
     }
 
     /**

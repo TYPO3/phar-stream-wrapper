@@ -28,7 +28,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         );
         $this->allowedAliasedPaths = array(
             __DIR__ . '/../Fixtures/geoip2.phar',
-            // __DIR__ . '/../Fixtures/alias-no-path.phar',
+            __DIR__ . '/../Fixtures/alias-no-path.phar',
             __DIR__ . '/../Fixtures/alias-with-path.phar',
         );
         $this->deniedPaths = array(
@@ -109,5 +109,31 @@ class PharExtensionInterceptorTest extends AbstractTestCase
             '__alias' => 'TYPO3 demo text file.',
             'bundle.phar' => 'TYPO3 demo text file.',
         ), json_decode($response, true));
+    }
+
+    /**
+     * @return array
+     */
+    public function isFileSystemInvocationAcceptableDataProvider()
+    {
+        $fixturePath = __DIR__ . '/../Fixtures';
+        return array(
+            'include phar' => array(
+                $fixturePath . '/geoip2.phar',
+                // Reader invocations: one for alias, one for meta-data
+                array(
+                    'TYPO3\\PharStreamWrapper\\Helper::determineBaseFile' => 1,
+                    'TYPO3\\PharStreamWrapper\\Phar\\Reader->resolveContainer' => 1,
+                )
+            ),
+            'include autoloader' => array(
+                'phar://' . $fixturePath . '/geoip2.phar/vendor/autoload.php',
+                // Reader invocations: one for alias, one for meta-data
+                array(
+                    'TYPO3\\PharStreamWrapper\\Helper::determineBaseFile' => 1,
+                    'TYPO3\\PharStreamWrapper\\Phar\\Reader->resolveContainer' => 1,
+                )
+            ),
+        );
     }
 }

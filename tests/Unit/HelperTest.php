@@ -56,24 +56,17 @@ class HelperTest extends TestCase
     public function pathIsNormalizedDataProvider()
     {
         $dataSet = array(
-            array('.', ''),
-            array('..', ''),
-            array('../x', 'x'),
-            array('./././x', 'x'),
-            array('./.././../x', 'x'),
-            array('a/../x', 'x'),
-            array('a/b/../../x', 'x'),
-            array('/a/b/../../x', '/x'),
-            array('c:\\a\\b\..\..\x', 'c:/x'),
-            array('phar://../x', 'x'),
-            array('phar://../x/file.phar', 'x/file.phar'),
-            array('phar:///../x/file.phar', '/x/file.phar'),
-            array('phar://a/b/../../x', 'x'),
-            array('phar:///a/b/../../x', '/x'),
-            array('phar://a/b/../../x/file.phar', 'x/file.phar'),
-            array('phar:///a/b/../../x/file.phar', '/x/file.phar'),
-            array('phar://c:\\a\\b\\..\\..\\x\\file.phar', 'c:/x/file.phar'),
-            array('  phar:///a/b/../../x/file.phar  ', '/x/file.phar'),
+            array('.', '.'),
+            array('..', '..'),
+            array('./x', './x'),
+            array('../x', '../x'),
+            array('c:\\a\\b\..\..\x', 'c:/a/b/../../x'),
+            array('phar://../x', '../x'),
+            array('phar:///../x', '/../x'),
+            array('phar://c:\\a\\b\..\..\x', 'c:/a/b/../../x'),
+            array('  phar://../x  ', '../x'),
+            array('  phar:///../x  ', '/../x'),
+            array('  phar://c:\\a\\b\..\..\x  ', 'c:/a/b/../../x'),
         );
 
         return array_merge($this->pharPrefixIsRemovedDataProvider(), $dataSet);

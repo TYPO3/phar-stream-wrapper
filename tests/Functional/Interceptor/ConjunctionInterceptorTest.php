@@ -27,6 +27,7 @@ class ConjunctionInterceptorTest extends AbstractTestCase
     {
         $this->allowedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar',
+            __DIR__ . '/../Fixtures/Source/../bundle.phar',
         );
         $this->allowedAliasedPaths = array(
             __DIR__ . '/../Fixtures/geoip2.phar',
@@ -41,6 +42,9 @@ class ConjunctionInterceptorTest extends AbstractTestCase
             __DIR__ . '/../Fixtures/compromised.phar.png',
             __DIR__ . '/../Fixtures/compromised.phar.gz.png',
             __DIR__ . '/../Fixtures/compromised.phar.bz2.png',
+            __DIR__ . '/../Fixtures/bundle.phar.png/../bundle.phar',
+            __DIR__ . '/../Fixtures/compromised.phar/../bundle.phar',
+            __DIR__ . '/../Fixtures/compromised.phar.png/../bundle.phar',
         );
         parent::__construct($name, $data, $dataName);
     }

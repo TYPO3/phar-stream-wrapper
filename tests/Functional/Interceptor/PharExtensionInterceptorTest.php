@@ -25,6 +25,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
      */
     protected $allowedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar',
+        __DIR__ . '/../Fixtures/Source/../bundle.phar',
     ];
 
     /**
@@ -42,6 +43,8 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     protected $deniedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar.png',
         __DIR__ . '/../Fixtures/compromised.phar.png',
+        __DIR__ . '/../Fixtures/bundle.phar.png/../bundle.phar',
+        __DIR__ . '/../Fixtures/compromised.phar.png/../bundle.phar',
     ];
 
     /**

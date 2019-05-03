@@ -26,6 +26,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
         $this->allowedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar',
             __DIR__ . '/../Fixtures/bundle.phar.png',
+            __DIR__ . '/../Fixtures/Source/../bundle.phar',
         );
         $this->allowedAliasedPaths = array(
             __DIR__ . '/../Fixtures/geoip2.phar',
@@ -39,6 +40,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
             __DIR__ . '/../Fixtures/compromised.phar.png',
             __DIR__ . '/../Fixtures/compromised.phar.gz.png',
             __DIR__ . '/../Fixtures/compromised.phar.bz2.png',
+            __DIR__ . '/../Fixtures/compromised.phar/../bundle.phar',
         );
         parent::__construct($name, $data, $dataName);
     }

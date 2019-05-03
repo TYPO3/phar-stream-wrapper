@@ -27,6 +27,7 @@ class ConjunctionInterceptorTest extends AbstractTestCase
      */
     protected $allowedPaths = [
         __DIR__ . '/../Fixtures/bundle.phar',
+        __DIR__ . '/../Fixtures/Source/../bundle.phar',
     ];
 
     /**
@@ -49,6 +50,9 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         __DIR__ . '/../Fixtures/compromised.phar.png',
         __DIR__ . '/../Fixtures/compromised.phar.gz.png',
         __DIR__ . '/../Fixtures/compromised.phar.bz2.png',
+        __DIR__ . '/../Fixtures/bundle.phar.png/../bundle.phar',
+        __DIR__ . '/../Fixtures/compromised.phar/../bundle.phar',
+        __DIR__ . '/../Fixtures/compromised.phar.png/../bundle.phar',
     ];
 
     /**

@@ -23,5 +23,10 @@
         "psr-4": {
             "TYPO3\\PharStreamWrapper\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "v3.x-dev"
+        }
     }
 }

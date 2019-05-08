@@ -21,9 +21,11 @@ and has been addressed concerning the specific attack vector and for this generi
 `PharStreamWrapper` in TYPO3 versions 7.6.30 LTS, 8.7.17 LTS and 9.3.1 on 12th
 July 2018.
 
-* https://typo3.org/security/advisory/typo3-core-sa-2018-002/
 * https://blog.secarma.co.uk/labs/near-phar-dangerous-unserialization-wherever-you-are
 * https://youtu.be/GePBmsNJw6Y
+* https://typo3.org/security/advisory/typo3-psa-2018-001/
+* https://typo3.org/security/advisory/typo3-psa-2019-007/
+* https://typo3.org/security/advisory/typo3-psa-2019-008/
 
 ## License
 

@@ -153,8 +153,28 @@ class Reader
      */
     private function determineFileType()
     {
-        $fileInfo = new \finfo();
-        return $fileInfo->file($this->fileName, FILEINFO_MIME_TYPE);
+        if (class_exists('\\finfo')) {
+            $fileInfo = new \finfo();
+            return $fileInfo->file($this->fileName, FILEINFO_MIME_TYPE);
+        }
+        return $this->determineFileTypeByHeader();
+    }
+
+    /**
+     * @return string
+     */
+    private function determineFileTypeByHeader(): string
+    {
+        $resource = fopen($this->fileName, 'r');
+        $header = fgets($resource, 4);
+        $mimeType = '';
+        if ($header === "\x42\x5a\x68") {
+            $mimeType = 'application/x-bzip2';
+        } elseif (strpos($header, "\x1f\x8b") === 0) {
+            $mimeType = 'application/x-gzip';
+        }
+        fclose($resource);
+        return $mimeType;
     }
 
     /**

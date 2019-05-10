@@ -7,12 +7,14 @@
     "keywords": ["php", "phar", "stream-wrapper", "security"],
     "require": {
         "php": "^7.0",
-        "ext-fileinfo": "*",
         "ext-json": "*"
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^6.5",
+    },
+    "suggest": {
+        "ext-fileinfo": "For PHP builtin file type guessing, otherwise internal uses internal processing"
     },
     "autoload": {
         "psr-4": {

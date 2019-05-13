@@ -20,6 +20,11 @@ class Reader
     private $fileName;
 
     /**
+     * Mime-type in order to use zlib, bzip2 or no compression.
+     * In case ext-fileinfo is not present only the relevant types
+     * 'application/x-gzip' and 'application/x-bzip2' are assigned
+     * to this class property.
+     *
      * @var string
      */
     private $fileType;
@@ -161,6 +166,9 @@ class Reader
     }
 
     /**
+     * In case ext-fileinfo is not present only the relevant types
+     * 'application/x-gzip' and 'application/x-bzip2' are resolved.
+     *
      * @return string
      */
     private function determineFileTypeByHeader(): string

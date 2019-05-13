@@ -167,13 +167,13 @@ class Reader
     {
         $resource = fopen($this->fileName, 'r');
         $header = fgets($resource, 4);
+        fclose($resource);
         $mimeType = '';
-        if ($header === "\x42\x5a\x68") {
+        if (strpos($header, "\x42\x5a\x68") === 0) {
             $mimeType = 'application/x-bzip2';
         } elseif (strpos($header, "\x1f\x8b") === 0) {
             $mimeType = 'application/x-gzip';
         }
-        fclose($resource);
         return $mimeType;
     }
 

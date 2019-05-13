@@ -127,6 +127,9 @@ class ReaderTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function mimeTypeDataProvider(): array
     {
         $fixturesPath = dirname(__DIR__) . '/Fixtures/';
@@ -149,9 +152,11 @@ class ReaderTest extends TestCase
             ],
         ];
     }
+
     /**
      * @param string $path
      * @param string $expectedMimeType
+     *
      * @test
      * @dataProvider mimeTypeDataProvider
      */
@@ -162,5 +167,4 @@ class ReaderTest extends TestCase
         $method->setAccessible(TRUE);
         $this->assertSame($expectedMimeType, $method->invoke($reader));
     }
-
 }

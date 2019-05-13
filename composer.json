@@ -14,7 +14,7 @@
         "phpunit/phpunit": "^6.5"
     },
     "suggest": {
-        "ext-fileinfo": "For PHP builtin file type guessing, otherwise internal uses internal processing"
+        "ext-fileinfo": "For PHP builtin file type guessing, otherwise uses internal processing"
     },
     "autoload": {
         "psr-4": {

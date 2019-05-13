@@ -105,7 +105,7 @@ class Helper
      * @param string $path File path to process
      * @return string
      */
-    private static function normalizeWindowsPath(string $path): string
+    public static function normalizeWindowsPath(string $path): string
     {
         return str_replace('\\', '/', $path);
     }

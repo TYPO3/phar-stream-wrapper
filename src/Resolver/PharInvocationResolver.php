@@ -215,7 +215,9 @@ class PharInvocationResolver implements Resolvable
         if (isset($this->baseNames[$baseName])) {
             return;
         }
-        $this->baseNames[$baseName] = realpath($baseName);
+        $this->baseNames[$baseName] = Helper::normalizeWindowsPath(
+            realpath($baseName)
+        );
     }
 
     /**

@@ -51,7 +51,7 @@ class Helper
 
         while (count($parts)) {
             $currentPath = implode('/', $parts);
-            if (@is_file($currentPath)) {
+            if (@is_file($currentPath) && realpath($currentPath) !== false) {
                 return $currentPath;
             }
             array_pop($parts);

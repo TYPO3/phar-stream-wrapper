@@ -59,7 +59,7 @@ class PharInvocationResolver implements Resolvable
     {
         $hasPharPrefix = Helper::hasPharPrefix($path);
         if ($flags === null) {
-            $flags = static::RESOLVE_REALPATH | static::RESOLVE_ALIAS | static::ASSERT_INTERNAL_INVOCATION;
+            $flags = static::RESOLVE_REALPATH | static::RESOLVE_ALIAS;
         }
 
         if ($hasPharPrefix && $flags & static::RESOLVE_ALIAS) {

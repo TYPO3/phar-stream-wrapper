@@ -21,6 +21,7 @@ class HelperTest extends TestCase
      */
     public function baseFileIsResolvedDataProvider()
     {
+        $isWindows = DIRECTORY_SEPARATOR === '\\';
         $dataSet = array(
             array(
                 'phar://{DIR}/bundle.phar',
@@ -44,7 +45,7 @@ class HelperTest extends TestCase
             ),
             array(
                 'phar://{DIR}/NotExisting/../bundle.phar/path/../other/content.txt',
-                null
+                $isWindows ? '{DIR}/NotExisting/../bundle.phar' : null
             ),
             array(
                 'phar://{DIR}/not-existing.phar/path/../other/content.txt',
@@ -60,7 +61,7 @@ class HelperTest extends TestCase
             ),
         );
 
-        $directory = __DIR__ . '/Fixtures';
+        $directory = Helper::normalizeWindowsPath(__DIR__) . '/Fixtures';
         return static::substituteFileNames($directory, $dataSet);
     }
 

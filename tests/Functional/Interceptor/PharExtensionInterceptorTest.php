@@ -11,6 +11,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\PharStreamWrapper\Helper;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
 
@@ -67,7 +68,10 @@ class PharExtensionInterceptorTest extends AbstractTestCase
      */
     public function cliToolCommandDataProvider()
     {
-        $fixtureDirectory = dirname(__DIR__) . '/Fixtures';
+        $fixtureDirectory = dirname(Helper::normalizeWindowsPath(__DIR__)) . '/Fixtures';
+        if (!is_link($fixtureDirectory . '/cli-tool')) {
+            symlink($fixtureDirectory . '/cli-tool.phar', $fixtureDirectory . '/cli-tool');
+        }
         return $this->inflateDataSet(array(
             // add ' --plain' in order to disable PharStreamWrapper in CLI tool
             $fixtureDirectory . '/cli-tool.phar',
@@ -103,12 +107,15 @@ class PharExtensionInterceptorTest extends AbstractTestCase
             static::fail($response);
         }
 
+        // Ensure STDERR is empty.
+        static::assertEmpty(stream_get_contents($pipes[2]));
+
         static::assertSame(array(
             '__wrapped' => true,
             '__self' => 'TYPO3 demo text file.',
             '__alias' => 'TYPO3 demo text file.',
             'bundle.phar' => 'TYPO3 demo text file.',
-        ), json_decode($response, true));
+        ), json_decode($response, true), 'The response is: ' . $response);
     }
 
     /**

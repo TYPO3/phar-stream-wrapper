@@ -12,6 +12,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  */
 
 use PHPUnit\Framework\TestCase;
+use TYPO3\PharStreamWrapper\Helper;
 
 abstract class AbstractTestCase extends TestCase
 {
@@ -523,9 +524,9 @@ abstract class AbstractTestCase extends TestCase
     protected function groupInvocations(array $monitoredInvocations, $path)
     {
         $invocations = array();
-        $path = rtrim($path, '/') . '/';
+        $path = rtrim(Helper::normalizeWindowsPath($path), '/') . '/';
         foreach ($monitoredInvocations as $item) {
-            if (empty($item['filename']) || strpos($item['filename'], $path) !== 0) {
+            if (empty($item['filename']) || strpos(Helper::normalizeWindowsPath($item['filename']), $path) !== 0) {
                 continue;
             }
             $functionName = $item['function'];

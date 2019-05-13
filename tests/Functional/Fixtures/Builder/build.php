@@ -79,5 +79,4 @@ namespace {
     $phar->setStub(file_get_contents('cli-tool.stub.php'));
     $phar->stopBuffering();
     chmod('../cli-tool.phar', 0755);
-    symlink('cli-tool.phar', '../cli-tool');
 }

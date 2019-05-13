@@ -125,4 +125,46 @@ class ReaderTest extends TestCase
             $reader->resolveContainer()->getAlias()
         );
     }
+
+    /**
+     * @return array
+     */
+    public function mimeTypeDataProvider()
+    {
+        $fixturesPath = dirname(__DIR__) . '/Fixtures/';
+        return array(
+            'compromised.phar.bz2' => array(
+                $fixturesPath . 'compromised.phar.bz2',
+                'application/x-bzip2',
+            ),
+            'compromised.phar.gz' => array(
+                $fixturesPath . 'compromised.phar.gz',
+                'application/x-gzip',
+            ),
+            'compromised.phar' => array(
+                $fixturesPath . 'compromised.phar',
+                '',
+            ),
+            'compromised.phar.gz.png' => array(
+                $fixturesPath . 'compromised.phar.gz.png',
+                'application/x-gzip',
+            ),
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param string $expectedMimeType
+     *
+     * @test
+     * @dataProvider mimeTypeDataProvider
+     */
+    public function mimeTypeCanBeDetermined($path, $expectedMimeType)
+    {
+        $reader = new Reader($path);
+        $object = new \ReflectionObject($reader);
+        $method = $object->getMethod('determineFileTypeByHeader');
+        $method->setAccessible(TRUE);
+        $this->assertSame($expectedMimeType, $method->invoke($reader));
+    }
 }

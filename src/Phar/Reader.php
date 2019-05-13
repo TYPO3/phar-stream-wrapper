@@ -174,6 +174,12 @@ class Reader
     private function determineFileTypeByHeader(): string
     {
         $resource = fopen($this->fileName, 'r');
+        if (!is_resource($resource)) {
+            throw new ReaderException(
+                sprintf('Resource %s could not be opened', $this->fileName),
+                1557753055
+            );
+        }
         $header = fgets($resource, 4);
         fclose($resource);
         $mimeType = '';

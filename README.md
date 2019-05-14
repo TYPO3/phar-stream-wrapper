@@ -1,5 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/badges/quality-score.png?b=v2)](https://scrutinizer-ci.com/g/TYPO3/phar-stream-wrapper/?branch=v2)
 [![Travis CI Build Status](https://travis-ci.org/TYPO3/phar-stream-wrapper.svg?branch=v2)](https://travis-ci.org/TYPO3/phar-stream-wrapper)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/q4ls5tg4w1d6sf4i/branch/v2?svg=true)](https://ci.appveyor.com/project/ohader/phar-stream-wrapper)
 
 # PHP Phar Stream Wrapper
 

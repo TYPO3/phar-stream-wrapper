@@ -6,7 +6,7 @@ clone_folder: c:\projects\php-project-workspace
 environment:
     matrix:
         - dependencies: current
-          php_ver_target: 7.1
+          php_ver_target: 5.5
 
 cache:
     - '%LOCALAPPDATA%\Composer\files -> composer.lock'

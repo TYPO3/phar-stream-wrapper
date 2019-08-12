@@ -1,20 +1,21 @@
 language: php
 
-php:
-- 7.0
-- 7.1
-- 7.2
-- 7.3
-- nightly
-
 matrix:
   include:
-  - php: 7.2
+  - php: '7.0'
+  - php: '7.1'
+  - php: '7.2'
+  - php: '7.2'
     env: deps=high
-  - php: 7.3
+  - php: '7.3'
+  - php: '7.3'
     env: deps=high
+  - php: '7.4snapshot'
+    env: deps=high composer=--ignore-platform-reqs
+  - php: 'nightly'
   fast_finish: true
   allow_failures:
+  - php: '7.4snapshot'
   - php: nightly
 
 sudo: false
@@ -33,7 +34,9 @@ before_install:
   - composer --version
 
 before_script:
-  - composer install
+  - if [ -z "$deps" ]; then composer install $composer; fi;
+  - if [ "$deps" = "low" ]; then composer update --prefer-lowest -n $composer; fi;
+  - if [ "$deps" = "high" ]; then composer update -n $composer; fi;
 
 script:
   - >

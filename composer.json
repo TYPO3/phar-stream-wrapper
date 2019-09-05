@@ -11,7 +11,7 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^6.5|^7"
     },
     "suggest": {
         "ext-fileinfo": "For PHP builtin file type guessing, otherwise uses internal processing"

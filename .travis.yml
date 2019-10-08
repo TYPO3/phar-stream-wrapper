@@ -15,7 +15,6 @@ matrix:
   - php: 'nightly'
   fast_finish: true
   allow_failures:
-  - php: '7.4snapshot'
   - php: nightly
 
 sudo: false

@@ -9,6 +9,8 @@ namespace {
     $metaData = ['test' => new TYPO3\PharStreamWrapper\Tests\Functional\Fixtures\Source\TestModel()];
 
     @unlink('../bundle.phar');
+    @unlink('../bundle.phar.gz');
+    @unlink('../bundle.phar.bz2');
     @unlink('../alias-no-path.phar');
     @unlink('../alias-with-path.phar');
     @unlink('../alias-special.phar');
@@ -28,6 +30,9 @@ namespace {
     $phar->setStub('<?php __HALT_COMPILER();');
     $phar->stopBuffering();
     copy('../bundle.phar', '../bundle.phar.png');
+
+    $phar->compress(PHAR::GZ);
+    $phar->compress(PHAR::BZ2);
 
     $phar = new Phar('../alias-no-path.phar');
     $phar->startBuffering();

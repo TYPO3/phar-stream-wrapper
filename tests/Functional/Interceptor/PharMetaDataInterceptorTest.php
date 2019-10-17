@@ -25,6 +25,8 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     {
         $this->allowedPaths = array(
             __DIR__ . '/../Fixtures/bundle.phar',
+            __DIR__ . '/../Fixtures/bundle.phar.bz2',
+            __DIR__ . '/../Fixtures/bundle.phar.png',
             __DIR__ . '/../Fixtures/bundle.phar.png',
             __DIR__ . '/../Fixtures/Source/../bundle.phar',
         );

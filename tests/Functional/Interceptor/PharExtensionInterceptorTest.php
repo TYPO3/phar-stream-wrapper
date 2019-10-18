@@ -82,9 +82,10 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     public function cliToolCommandDataProvider(): array
     {
         $fixtureDirectory = dirname(Helper::normalizeWindowsPath(__DIR__)) . '/Fixtures';
-        if (!is_link($fixtureDirectory . '/cli-tool')) {
-            symlink($fixtureDirectory . '/cli-tool.phar', $fixtureDirectory . '/cli-tool');
+        if (is_link($fixtureDirectory . '/cli-tool')) {
+            unlink($fixtureDirectory . '/cli-tool');
         }
+        symlink($fixtureDirectory . '/cli-tool.phar', $fixtureDirectory . '/cli-tool');
         return $this->inflateDataSet([
             // add ' --plain' in order to disable PharStreamWrapper in CLI tool
             $fixtureDirectory . '/cli-tool.phar',

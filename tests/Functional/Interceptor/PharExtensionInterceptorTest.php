@@ -93,7 +93,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         $descriptorSpecifications = array(
             array('pipe', 'r'), // STDIN -> process
             array('pipe', 'w'), // STDOUT <- process
-            array('pipe', 'a'), // STDERR
+            array('pipe', 'w'), // STDERR
         );
         $process = proc_open('php ' . $command, $descriptorSpecifications, $pipes);
         static::assertInternalType('resource', $process);
@@ -111,13 +111,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         }
 
         // Ensure STDERR is empty.
-        // @todo Address 'stream_get_contents(): read of 8192 bytes failed with errno=9 Bad file descriptor'
-        // @todo Once PHP 7.4 is released
-        if (version_compare(PHP_VERSION, '7.4.0-dev') < 0) {
-            static::assertEmpty(stream_get_contents($pipes[2]));
-        } else {
-            $this->markTestIncomplete('STDERR not asserted for PHP 7.4');
-        }
+        static::assertEmpty(stream_get_contents($pipes[2]));
 
         static::assertSame(array(
             '__wrapped' => true,

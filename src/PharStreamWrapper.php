@@ -476,7 +476,7 @@ class PharStreamWrapper
      */
     private function invokeInternalStreamWrapper(string $functionName, ...$arguments)
     {
-        $silentExecution = $functionName[0] === '@';
+        $silentExecution = substr($functionName, 0, 1) === '@';
         $functionName = ltrim($functionName, '@');
         $this->restoreInternalSteamWrapper();
 

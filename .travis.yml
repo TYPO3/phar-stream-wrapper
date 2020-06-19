@@ -23,8 +23,6 @@ matrix:
   allow_failures:
   - php: nightly
 
-sudo: false
-
 addons:
   apt:
     packages:

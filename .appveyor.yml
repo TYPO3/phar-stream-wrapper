@@ -41,7 +41,7 @@ install:
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\php-project-workspace
 # Remove xdebug dependency as performance testing is not relevant at this point.
-    - composer remove --dev ext-xdebug
+    - composer remove --dev --no-update ext-xdebug
     - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --no-progress --profile -n
     - IF %dependencies%==current appveyor-retry composer install --no-progress --profile
     - IF %dependencies%==highest appveyor-retry composer update --no-progress --profile -n

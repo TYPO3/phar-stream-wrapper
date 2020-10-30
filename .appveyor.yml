@@ -24,6 +24,7 @@ init:
     - SET COMPOSER_NO_INTERACTION=1
     - SET PHP=1 # This var is connected to PHP install cache
     - SET ANSICON=121x90 (121x90)
+    - SET SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1
 
 ## Install PHP and composer, and run the appropriate composer command
 install:
@@ -50,4 +51,4 @@ install:
 ## Run the actual test
 test_script:
     - cd c:\projects\php-project-workspace
-    - vendor/bin/phpunit
+    - vendor/bin/simple-phpunit

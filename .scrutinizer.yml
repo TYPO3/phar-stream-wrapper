@@ -1,0 +1,33 @@
+build:
+    environment:
+        php: '7.2'
+    dependencies:
+        before:
+            - pecl install xdebug
+            - echo zend_extension=$(php-config --extension-dir)/xdebug.so >> $(php --ini | grep -F '/php.ini' | cut -d ':' -f 2)
+    nodes:
+        analysis:
+            project_setup:
+                override:
+                    - 'true'
+            tests:
+                override:
+                    - php-scrutinizer-run
+                    -
+                        command: phpcs-run
+                        use_website_config: true
+    tests:
+        override:
+            - SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 vendor/bin/simple-phpunit  --colors
+filter:
+    excluded_paths:
+        - 'tests/*'
+checks:
+    php:
+        phpunit_assertions: true
+
+coding_style:
+    php:
+        spaces:
+            around_operators:
+                concatenation: true

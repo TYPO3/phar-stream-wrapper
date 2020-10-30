@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpunit
+		bootstrap="vendor/autoload.php"
 		backupGlobals="true"
 		colors="true"
 		processIsolation="true"
 		verbose="true">
-
+	<php>
+	<ini name="SYMFONY_PHPUNIT_REMOVE" value="symfony/yaml"/>
+	</php>
 	<testsuites>
 		<testsuite name="functional tests">
 			<directory>tests/Functional/</directory>

@@ -39,7 +39,7 @@ script:
   - >
     echo;
     echo "Running tests";
-    vendor/bin/phpunit --colors
+    SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 vendor/bin/simple-phpunit --colors
   - >
     echo;
     echo "Running PHP lint";

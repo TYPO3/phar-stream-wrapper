@@ -107,7 +107,7 @@ abstract class AbstractTestCase extends TestCase
     public function directoryOpenAllowsInvocation(string $path)
     {
         $handle = opendir('phar://' . $path);
-        self::assertInternalType('resource', $handle);
+        self::assertIsResource($handle);
     }
 
     /**
@@ -372,7 +372,7 @@ abstract class AbstractTestCase extends TestCase
     public function streamOpenAllowsInvocationForFileOpen(string $allowedPath)
     {
         $handle = fopen('phar://' . $allowedPath . '/Resources/content.txt', 'r');
-        self::assertInternalType('resource', $handle);
+        self::assertIsResource($handle);
     }
 
     /**

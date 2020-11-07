@@ -76,7 +76,7 @@ class ReaderTest extends TestCase
     public function pharStubContentFlagCanBeResolved(string $path, array $expectations)
     {
         $reader = new Reader($path);
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectations[self::STUB_CONTENT_FLAG],
             $reader->resolveContainer()->getStub()->getContent()
         );

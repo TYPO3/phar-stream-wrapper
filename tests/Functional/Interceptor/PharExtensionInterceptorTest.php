@@ -107,7 +107,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
             ['pipe', 'w'], // STDERR
         ];
         $process = proc_open('php ' . $command, $descriptorSpecifications, $pipes);
-        static::assertInternalType('resource', $process);
+        static::assertIsResource($process);
 
         $read = [$pipes[1], $pipes[2]]; // reading from process' STDOUT & STDERR
         $write = null;

@@ -1,0 +1,42 @@
+name: 'Tests (Ubuntu)'
+
+on:
+  push:
+    branches: [ master, v2 ]
+  pull_request:
+    branches: [ master, v2 ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: xdebug.mode=develop
+          tools: composer:v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Lint PHP
+        run: |
+          find . -name \*.php ! -path './vendor/*' | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run test suite
+        env:
+          SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
+        run: |
+          vendor/bin/simple-phpunit --colors

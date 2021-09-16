@@ -1,9 +1,7 @@
-/_config.yml
-/.appveyor.yml export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
-/.travis.yml export-ignore
 /phpunit.xml export-ignore
+/.github/ export-ignore
 /tests/ export-ignore
 # Define phar file attributes.
 # - Use text diff to make reviewing changes easy.

@@ -1,0 +1,39 @@
+name: 'Tests (Windows)'
+
+on:
+  push:
+    branches: [ master, v2 ]
+  pull_request:
+    branches: [ master, v2 ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.5', '7.0']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bz2
+          tools: composer:v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        # Remove xdebug dependency as performance testing is not relevant at this point.
+        run: |
+          composer remove --dev --no-update ext-xdebug
+          composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run test suite
+        run: |
+          vendor/bin/phpunit --colors

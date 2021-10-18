@@ -38,5 +38,6 @@ jobs:
       - name: Run test suite
         env:
           SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
+          SYMFONY_PHPUNIT_DISABLE_RESULT_CACHE: 1
         run: |
           vendor/bin/simple-phpunit --colors

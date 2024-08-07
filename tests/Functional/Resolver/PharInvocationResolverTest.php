@@ -81,7 +81,7 @@ class PharInvocationResolverTest extends TestCase
      * @test
      * @dataProvider invocationIsResolvedDataProvider
      */
-    public function invocationIsResolved(string $path, $flags, array $expectations)
+    public function invocationIsResolved(string $path, ?int $flags, array $expectations)
     {
         $invocation = $this->subject->resolve($path, $flags);
         static::assertSame($invocation->getBaseName(), $expectations['baseName']);
@@ -105,7 +105,7 @@ class PharInvocationResolverTest extends TestCase
      * @test
      * @dataProvider invocationIsNotResolvedDataProvider
      */
-    public function invocationIsNotResolved(string $path, int $flags = null)
+    public function invocationIsNotResolved(string $path, ?int $flags = null)
     {
         $invocation = $this->subject->resolve($path, $flags);
         static::assertNull($invocation);

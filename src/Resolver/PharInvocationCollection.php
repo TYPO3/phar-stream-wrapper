@@ -39,7 +39,7 @@ class PharInvocationCollection implements Collectable
      * @param null|int $flags
      * @return bool
      */
-    public function collect(PharInvocation $invocation, int $flags = null): bool
+    public function collect(PharInvocation $invocation, ?int $flags = null): bool
     {
         if ($flags === null) {
             $flags = static::UNIQUE_INVOCATION | static::DUPLICATE_ALIAS_WARNING;
@@ -64,7 +64,7 @@ class PharInvocationCollection implements Collectable
      * @param bool $reverse
      * @return null|PharInvocation
      */
-    public function findByCallback(callable $callback, $reverse = false)
+    public function findByCallback(callable $callback, bool $reverse = false)
     {
         foreach ($this->getInvocations($reverse) as $invocation) {
             if (call_user_func($callback, $invocation) === true) {

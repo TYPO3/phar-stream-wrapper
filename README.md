@@ -32,7 +32,7 @@ July 2018.
 With PHP 8.0.0 the default behavior changed and meta-data is not
 deserialized automatically anymore:
 
-* https://github.com/TYPO3/phar-stream-wrapper/issues/64
+* [`typo3/phar-stream-wrapper` issue #64](https://github.com/TYPO3/phar-stream-wrapper/issues/64)
 * https://php.watch/versions/8.0/phar-stream-wrapper-unserialize
 
 ## License

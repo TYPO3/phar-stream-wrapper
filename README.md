@@ -29,6 +29,12 @@ July 2018.
 * https://typo3.org/security/advisory/typo3-psa-2019-007/
 * https://typo3.org/security/advisory/typo3-psa-2019-008/
 
+With PHP 8.0.0 the default behavior changed and meta-data is not
+deserialized automatically anymore:
+
+* https://github.com/TYPO3/phar-stream-wrapper/issues/64
+* https://php.watch/versions/8.0/phar-stream-wrapper-unserialize
+
 ## License
 
 In general the TYPO3 core is released under the GNU General Public License version

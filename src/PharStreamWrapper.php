@@ -251,7 +251,7 @@ class PharStreamWrapper
         string $path,
         string $mode,
         int $options,
-        string &$opened_path = null
+        ?string &$opened_path = null
     ): bool {
         $this->assert($path, Behavior::COMMAND_STREAM_OPEN);
         $arguments = [$path, $mode, (bool) ($options & STREAM_USE_PATH)];

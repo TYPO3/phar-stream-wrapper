@@ -46,8 +46,8 @@ class Manager
      */
     public static function initialize(
         Behavior $behaviour,
-        Resolvable $resolver = null,
-        Collectable $collection = null
+        ?Resolvable $resolver = null,
+        ?Collectable $collection = null
     ): self {
         if (self::$instance === null) {
             self::$instance = new self($behaviour, $resolver, $collection);
@@ -92,8 +92,8 @@ class Manager
      */
     private function __construct(
         Behavior $behaviour,
-        Resolvable $resolver = null,
-        Collectable $collection = null
+        ?Resolvable $resolver = null,
+        ?Collectable $collection = null
     ) {
         $this->collection = $collection ?? new PharInvocationCollection();
         $this->resolver = $resolver ?? new PharInvocationResolver();
@@ -115,7 +115,7 @@ class Manager
      * @param null|int $flags
      * @return PharInvocation|null
      */
-    public function resolve(string $path, int $flags = null)
+    public function resolve(string $path, ?int $flags = null)
     {
         return $this->resolver->resolve($path, $flags);
     }

@@ -73,7 +73,7 @@ class HelperTest extends TestCase
      * @test
      * @dataProvider baseFileIsResolvedDataProvider
      */
-    public function baseFileIsResolved(string $path, string $expectation = null)
+    public function baseFileIsResolved(string $path, ?string $expectation = null)
     {
         static::assertSame(
             $expectation,

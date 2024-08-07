@@ -57,7 +57,7 @@ class PharInvocationResolver implements Resolvable
      * @param int|null $flags
      * @return null|PharInvocation
      */
-    public function resolve(string $path, int $flags = null)
+    public function resolve(string $path, ?int $flags = null)
     {
         $hasPharPrefix = Helper::hasPharPrefix($path);
         $flags = $flags ?? static::RESOLVE_REALPATH | static::RESOLVE_ALIAS;

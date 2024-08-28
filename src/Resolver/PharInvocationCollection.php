@@ -39,7 +39,7 @@ class PharInvocationCollection implements Collectable
      * @param null|int $flags
      * @return bool
      */
-    public function collect(PharInvocation $invocation, int $flags = null): bool
+    public function collect(PharInvocation $invocation, ?int $flags = null): bool
     {
         if ($flags === null) {
             $flags = static::UNIQUE_INVOCATION | static::DUPLICATE_ALIAS_WARNING;

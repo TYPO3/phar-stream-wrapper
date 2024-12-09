@@ -17,7 +17,7 @@ class TestModel
     public function __destruct()
     {
         throw new TestException(
-            sprintf('Destructed %s object', __CLASS__),
+            sprintf('Destructed %s object', self::class),
             1553424350
         );
     }

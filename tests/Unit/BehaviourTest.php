@@ -37,7 +37,6 @@ class BehaviourTest extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
         $this->path = uniqid('path');
         $this->allAssertion = $this->prophesize(Assertable::class);
         $this->specificAssertion = $this->prophesize(Assertable::class);
@@ -46,7 +45,6 @@ class BehaviourTest extends TestCase
     protected function tearDown()
     {
         unset($this->path, $this->allAssertion, $this->specificAssertion);
-        parent::tearDown();
     }
 
     /**

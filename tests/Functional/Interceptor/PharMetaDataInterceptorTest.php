@@ -12,6 +12,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\PharStreamWrapper\Behavior;
 use TYPO3\PharStreamWrapper\Helper;
 use TYPO3\PharStreamWrapper\Interceptor\PharMetaDataInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
@@ -60,8 +61,6 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
 
     protected function setUp()
     {
-        parent::setUp();
-
         if (!in_array('phar', stream_get_wrappers())) {
             $this->markTestSkipped('Phar stream wrapper is not registered');
         }
@@ -70,7 +69,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
         stream_wrapper_register('phar', PharStreamWrapper::class);
 
         Manager::initialize(
-            (new \TYPO3\PharStreamWrapper\Behavior())
+            (new Behavior())
                 ->withAssertion(new PharMetaDataInterceptor())
         );
     }
@@ -79,12 +78,8 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
     {
         stream_wrapper_restore('phar');
         Manager::destroy();
-        parent::tearDown();
     }
 
-    /**
-     * @return array
-     */
     public function isFileSystemInvocationAcceptableDataProvider(): array
     {
         $fixturePath = __DIR__ . '/../Fixtures';

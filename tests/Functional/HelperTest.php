@@ -17,9 +17,6 @@ use TYPO3\PharStreamWrapper\Helper;
 
 class HelperTest extends TestCase
 {
-    /**
-     * @return array
-     */
     public function baseFileIsResolvedDataProvider(): array
     {
         $isWindows = DIRECTORY_SEPARATOR === '\\';
@@ -67,9 +64,6 @@ class HelperTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param string $expectation
-     *
      * @test
      * @dataProvider baseFileIsResolvedDataProvider
      */
@@ -82,7 +76,6 @@ class HelperTest extends TestCase
     }
 
     /**
-     * @param string $directory
      * @param string[] $items
      * @return string[]
      */
@@ -90,17 +83,19 @@ class HelperTest extends TestCase
     {
         $directory = rtrim($directory);
 
-        return array_map(
-            function ($item) use ($directory) {
-                if (is_null($item)) {
-                    return $item;
-                }
-                if (is_array($item)) {
-                    return $this->substituteFileNames($directory, $item);
-                }
-                return str_replace('{DIR}', $directory, $item);
-            },
-            $items
+        return array_filter(
+            array_map(
+                function ($item) use ($directory) {
+                    if (is_null($item)) {
+                        return null;
+                    }
+                    if (is_array($item)) {
+                        return $this->substituteFileNames($directory, $item);
+                    }
+                    return str_replace('{DIR}', $directory, $item);
+                },
+                $items
+            )
         );
     }
 }

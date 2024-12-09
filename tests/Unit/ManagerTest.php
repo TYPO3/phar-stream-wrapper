@@ -26,14 +26,12 @@ class ManagerTest extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
         $this->behaviorProphecy = $this->prophesize(Behavior::class);
     }
 
     protected function tearDown()
     {
         unset($this->behaviorProphecy);
-        parent::tearDown();
     }
 
     /**

@@ -12,6 +12,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Interceptor;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\PharStreamWrapper\Behavior;
 use TYPO3\PharStreamWrapper\Helper;
 use TYPO3\PharStreamWrapper\Interceptor\PharExtensionInterceptor;
 use TYPO3\PharStreamWrapper\Manager;
@@ -54,8 +55,6 @@ class PharExtensionInterceptorTest extends AbstractTestCase
 
     protected function setUp()
     {
-        parent::setUp();
-
         if (!in_array('phar', stream_get_wrappers())) {
             $this->markTestSkipped('Phar stream wrapper is not registered');
         }
@@ -64,7 +63,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         stream_wrapper_register('phar', PharStreamWrapper::class);
 
         Manager::initialize(
-            (new \TYPO3\PharStreamWrapper\Behavior())
+            (new Behavior())
                 ->withAssertion(new PharExtensionInterceptor())
         );
     }
@@ -73,12 +72,8 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     {
         stream_wrapper_restore('phar');
         Manager::destroy();
-        parent::tearDown();
     }
 
-    /**
-     * @return array
-     */
     public function cliToolCommandDataProvider(): array
     {
         $fixtureDirectory = dirname(Helper::normalizeWindowsPath(__DIR__)) . '/Fixtures';
@@ -94,8 +89,6 @@ class PharExtensionInterceptorTest extends AbstractTestCase
     }
 
     /**
-     * @param string $command
-     *
      * @test
      * @dataProvider cliToolCommandDataProvider
      */
@@ -132,9 +125,6 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         ], json_decode($response, true), 'The response is: ' . $response);
     }
 
-    /**
-     * @return array
-     */
     public function isFileSystemInvocationAcceptableDataProvider(): array
     {
         $fixturePath = __DIR__ . '/../Fixtures';

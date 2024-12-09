@@ -42,11 +42,6 @@ class Behavior implements Assertable
      */
     private $assertions;
 
-    /**
-     * @param Assertable $assertable
-     * @param string ...$commands
-     * @return static
-     */
     public function withAssertion(Assertable $assertable, string ...$commands): self
     {
         $this->assertCommands($commands);
@@ -59,11 +54,6 @@ class Behavior implements Assertable
         return $target;
     }
 
-    /**
-     * @param string $path
-     * @param string $command
-     * @return bool
-     */
     public function assert(string $path, string $command): bool
     {
         $this->assertCommand($command);
@@ -72,13 +62,10 @@ class Behavior implements Assertable
         return $this->assertions[$command]->assert($path, $command);
     }
 
-    /**
-     * @param array $commands
-     */
     private function assertCommands(array $commands)
     {
         $unknownCommands = array_diff($commands, $this->availableCommands);
-        if (empty($unknownCommands)) {
+        if ($unknownCommands === []) {
             return;
         }
         throw new \LogicException(
@@ -110,7 +97,7 @@ class Behavior implements Assertable
             $this->availableCommands,
             array_keys($this->assertions)
         );
-        if (empty($undefinedAssertions)) {
+        if ($undefinedAssertions === []) {
             return;
         }
         throw new \LogicException(

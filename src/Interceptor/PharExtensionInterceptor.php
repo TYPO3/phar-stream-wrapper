@@ -21,9 +21,6 @@ class PharExtensionInterceptor implements Assertable
     /**
      * Determines whether the base file name has a ".phar" suffix.
      *
-     * @param string $path
-     * @param string $command
-     * @return bool
      * @throws Exception
      */
     public function assert(string $path, string $command): bool
@@ -40,10 +37,6 @@ class PharExtensionInterceptor implements Assertable
         );
     }
 
-    /**
-     * @param string $path
-     * @return bool
-     */
     private function baseFileContainsPharExtension(string $path): bool
     {
         $invocation = Manager::instance()->resolve($path);

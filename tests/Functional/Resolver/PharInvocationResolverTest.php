@@ -26,7 +26,6 @@ class PharInvocationResolverTest extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
         Manager::initialize(new Behavior());
         $this->subject = new PharInvocationResolver();
     }
@@ -35,12 +34,8 @@ class PharInvocationResolverTest extends TestCase
     {
         unset($this->subject);
         Manager::destroy();
-        parent::tearDown();
     }
 
-    /**
-     * @return array
-     */
     public function invocationIsResolvedDataProvider(): array
     {
         $fixtureDirectory = dirname(__DIR__) . '/Fixtures';
@@ -81,9 +76,7 @@ class PharInvocationResolverTest extends TestCase
     }
 
     /**
-     * @param string $path
      * @param int|null $flags
-     * @param array $expectations
      *
      * @test
      * @dataProvider invocationIsResolvedDataProvider
@@ -95,9 +88,6 @@ class PharInvocationResolverTest extends TestCase
         static::assertSame($invocation->getAlias(), $expectations['alias']);
     }
 
-    /**
-     * @return array
-     */
     public function invocationIsNotResolvedDataProvider(): array
     {
         $fixtureDirectory = dirname(__DIR__) . '/Fixtures';
@@ -110,9 +100,7 @@ class PharInvocationResolverTest extends TestCase
     }
 
     /**
-     * @param string $path
      * @param int|null $flags
-     * @param PharInvocation|null $expectation
      *
      * @test
      * @dataProvider invocationIsNotResolvedDataProvider
@@ -125,9 +113,6 @@ class PharInvocationResolverTest extends TestCase
 
     /**
      * Duplicate of Helper::normalizeWindowsPath() for this test.
-     *
-     * @param string $path File path to process
-     * @return string
      *
      * @see Helper::normalizePath()
      */

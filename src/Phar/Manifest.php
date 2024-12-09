@@ -15,8 +15,6 @@ namespace TYPO3\PharStreamWrapper\Phar;
 class Manifest
 {
     /**
-     * @param string $content
-     * @return self
      * @see http://php.net/manual/en/phar.fileformat.phar.php
      */
     public static function fromContent(string $content): self
@@ -87,65 +85,41 @@ class Manifest
     {
     }
 
-    /**
-     * @return int
-     */
     public function getManifestLength(): int
     {
         return $this->manifestLength;
     }
 
-    /**
-     * @return int
-     */
     public function getAmountOfFiles(): int
     {
         return $this->amountOfFiles;
     }
 
-    /**
-     * @return string
-     */
     public function getApiVersion(): string
     {
         return $this->apiVersion;
     }
 
-    /**
-     * @return int
-     */
     public function getFlags(): int
     {
         return $this->flags;
     }
 
-    /**
-     * @return int
-     */
     public function getAliasLength(): int
     {
         return $this->aliasLength;
     }
 
-    /**
-     * @return string
-     */
     public function getAlias(): string
     {
         return $this->alias;
     }
 
-    /**
-     * @return int
-     */
     public function getMetaDataLength(): int
     {
         return $this->metaDataLength;
     }
 
-    /**
-     * @return string
-     */
     public function getMetaData(): string
     {
         return $this->metaData;

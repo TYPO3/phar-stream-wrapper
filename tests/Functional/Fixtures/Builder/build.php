@@ -5,7 +5,7 @@ namespace TYPO3\PharStreamWrapper\Tests\Functional\Fixtures\Source {
 }
 
 namespace {
-    include 'Classes/Domain/Model/DemoModel.php';
+    include __DIR__ . '/Classes/Domain/Model/DemoModel.php';
     $metaData = ['test' => new TYPO3\PharStreamWrapper\Tests\Functional\Fixtures\Source\TestModel()];
 
     @unlink('../bundle.phar');

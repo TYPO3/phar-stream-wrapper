@@ -40,7 +40,7 @@ class ReaderTest extends TestCase
                 $fixturesPath . 'alias-special.phar',
                 [
                     self::STUB_CONTENT_FLAG => '<c3d4371ab0014b4e777cd450347bd20182a1dae3>',
-                    // actually PHP would throw an error when having different alias names
+                    // actually, PHP would throw an error when having different alias names
                     self::CONTAINER_ALIAS => 'spcl.phar',
                     self::STUB_MAPPED_ALIAS => 'alias.special.phar',
                     self::MANIFEST_ALIAS => 'spcl.phar',
@@ -68,8 +68,6 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param array $expectations
      * @test
      * @dataProvider pharAliasDataProvider
      */
@@ -83,8 +81,6 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param array $expectations
      * @test
      * @dataProvider pharAliasDataProvider
      */
@@ -98,8 +94,6 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param array $expectations
      * @test
      * @dataProvider pharAliasDataProvider
      */
@@ -113,8 +107,6 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param array $expectations
      * @test
      * @dataProvider pharAliasDataProvider
      */
@@ -127,9 +119,6 @@ class ReaderTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function mimeTypeDataProvider(): array
     {
         $fixturesPath = dirname(__DIR__) . '/Fixtures/';
@@ -154,9 +143,6 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param string $expectedMimeType
-     *
      * @test
      * @dataProvider mimeTypeDataProvider
      */
@@ -164,7 +150,7 @@ class ReaderTest extends TestCase
     {
         $reader = new Reader($path);
         $method = (new \ReflectionObject($reader))->getMethod('determineFileTypeByHeader');
-        $method->setAccessible(TRUE);
+        $method->setAccessible(true);
         $this->assertSame($expectedMimeType, $method->invoke($reader));
     }
 }

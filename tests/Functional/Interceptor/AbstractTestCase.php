@@ -39,9 +39,6 @@ abstract class AbstractTestCase extends TestCase
      */
     const EXPECTED_EXCEPTION_CODE = 0;
 
-    /**
-     * @return array
-     */
     public function allowedPathsDataProvider(): array
     {
         return array_combine(
@@ -50,9 +47,6 @@ abstract class AbstractTestCase extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function allowedAliasedPathsDataProvider(): array
     {
         return array_combine(
@@ -61,9 +55,6 @@ abstract class AbstractTestCase extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function deniedPathsDataProvider(): array
     {
         return array_combine(
@@ -72,9 +63,6 @@ abstract class AbstractTestCase extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function directoryActionAllowsInvocationDataProvider(): array
     {
         $dataSet = [];
@@ -99,8 +87,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $path
-     *
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
@@ -115,7 +101,7 @@ abstract class AbstractTestCase extends TestCase
      */
     public function directoryOpenDeniesInvocationAfterCatchingError()
     {
-        if (empty($this->allowedPaths) || empty($this->deniedPaths)) {
+        if ($this->allowedPaths === [] || $this->deniedPaths === []) {
             $this->markTestSkipped('No ALLOWED_PATHS and DENIED_PATHS defined');
         }
         try {
@@ -126,8 +112,8 @@ abstract class AbstractTestCase extends TestCase
             static::assertInstanceOf(Warning::class, $throwable);
         }
 
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         file_exists('phar://' . $this->deniedPaths[0]);
     }
 
@@ -136,7 +122,7 @@ abstract class AbstractTestCase extends TestCase
      */
     public function directoryOpenDeniesInvocationAfterCatchingException()
     {
-        if (empty($this->allowedPaths) || empty($this->deniedPaths)) {
+        if ($this->allowedPaths === [] || $this->deniedPaths === []) {
             $this->markTestSkipped('No ALLOWED_PATHS and DENIED_PATHS defined');
         }
         try {
@@ -148,15 +134,12 @@ abstract class AbstractTestCase extends TestCase
             static::assertSame(1539618987, $throwable->getCode());
         }
 
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         file_exists('phar://' . $this->deniedPaths[0]);
     }
 
     /**
-     * @param string $path
-     * @param $expectation
-     *
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
@@ -172,8 +155,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $path
-     *
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
@@ -185,9 +166,6 @@ abstract class AbstractTestCase extends TestCase
         self::assertFalse(is_resource($handle));
     }
 
-    /**
-     * @return array
-     */
     public function directoryActionDeniesInvocationDataProvider(): array
     {
         $dataSet = [];
@@ -212,21 +190,16 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $path
-     *
      * @test
      * @dataProvider directoryActionDeniesInvocationDataProvider
      */
     public function directoryActionDeniesInvocation(string $path)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         opendir('phar://' . $path);
     }
 
-    /**
-     * @return array
-     */
     public function urlStatAllowsInvocationDataProvider(): array
     {
         $dataSet = [];
@@ -279,8 +252,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $functionName
-     * @param string $path
      * @param mixed $expectation
      *
      * @test
@@ -294,9 +265,6 @@ abstract class AbstractTestCase extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function urlStatDeniesInvocationDataProvider(): array
     {
         $dataSet = [];
@@ -349,23 +317,17 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $functionName
-     * @param string $path
-     * @param mixed $expectation
-     *
      * @test
      * @dataProvider urlStatDeniesInvocationDataProvider
      */
     public function urlStatDeniesInvocation(string $functionName, string $path)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         call_user_func($functionName, 'phar://' . $path);
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedPathsDataProvider
      */
@@ -376,8 +338,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedPathsDataProvider
      */
@@ -389,8 +349,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedPathsDataProvider
      */
@@ -402,8 +360,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedPathsDataProvider
      */
@@ -415,8 +371,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedPathsDataProvider
      */
@@ -427,8 +381,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedPathsDataProvider
      */
@@ -444,8 +396,6 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $allowedPath
-     *
      * @test
      * @dataProvider allowedAliasedPathsDataProvider
      */
@@ -456,53 +406,41 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param string $deniedPath
-     *
      * @test
      * @dataProvider deniedPathsDataProvider
      */
     public function streamOpenDeniesInvocationForFileOpen(string $deniedPath)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         fopen('phar://' . $deniedPath . '/Resources/content.txt', 'r');
     }
 
     /**
-     * @param string $deniedPath
-     *
      * @test
      * @dataProvider deniedPathsDataProvider
      */
     public function streamOpenDeniesInvocationForFileGetContents(string $deniedPath)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         file_get_contents('phar://' . $deniedPath . '/Resources/content.txt');
     }
 
     /**
-     * @param string $deniedPath
-     *
      * @test
      * @dataProvider deniedPathsDataProvider
      */
     public function streamOpenDeniesInvocationForInclude(string $deniedPath)
     {
-        self::expectException(Exception::class);
-        self::expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
         include('phar://' . $deniedPath . '/Classes/Domain/Model/DemoModel.php');
     }
 
-    /**
-     * @return array
-     */
     abstract public function isFileSystemInvocationAcceptableDataProvider(): array;
 
     /**
-     * @param string $path
-     * @param array $expectation
-     *
      * @test
      * @dataProvider isFileSystemInvocationAcceptableDataProvider
      * @throws \MaxMind\Db\Reader\InvalidDatabaseException
@@ -527,11 +465,6 @@ abstract class AbstractTestCase extends TestCase
         self::assertSame($expectation, $invocations);
     }
 
-    /**
-     * @param array $monitoredInvocations
-     * @param string $path
-     * @return array
-     */
     protected function groupInvocations(array $monitoredInvocations, string $path): array
     {
         $invocations = [];
@@ -550,19 +483,11 @@ abstract class AbstractTestCase extends TestCase
         return $invocations;
     }
 
-    /**
-     * @param string $value
-     * @return array
-     */
     protected function wrapInArray(string $value): array
     {
         return [$value];
     }
 
-    /**
-     * @param array $items
-     * @return array
-     */
     protected function inflateDataSet(array $items): array
     {
         return array_combine(

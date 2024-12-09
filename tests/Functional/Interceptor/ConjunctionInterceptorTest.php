@@ -59,9 +59,9 @@ class ConjunctionInterceptorTest extends AbstractTestCase
     /**
      * @var int
      */
-    const EXPECTED_EXCEPTION_CODE = 1539625084;
+    protected const EXPECTED_EXCEPTION_CODE = 1539625084;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!in_array('phar', stream_get_wrappers())) {
             $this->markTestSkipped('Phar stream wrapper is not registered');
@@ -79,7 +79,7 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         stream_wrapper_restore('phar');
         Manager::destroy();

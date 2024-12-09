@@ -71,7 +71,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharStubContentFlagCanBeResolved(string $path, array $expectations)
+    public function pharStubContentFlagCanBeResolved(string $path, array $expectations): void
     {
         $reader = new Reader($path);
         $this->assertStringContainsString(
@@ -84,7 +84,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharStubMappedAliasCanBeResolved(string $path, array $expectations)
+    public function pharStubMappedAliasCanBeResolved(string $path, array $expectations): void
     {
         $reader = new Reader($path);
         $this->assertSame(
@@ -97,7 +97,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharManifestAliasCanBeResolved(string $path, array $expectations)
+    public function pharManifestAliasCanBeResolved(string $path, array $expectations): void
     {
         $reader = new Reader($path);
         $this->assertSame(
@@ -110,7 +110,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider pharAliasDataProvider
      */
-    public function pharContainerAliasCanBeResolved(string $path, array $expectations)
+    public function pharContainerAliasCanBeResolved(string $path, array $expectations): void
     {
         $reader = new Reader($path);
         $this->assertSame(
@@ -146,7 +146,7 @@ class ReaderTest extends TestCase
      * @test
      * @dataProvider mimeTypeDataProvider
      */
-    public function mimeTypeCanBeDetermined(string $path, string $expectedMimeType)
+    public function mimeTypeCanBeDetermined(string $path, string $expectedMimeType): void
     {
         $reader = new Reader($path);
         $method = (new \ReflectionObject($reader))->getMethod('determineFileTypeByHeader');

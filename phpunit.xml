@@ -5,9 +5,6 @@
 		colors="true"
 		processIsolation="true"
 		verbose="true">
-	<php>
-	<ini name="SYMFONY_PHPUNIT_REMOVE" value="symfony/yaml"/>
-	</php>
 	<testsuites>
 		<testsuite name="functional tests">
 			<directory>tests/Functional/</directory>

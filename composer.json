@@ -11,8 +11,7 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "phpspec/prophecy": "^1.10",
-        "symfony/phpunit-bridge": "^5.1"
+        "phpunit/phpunit": "^9"
     },
     "suggest": {
         "ext-fileinfo": "For PHP builtin file type guessing, otherwise uses internal processing"

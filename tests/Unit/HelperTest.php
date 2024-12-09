@@ -37,7 +37,7 @@ class HelperTest extends TestCase
      * @test
      * @dataProvider pharPrefixIsRemovedDataProvider
      */
-    public function pharPrefixIsRemoved(string $path, string $expectation)
+    public function pharPrefixIsRemoved(string $path, string $expectation): void
     {
         static::assertSame(
             $expectation,
@@ -68,7 +68,7 @@ class HelperTest extends TestCase
      * @test
      * @dataProvider pathIsNormalizedDataProvider
      */
-    public function pathIsNormalized(string $path, string $expectation)
+    public function pathIsNormalized(string $path, string $expectation): void
     {
         static::assertSame(
             $expectation,

@@ -54,12 +54,9 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
         __DIR__ . '/../Fixtures/compromised.phar/../bundle.phar',
     ];
 
-    /**
-     * @var int
-     */
-    const EXPECTED_EXCEPTION_CODE = 1539632368;
+    protected const EXPECTED_EXCEPTION_CODE = 1539632368;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!in_array('phar', stream_get_wrappers())) {
             $this->markTestSkipped('Phar stream wrapper is not registered');
@@ -74,7 +71,7 @@ class PharMetaDataInterceptorTest extends AbstractTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         stream_wrapper_restore('phar');
         Manager::destroy();

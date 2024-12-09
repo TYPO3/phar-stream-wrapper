@@ -34,10 +34,7 @@ abstract class AbstractTestCase extends TestCase
      */
     protected $deniedPaths = [];
 
-    /**
-     * @var int
-     */
-    const EXPECTED_EXCEPTION_CODE = 0;
+    protected const EXPECTED_EXCEPTION_CODE = 0;
 
     public function allowedPathsDataProvider(): array
     {
@@ -90,7 +87,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryOpenAllowsInvocation(string $path)
+    public function directoryOpenAllowsInvocation(string $path): void
     {
         $handle = opendir('phar://' . $path);
         self::assertIsResource($handle);
@@ -99,7 +96,7 @@ abstract class AbstractTestCase extends TestCase
     /**
      * @test
      */
-    public function directoryOpenDeniesInvocationAfterCatchingError()
+    public function directoryOpenDeniesInvocationAfterCatchingError(): void
     {
         if ($this->allowedPaths === [] || $this->deniedPaths === []) {
             $this->markTestSkipped('No ALLOWED_PATHS and DENIED_PATHS defined');
@@ -120,7 +117,7 @@ abstract class AbstractTestCase extends TestCase
     /**
      * @test
      */
-    public function directoryOpenDeniesInvocationAfterCatchingException()
+    public function directoryOpenDeniesInvocationAfterCatchingException(): void
     {
         if ($this->allowedPaths === [] || $this->deniedPaths === []) {
             $this->markTestSkipped('No ALLOWED_PATHS and DENIED_PATHS defined');
@@ -143,7 +140,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryReadAllowsInvocation(string $path, array $expectation)
+    public function directoryReadAllowsInvocation(string $path, array $expectation): void
     {
         $items = [];
         $handle = opendir('phar://' . $path);
@@ -158,7 +155,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryCloseAllowsInvocation(string $path)
+    public function directoryCloseAllowsInvocation(string $path): void
     {
         $handle = opendir('phar://' . $path);
         closedir($handle);
@@ -193,7 +190,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider directoryActionDeniesInvocationDataProvider
      */
-    public function directoryActionDeniesInvocation(string $path)
+    public function directoryActionDeniesInvocation(string $path): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
@@ -257,7 +254,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider urlStatAllowsInvocationDataProvider
      */
-    public function urlStatAllowsInvocation(string $functionName, string $path, $expectation)
+    public function urlStatAllowsInvocation(string $functionName, string $path, $expectation): void
     {
         self::assertSame(
             $expectation,
@@ -320,7 +317,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider urlStatDeniesInvocationDataProvider
      */
-    public function urlStatDeniesInvocation(string $functionName, string $path)
+    public function urlStatDeniesInvocation(string $functionName, string $path): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
@@ -331,7 +328,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForFileOpen(string $allowedPath)
+    public function streamOpenAllowsInvocationForFileOpen(string $allowedPath): void
     {
         $handle = fopen('phar://' . $allowedPath . '/Resources/content.txt', 'r');
         self::assertIsResource($handle);
@@ -341,7 +338,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForFileRead(string $allowedPath)
+    public function streamOpenAllowsInvocationForFileRead(string $allowedPath): void
     {
         $handle = fopen('phar://' . $allowedPath . '/Resources/content.txt', 'r');
         $content = fread($handle, 1024);
@@ -352,7 +349,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForFileEnd(string $allowedPath)
+    public function streamOpenAllowsInvocationForFileEnd(string $allowedPath): void
     {
         $handle = fopen('phar://' . $allowedPath . '/Resources/content.txt', 'r');
         fread($handle, 1024);
@@ -363,7 +360,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForFileClose(string $allowedPath)
+    public function streamOpenAllowsInvocationForFileClose(string $allowedPath): void
     {
         $handle = fopen('phar://' . $allowedPath . '/Resources/content.txt', 'r');
         fclose($handle);
@@ -374,7 +371,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForFileGetContents(string $allowedPath)
+    public function streamOpenAllowsInvocationForFileGetContents(string $allowedPath): void
     {
         $content = file_get_contents('phar://' . $allowedPath . '/Resources/content.txt');
         self::assertSame('TYPO3 demo text file.', $content);
@@ -384,7 +381,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForInclude(string $allowedPath)
+    public function streamOpenAllowsInvocationForInclude(string $allowedPath): void
     {
         include('phar://' . $allowedPath . '/Classes/Domain/Model/DemoModel.php');
         self::assertTrue(
@@ -399,7 +396,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider allowedAliasedPathsDataProvider
      */
-    public function streamOpenAllowsInvocationForIncludeOnAliasedPhar(string $allowedPath)
+    public function streamOpenAllowsInvocationForIncludeOnAliasedPhar(string $allowedPath): void
     {
         $result = include($allowedPath);
         static::assertNotFalse($result);
@@ -409,7 +406,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider deniedPathsDataProvider
      */
-    public function streamOpenDeniesInvocationForFileOpen(string $deniedPath)
+    public function streamOpenDeniesInvocationForFileOpen(string $deniedPath): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
@@ -420,7 +417,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider deniedPathsDataProvider
      */
-    public function streamOpenDeniesInvocationForFileGetContents(string $deniedPath)
+    public function streamOpenDeniesInvocationForFileGetContents(string $deniedPath): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
@@ -431,7 +428,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider deniedPathsDataProvider
      */
-    public function streamOpenDeniesInvocationForInclude(string $deniedPath)
+    public function streamOpenDeniesInvocationForInclude(string $deniedPath): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(static::EXPECTED_EXCEPTION_CODE);
@@ -445,7 +442,7 @@ abstract class AbstractTestCase extends TestCase
      * @dataProvider isFileSystemInvocationAcceptableDataProvider
      * @throws \MaxMind\Db\Reader\InvalidDatabaseException
      */
-    public function isFileSystemInvocationAcceptable(string $path, array $expectation)
+    public function isFileSystemInvocationAcceptable(string $path, array $expectation): void
     {
         if (!extension_loaded('xdebug')) {
             $this->markTestSkipped('xdebug not available');

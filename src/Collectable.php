@@ -18,14 +18,7 @@ interface Collectable
 {
     public function has(PharInvocation $invocation): bool;
 
-    /**
-     * @param int|null $flags
-     */
-    public function collect(PharInvocation $invocation, int $flags = null): bool;
+    public function collect(PharInvocation $invocation, ?int $flags = null): bool;
 
-    /**
-     * @param bool $reverse
-     * @return null|PharInvocation
-     */
-    public function findByCallback(callable $callback, $reverse = false);
+    public function findByCallback(callable $callback, bool $reverse = false): ?PharInvocation;
 }

@@ -27,7 +27,7 @@ class Helper
      *
      * @see https://bugs.php.net/bug.php?id=66569
      */
-    public static function resetOpCache()
+    public static function resetOpCache(): void
     {
         if (function_exists('opcache_reset')
             && function_exists('opcache_get_status')
@@ -41,10 +41,8 @@ class Helper
      * Determines base file that can be accessed using the regular file system.
      * For e.g. "phar:///home/user/bundle.phar/content.txt" that would result
      * into "/home/user/bundle.phar".
-     *
-     * @return string|null
      */
-    public static function determineBaseFile(string $path)
+    public static function determineBaseFile(string $path): ?string
     {
         $parts = explode('/', static::normalizePath($path));
 

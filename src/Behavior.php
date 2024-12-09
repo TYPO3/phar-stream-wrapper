@@ -14,14 +14,14 @@ namespace TYPO3\PharStreamWrapper;
 
 class Behavior implements Assertable
 {
-    const COMMAND_DIR_OPENDIR = 'dir_opendir';
-    const COMMAND_MKDIR = 'mkdir';
-    const COMMAND_RENAME = 'rename';
-    const COMMAND_RMDIR = 'rmdir';
-    const COMMAND_STEAM_METADATA = 'stream_metadata';
-    const COMMAND_STREAM_OPEN = 'stream_open';
-    const COMMAND_UNLINK = 'unlink';
-    const COMMAND_URL_STAT = 'url_stat';
+    public const COMMAND_DIR_OPENDIR = 'dir_opendir';
+    public const COMMAND_MKDIR = 'mkdir';
+    public const COMMAND_RENAME = 'rename';
+    public const COMMAND_RMDIR = 'rmdir';
+    public const COMMAND_STEAM_METADATA = 'stream_metadata';
+    public const COMMAND_STREAM_OPEN = 'stream_open';
+    public const COMMAND_UNLINK = 'unlink';
+    public const COMMAND_URL_STAT = 'url_stat';
 
     /**
      * @var string[]
@@ -62,7 +62,7 @@ class Behavior implements Assertable
         return $this->assertions[$command]->assert($path, $command);
     }
 
-    private function assertCommands(array $commands)
+    private function assertCommands(array $commands): void
     {
         $unknownCommands = array_diff($commands, $this->availableCommands);
         if ($unknownCommands === []) {
@@ -77,7 +77,7 @@ class Behavior implements Assertable
         );
     }
 
-    private function assertCommand(string $command)
+    private function assertCommand(string $command): void
     {
         if (in_array($command, $this->availableCommands, true)) {
             return;
@@ -91,7 +91,7 @@ class Behavior implements Assertable
         );
     }
 
-    private function assertAssertionCompleteness()
+    private function assertAssertionCompleteness(): void
     {
         $undefinedAssertions = array_diff(
             $this->availableCommands,

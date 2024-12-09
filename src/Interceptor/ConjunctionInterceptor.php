@@ -53,7 +53,7 @@ class ConjunctionInterceptor implements Assertable
     /**
      * @param Assertable[] $assertions
      */
-    private function assertAssertions(array $assertions)
+    private function assertAssertions(array $assertions): void
     {
         foreach ($assertions as $assertion) {
             if (!$assertion instanceof Assertable) {

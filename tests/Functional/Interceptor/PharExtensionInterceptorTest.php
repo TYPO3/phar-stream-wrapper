@@ -48,12 +48,9 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         __DIR__ . '/../Fixtures/compromised.phar.png/../bundle.phar',
     ];
 
-    /**
-     * @var int
-     */
-    const EXPECTED_EXCEPTION_CODE = 1535198703;
+    protected const EXPECTED_EXCEPTION_CODE = 1535198703;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!in_array('phar', stream_get_wrappers())) {
             $this->markTestSkipped('Phar stream wrapper is not registered');
@@ -68,7 +65,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         stream_wrapper_restore('phar');
         Manager::destroy();
@@ -92,7 +89,7 @@ class PharExtensionInterceptorTest extends AbstractTestCase
      * @test
      * @dataProvider cliToolCommandDataProvider
      */
-    public function cliToolIsExecuted(string $command)
+    public function cliToolIsExecuted(string $command): void
     {
         $descriptorSpecifications = [
             ['pipe', 'r'], // STDIN -> process

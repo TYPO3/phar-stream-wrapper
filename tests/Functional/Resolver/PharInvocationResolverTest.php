@@ -24,13 +24,13 @@ class PharInvocationResolverTest extends TestCase
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Manager::initialize(new Behavior());
         $this->subject = new PharInvocationResolver();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         Manager::destroy();
@@ -81,7 +81,7 @@ class PharInvocationResolverTest extends TestCase
      * @test
      * @dataProvider invocationIsResolvedDataProvider
      */
-    public function invocationIsResolved(string $path, $flags, array $expectations)
+    public function invocationIsResolved(string $path, ?int $flags, array $expectations): void
     {
         $invocation = $this->subject->resolve($path, $flags);
         static::assertSame($invocation->getBaseName(), $expectations['baseName']);
@@ -105,7 +105,7 @@ class PharInvocationResolverTest extends TestCase
      * @test
      * @dataProvider invocationIsNotResolvedDataProvider
      */
-    public function invocationIsNotResolved(string $path, int $flags = null)
+    public function invocationIsNotResolved(string $path, ?int $flags = null): void
     {
         $invocation = $this->subject->resolve($path, $flags);
         static::assertNull($invocation);

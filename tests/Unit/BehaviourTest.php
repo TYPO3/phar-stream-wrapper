@@ -35,14 +35,14 @@ class BehaviourTest extends TestCase
     private $specificAssertion;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->path = uniqid('path');
-        $this->allAssertion = $this->prophesize(Assertable::class);
-        $this->specificAssertion = $this->prophesize(Assertable::class);
+        $this->allAssertion = $this->createMock(Assertable::class);
+        $this->specificAssertion = $this->createMock(Assertable::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->path, $this->allAssertion, $this->specificAssertion);
     }
@@ -50,12 +50,12 @@ class BehaviourTest extends TestCase
     /**
      * @test
      */
-    public function assertionAssignmentFailsWithUnknownCommand()
+    public function assertionAssignmentFailsWithUnknownCommand(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionCode(1535189881);
         (new Behavior())->withAssertion(
-            $this->allAssertion->reveal(),
+            $this->allAssertion,
             'UNKNOWN'
         );
     }
@@ -63,12 +63,12 @@ class BehaviourTest extends TestCase
     /**
      * @test
      */
-    public function assertInvocationFailsWithInvalidCommand()
+    public function assertInvocationFailsWithInvalidCommand(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionCode(1535189882);
         $subject = (new Behavior())->withAssertion(
-            $this->allAssertion->reveal()
+            $this->allAssertion
         );
         $subject->assert($this->path, 'UNKNOWN');
     }
@@ -76,12 +76,12 @@ class BehaviourTest extends TestCase
     /**
      * @test
      */
-    public function assertInvocationFailsWithIncompleteAssertions()
+    public function assertInvocationFailsWithIncompleteAssertions(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionCode(1535189883);
         $subject = (new Behavior())->withAssertion(
-            $this->allAssertion->reveal(),
+            $this->allAssertion,
             Behavior::COMMAND_UNLINK
         );
         $subject->assert($this->path, Behavior::COMMAND_UNLINK);
@@ -90,8 +90,10 @@ class BehaviourTest extends TestCase
     /**
      * @test
      */
-    public function assertInvocationIsDelegatedWithEmptyCommands()
+    public function assertInvocationIsDelegatedWithEmptyCommands(): void
     {
+        $subject = new Behavior();
+
         $commands = [
             Behavior::COMMAND_DIR_OPENDIR,
             Behavior::COMMAND_MKDIR,
@@ -102,15 +104,16 @@ class BehaviourTest extends TestCase
             Behavior::COMMAND_UNLINK,
             Behavior::COMMAND_URL_STAT,
         ];
-        foreach ($commands as $command) {
-            $this->allAssertion->assert($this->path, $command)
-                ->willReturn(false)
-                ->shouldBeCalled();
-        }
 
-        $subject = (new Behavior())->withAssertion(
-            $this->allAssertion->reveal()
-        );
+        foreach ($commands as $command) {
+            $assertion = $this->createMock(Assertable::class);
+            $assertion
+                ->expects($this->once())
+                ->method('assert')
+                ->with($this->path, $command)
+                ->willReturn(false);
+            $subject = $subject->withAssertion($assertion, $command);
+        }
 
         foreach ($commands as $command) {
             static::assertFalse(
@@ -122,23 +125,25 @@ class BehaviourTest extends TestCase
     /**
      * @test
      */
-    public function assertionSucceedsWithEmptyAndSingleCommands()
+    public function assertionSucceedsWithEmptyAndSingleCommands(): void
     {
         $this->allAssertion
-            ->assert($this->path, Behavior::COMMAND_URL_STAT)
-            ->willReturn(false)
-            ->shouldBeCalled();
+            ->expects($this->once())
+            ->method('assert')
+            ->with($this->path, Behavior::COMMAND_URL_STAT)
+            ->willReturn(false);
         $this->specificAssertion
-            ->assert($this->path, Behavior::COMMAND_UNLINK)
-            ->willReturn(false)
-            ->shouldBeCalled();
+            ->expects($this->once())
+            ->method('assert')
+            ->with($this->path, Behavior::COMMAND_UNLINK)
+            ->willReturn(false);
 
         $subject = (new Behavior())
             ->withAssertion(
-                $this->allAssertion->reveal()
+                $this->allAssertion
             )
             ->withAssertion(
-                $this->specificAssertion->reveal(),
+                $this->specificAssertion,
                 Behavior::COMMAND_UNLINK
             );
 

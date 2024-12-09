@@ -182,10 +182,7 @@ class Reader
         return '';
     }
 
-    /**
-     * @return int|null
-     */
-    private function resolveManifestLength(string $content)
+    private function resolveManifestLength(string $content): ?int
     {
         if (strlen($content) < 4) {
             return null;

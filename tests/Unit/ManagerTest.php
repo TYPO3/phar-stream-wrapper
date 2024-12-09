@@ -22,33 +22,33 @@ class ManagerTest extends TestCase
     /**
      * @var ObjectProphecy|Behavior
      */
-    private $behaviorProphecy;
+    private $behaviorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->behaviorProphecy = $this->prophesize(Behavior::class);
+        $this->behaviorMock = $this->createMock(Behavior::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        unset($this->behaviorProphecy);
+        unset($this->behaviorMock);
     }
 
     /**
      * @test
      */
-    public function multipleInitializationFails()
+    public function multipleInitializationFails(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionCode(1535189871);
-        Manager::initialize($this->behaviorProphecy->reveal());
-        Manager::initialize($this->behaviorProphecy->reveal());
+        Manager::initialize($this->behaviorMock);
+        Manager::initialize($this->behaviorMock);
     }
 
     /**
      * @test
      */
-    public function instanceFailsIfNotInitialized()
+    public function instanceFailsIfNotInitialized(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionCode(1535189872);
@@ -58,11 +58,11 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function instanceFailsIfDestroyed()
+    public function instanceFailsIfDestroyed(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionCode(1535189872);
-        Manager::initialize($this->behaviorProphecy->reveal());
+        Manager::initialize($this->behaviorMock);
         Manager::destroy();
         Manager::instance();
     }
@@ -70,9 +70,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function instanceResolvesIfCalledTwice()
+    public function instanceResolvesIfCalledTwice(): void
     {
-        Manager::initialize($this->behaviorProphecy->reveal());
+        Manager::initialize($this->behaviorMock);
         $firstInstance = Manager::instance();
         $secondInstance = Manager::instance();
         static::assertSame($firstInstance, $secondInstance);
@@ -81,16 +81,16 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function destroyReturnsTrueIfInitialized()
+    public function destroyReturnsTrueIfInitialized(): void
     {
-        Manager::initialize($this->behaviorProphecy->reveal());
+        Manager::initialize($this->behaviorMock);
         static::assertTrue(Manager::destroy());
     }
 
     /**
      * @test
      */
-    public function destroyReturnsFalseIfNotInitialized()
+    public function destroyReturnsFalseIfNotInitialized(): void
     {
         static::assertFalse(Manager::destroy());
     }
@@ -98,15 +98,17 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function assertInvocationIsDelegatedToBehavior()
+    public function assertInvocationIsDelegatedToBehavior(): void
     {
         $testPath = uniqid('path');
         $testCommand = uniqid('command');
-        $this->behaviorProphecy->assert($testPath, $testCommand)
-            ->willReturn(false)
-            ->shouldBeCalled();
+        $this->behaviorMock
+            ->expects($this->once())
+            ->method('assert')
+            ->with($testPath, $testCommand)
+            ->willReturn(false);
 
-        Manager::initialize($this->behaviorProphecy->reveal());
+        Manager::initialize($this->behaviorMock);
 
         static::assertFalse(
             Manager::instance()->assert($testPath, $testCommand)

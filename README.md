@@ -89,8 +89,8 @@ if (in_array('phar', stream_get_wrappers())) {
   in order to retrieve individual behavior and settings.
 * `Behavior` holds reference to interceptor(s) that shall assert correct/allowed
   invocation of a given `$path` for a given `$command`. Interceptors implement
-  the interface `Assertable`. Interceptors can act individually on following
-  commands or handle all of them in case not defined specifically:  
+  the interface `Assertable`. Interceptors can act individually on the following
+  commands or handle all of them in case they were not defined specifically:
   + `COMMAND_DIR_OPENDIR`
   + `COMMAND_MKDIR`
   + `COMMAND_RENAME`

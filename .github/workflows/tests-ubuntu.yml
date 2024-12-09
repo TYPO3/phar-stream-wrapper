@@ -33,13 +33,7 @@ jobs:
           find . -name \*.php ! -path './vendor/*' | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
       - name: Install dependencies
-        if: ${{ matrix.php <= '8.1' }}
         run: composer install --prefer-dist --no-progress --no-suggest
-
-      - name: Install dependencies PHP 8.2
-        # @todo: Needed until prophecy (req by phpunit) allows PHP 8.2, https://github.com/phpspec/prophecy/issues/556
-        if: ${{ matrix.php > '8.1' }}
-        run: composer install --prefer-dist --no-progress --no-suggest --ignore-platform-req=php+
 
       - name: Run test suite
         env:

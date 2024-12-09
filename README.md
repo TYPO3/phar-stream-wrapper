@@ -29,11 +29,10 @@ July 2018.
 * https://typo3.org/security/advisory/typo3-psa-2019-007/
 * https://typo3.org/security/advisory/typo3-psa-2019-008/
 
-With PHP 8.0.0 the default behavior changed and meta-data is not
-deserialized automatically anymore:
-
-* [`typo3/phar-stream-wrapper` issue #64](https://github.com/TYPO3/phar-stream-wrapper/issues/64)
-* https://php.watch/versions/8.0/phar-stream-wrapper-unserialize
+> ?? With PHP 8.0.0 the default behavior changed, and meta-data is not deserialized automatically anymore:
+>
+> * [`typo3/phar-stream-wrapper` issue #64](https://github.com/TYPO3/phar-stream-wrapper/issues/64)
+> * https://php.watch/versions/8.0/phar-stream-wrapper-unserialize
 
 ## License
 
@@ -50,9 +49,16 @@ back-ports of all sources in order to provide compatibility with PHP v5.3.
 ## Installation
 
 The `PharStreamWrapper` is provided as composer package `typo3/phar-stream-wrapper`
-and has minimum requirements of PHP v5.3 ([`v2`](https://github.com/TYPO3/phar-stream-wrapper/tree/v2) branch) and PHP v7.0 ([`master`](https://github.com/TYPO3/phar-stream-wrapper) branch).
+and has minimum requirements of PHP v5.3 ([`v2`](https://github.com/TYPO3/phar-stream-wrapper/tree/v2) branch),
+PHP v7.0 - v8.3 ([`v3`](https://github.com/TYPO3/phar-stream-wrapper/tree/v3) branch) and PHP v7.1 - v8.4+ ([`v3`](https://github.com/TYPO3/phar-stream-wrapper) branch).
 
-### Installation for PHP v7.0
+### Installation for PHP v7.1 - v8.4
+
+```
+composer require typo3/phar-stream-wrapper ^4.0
+```
+
+### Installation for PHP v7.0 - v8.3
 
 ```
 composer require typo3/phar-stream-wrapper ^3.0

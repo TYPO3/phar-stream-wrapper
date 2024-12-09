@@ -17,9 +17,6 @@ use TYPO3\PharStreamWrapper\Helper;
 
 class HelperTest extends TestCase
 {
-    /**
-     * @return array
-     */
     public function pharPrefixIsRemovedDataProvider(): array
     {
         return [
@@ -37,9 +34,6 @@ class HelperTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param string $expectation
-     *
      * @test
      * @dataProvider pharPrefixIsRemovedDataProvider
      */
@@ -51,9 +45,6 @@ class HelperTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function pathIsNormalizedDataProvider(): array
     {
         $dataSet = [
@@ -74,9 +65,6 @@ class HelperTest extends TestCase
     }
 
     /**
-     * @param string $path
-     * @param string $expectation
-     *
      * @test
      * @dataProvider pathIsNormalizedDataProvider
      */

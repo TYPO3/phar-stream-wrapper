@@ -24,35 +24,22 @@ class Container
      */
     private $manifest;
 
-    /**
-     * @param Stub $stub
-     * @param Manifest $manifest
-     */
     public function __construct(Stub $stub, Manifest $manifest)
     {
         $this->stub = $stub;
         $this->manifest = $manifest;
     }
 
-    /**
-     * @return Stub
-     */
     public function getStub(): Stub
     {
         return $this->stub;
     }
 
-    /**
-     * @return Manifest
-     */
     public function getManifest(): Manifest
     {
         return $this->manifest;
     }
 
-    /**
-     * @return string
-     */
     public function getAlias(): string
     {
         return $this->manifest->getAlias() ?: $this->stub->getMappedAlias();

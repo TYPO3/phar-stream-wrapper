@@ -28,9 +28,6 @@ class PharMetaDataInterceptor implements Assertable
      * Determines whether the according Phar archive contains
      * (potential insecure) serialized objects.
      *
-     * @param string $path
-     * @param string $command
-     * @return bool
      * @throws Exception
      */
     public function assert(string $path, string $command): bool
@@ -47,10 +44,6 @@ class PharMetaDataInterceptor implements Assertable
         );
     }
 
-    /**
-     * @param string $path
-     * @return bool
-     */
     private function baseFileDoesNotHaveMetaDataIssues(string $path): bool
     {
         $invocation = Manager::instance()->resolve($path);

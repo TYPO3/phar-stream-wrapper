@@ -16,9 +16,9 @@ use TYPO3\PharStreamWrapper\Collectable;
 
 class PharInvocationCollection implements Collectable
 {
-    const UNIQUE_INVOCATION = 1;
-    const UNIQUE_BASE_NAME = 2;
-    const DUPLICATE_ALIAS_WARNING = 32;
+    public const UNIQUE_INVOCATION = 1;
+    public const UNIQUE_BASE_NAME = 2;
+    public const DUPLICATE_ALIAS_WARNING = 32;
 
     /**
      * @var PharInvocation[]

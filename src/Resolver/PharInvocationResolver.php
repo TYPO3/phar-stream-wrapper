@@ -20,9 +20,9 @@ use TYPO3\PharStreamWrapper\Resolvable;
 
 class PharInvocationResolver implements Resolvable
 {
-    const RESOLVE_REALPATH = 1;
-    const RESOLVE_ALIAS = 2;
-    const ASSERT_INTERNAL_INVOCATION = 32;
+    public const RESOLVE_REALPATH = 1;
+    public const RESOLVE_ALIAS = 2;
+    public const ASSERT_INTERNAL_INVOCATION = 32;
 
     /**
      * @var string[]

@@ -20,7 +20,7 @@ class PharStreamWrapper
      * Internal stream constants that are not exposed to PHP, but used...
      * @see https://github.com/php/php-src/blob/e17fc0d73c611ad0207cac8a4a01ded38251a7dc/main/php_streams.h
      */
-    const STREAM_OPEN_FOR_INCLUDE = 128;
+    public const STREAM_OPEN_FOR_INCLUDE = 128;
 
     /**
      * @var resource

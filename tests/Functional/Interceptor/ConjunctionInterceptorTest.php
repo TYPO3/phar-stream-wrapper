@@ -56,9 +56,6 @@ class ConjunctionInterceptorTest extends AbstractTestCase
         __DIR__ . '/../Fixtures/compromised.phar.png/../bundle.phar',
     ];
 
-    /**
-     * @var int
-     */
     protected const EXPECTED_EXCEPTION_CODE = 1539625084;
 
     protected function setUp(): void

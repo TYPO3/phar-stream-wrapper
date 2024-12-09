@@ -34,9 +34,6 @@ abstract class AbstractTestCase extends TestCase
      */
     protected $deniedPaths = [];
 
-    /**
-     * @var int
-     */
     protected const EXPECTED_EXCEPTION_CODE = 0;
 
     public function allowedPathsDataProvider(): array

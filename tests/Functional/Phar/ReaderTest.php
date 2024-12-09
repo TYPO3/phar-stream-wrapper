@@ -17,10 +17,10 @@ use TYPO3\PharStreamWrapper\Phar\Reader;
 
 class ReaderTest extends TestCase
 {
-    const CONTAINER_ALIAS = 'container.alias';
-    const STUB_MAPPED_ALIAS = 'stub.mappedAlias';
-    const STUB_CONTENT_FLAG = 'stub.containerFlag';
-    const MANIFEST_ALIAS = 'manifest.alias';
+    private const CONTAINER_ALIAS = 'container.alias';
+    private const STUB_MAPPED_ALIAS = 'stub.mappedAlias';
+    private const STUB_CONTENT_FLAG = 'stub.containerFlag';
+    private const MANIFEST_ALIAS = 'manifest.alias';
 
     public function pharAliasDataProvider(): array
     {

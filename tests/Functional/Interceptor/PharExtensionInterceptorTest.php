@@ -48,9 +48,6 @@ class PharExtensionInterceptorTest extends AbstractTestCase
         __DIR__ . '/../Fixtures/compromised.phar.png/../bundle.phar',
     ];
 
-    /**
-     * @var int
-     */
     protected const EXPECTED_EXCEPTION_CODE = 1535198703;
 
     protected function setUp(): void

@@ -36,4 +36,4 @@ jobs:
 
       - name: Run test suite
         run: |
-          vendor/bin/simple-phpunit --colors
+          vendor/bin/phpunit --colors

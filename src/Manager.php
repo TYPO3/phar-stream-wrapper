@@ -88,10 +88,7 @@ class Manager
         return $this->behavior->assert($path, $command);
     }
 
-    /**
-     * @return PharInvocation|null
-     */
-    public function resolve(string $path, ?int $flags = null)
+    public function resolve(string $path, ?int $flags = null): ?PharInvocation
     {
         return $this->resolver->resolve($path, $flags);
     }

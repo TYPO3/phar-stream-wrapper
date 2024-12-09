@@ -59,12 +59,7 @@ class PharInvocationCollection implements Collectable
         return true;
     }
 
-    /**
-     * @param callable $callback
-     * @param bool $reverse
-     * @return null|PharInvocation
-     */
-    public function findByCallback(callable $callback, bool $reverse = false)
+    public function findByCallback(callable $callback, bool $reverse = false): ?PharInvocation
     {
         foreach ($this->getInvocations($reverse) as $invocation) {
             if (call_user_func($callback, $invocation) === true) {
@@ -117,10 +112,9 @@ class PharInvocationCollection implements Collectable
     /**
      * Triggers warning for invocations with same alias and same confirmation state.
      *
-     * @param PharInvocation $invocation
      * @see \TYPO3\PharStreamWrapper\PharStreamWrapper::collectInvocation()
      */
-    private function triggerDuplicateAliasWarning(PharInvocation $invocation)
+    private function triggerDuplicateAliasWarning(PharInvocation $invocation): void
     {
         $sameAliasInvocation = $this->findByCallback(
             function (PharInvocation $candidate) use ($invocation) {

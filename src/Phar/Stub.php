@@ -44,10 +44,7 @@ class Stub
      */
     private $mappedAlias = '';
 
-    /**
-     * @return null|string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }

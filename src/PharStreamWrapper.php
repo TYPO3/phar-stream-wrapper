@@ -119,7 +119,7 @@ class PharStreamWrapper
         );
     }
 
-    public function stream_cast(int $cast_as)
+    public function stream_cast(int $cast_as): void
     {
         throw new Exception(
             'Method stream_select() cannot be used',
@@ -127,7 +127,7 @@ class PharStreamWrapper
         );
     }
 
-    public function stream_close()
+    public function stream_close(): void
     {
         $this->invokeInternalStreamWrapper(
             'fclose',
@@ -330,7 +330,7 @@ class PharStreamWrapper
         return $this->invokeInternalStreamWrapper($functionName, $path);
     }
 
-    protected function assert(string $path, string $command)
+    protected function assert(string $path, string $command): void
     {
         if (Manager::instance()->assert($path, $command) === true) {
             $this->collectInvocation($path);
@@ -347,7 +347,7 @@ class PharStreamWrapper
         );
     }
 
-    protected function collectInvocation(string $path)
+    protected function collectInvocation(string $path): void
     {
         if (isset($this->invocation)) {
             return;
@@ -403,7 +403,7 @@ class PharStreamWrapper
         return $result;
     }
 
-    private function restoreInternalSteamWrapper()
+    private function restoreInternalSteamWrapper(): void
     {
         if (PHP_VERSION_ID < 70324
             || PHP_VERSION_ID >= 70400 && PHP_VERSION_ID < 70412) {
@@ -416,7 +416,7 @@ class PharStreamWrapper
         }
     }
 
-    private function registerStreamWrapper()
+    private function registerStreamWrapper(): void
     {
         stream_wrapper_unregister('phar');
         stream_wrapper_register('phar', static::class);

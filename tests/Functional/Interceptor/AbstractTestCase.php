@@ -87,7 +87,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryOpenAllowsInvocation(string $path)
+    public function directoryOpenAllowsInvocation(string $path): void
     {
         $handle = opendir('phar://' . $path);
         self::assertIsResource($handle);
@@ -155,7 +155,7 @@ abstract class AbstractTestCase extends TestCase
      * @test
      * @dataProvider directoryActionAllowsInvocationDataProvider
      */
-    public function directoryCloseAllowsInvocation(string $path)
+    public function directoryCloseAllowsInvocation(string $path): void
     {
         $handle = opendir('phar://' . $path);
         closedir($handle);
